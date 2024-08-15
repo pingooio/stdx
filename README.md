@@ -62,6 +62,8 @@ $ cd cobra && rm -rf doc go.mod go.sum && cd ..
 
 `validate` is a fork of https://github.com/asaskevich/govalidator commit f21760c49a8d602d863493de796926d2a5c1138d - License: MIT
 
+`yaml` is a fork of https://github.com/go-yaml/yaml commit f6f7691b1fdeb513f56608cd2c32c51f8194bf51 - License: MIT and Apache 2.0
+
 
 ## Maintenance
 
