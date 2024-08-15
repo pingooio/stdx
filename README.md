@@ -46,6 +46,8 @@ $ cd cobra && rm -rf doc go.mod go.sum && cd ..
 
 `reuseport` is a fork of https://github.com/libp2p/go-reuseport commit 16c6bbdfdf27d8388b6797d767d57dcc1acc8780 - License: ISC
 
+`routingtable` is a fork of https://github.com/tailscale/tailscale/tree/main/net/art commit 7c1d6e35a5863d58f3727af07dea0578fca87030 - License: BSD 3-Clause
+
 `schema` is a fork of https://github.com/gorilla/schema.git commit 5fca2dce7a3a9cde2cd764a822ae373b4aaaaece - License: BSD-3-Clause
 
 `singleinstance` is a fork of https://github.com/snabb/sitemap commit ac70ad656cd7f36cc5623306806a3583707c9a56 - License: MIT
