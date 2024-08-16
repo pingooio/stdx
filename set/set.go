@@ -39,6 +39,16 @@ func (set Set[T]) ToSlice() []T {
 	return ret
 }
 
+func (set Set[T]) ToIter() iter.Seq[T] {
+	return func(yield func(T) bool) {
+		for element := range set {
+			if !yield(element) {
+				return
+			}
+		}
+	}
+}
+
 func (set Set[T]) Insert(element T) {
 	set[element] = struct{}{}
 }
