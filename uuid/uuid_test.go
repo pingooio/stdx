@@ -569,7 +569,7 @@ func TestWrongLength(t *testing.T) {
 func TestIsWrongLength(t *testing.T) {
 	_, err := Parse("12345")
 	if !IsInvalidLengthError(err) {
-		t.Errorf("expected error type is invalidLengthError")
+		t.Errorf("IsInvalidLength returned incorrect type %T", err)
 	}
 }
 
@@ -918,10 +918,10 @@ func TestVersion7MonotonicityStrict(t *testing.T) {
 	defer SetRand(nil)
 
 	length := 100000 // > 3906
-	u1 := NewV7().String()
+	u1 := NewV7()
 	for i := 0; i < length; i++ {
-		u2 := NewV7().String()
-		if u2 <= u1 {
+		u2 := NewV7()
+		if Compare(u1, u2) >= 0 {
 			t.Errorf("monotonicity failed at #%d: %s(next) < %s(before)", i, u2, u1)
 			break
 		}

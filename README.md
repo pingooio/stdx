@@ -60,7 +60,7 @@ $ cd cobra && rm -rf doc go.mod go.sum && cd ..
 
 `useragent` is a fork of https://github.com/mileusna/useragent commit f0b3dcfa90b239ba5323bded5eb433e3b7250b29 - License: MIT
 
-`uuid` is a fork of https://github.com/google/uuid commit 0f11ee6918f41a04c201eceeadf612a377bc7fbc - License: BSD-3 Clause
+`uuid` is a fork of https://github.com/google/uuid commit 0e97ed3b537927cb4afea366bc4cc36f6eb37e75 - License: BSD-3 Clause
 
 `validate` is a fork of https://github.com/asaskevich/govalidator commit f21760c49a8d602d863493de796926d2a5c1138d - License: MIT
 

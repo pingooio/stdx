@@ -1,8 +1,18 @@
 package set
 
+import "iter"
+
 type Set[T comparable] map[T]struct{}
 
-func New[T comparable](fromList []T) Set[T] {
+func New[T comparable]() Set[T] {
+	return Set[T](make(map[T]struct{}))
+}
+
+func NewWithCapacity[T comparable](capacity uint64) Set[T] {
+	return Set[T](make(map[T]struct{}, capacity))
+}
+
+func NewFromList[T comparable](fromList []T) Set[T] {
 	ret := Set[T](make(map[T]struct{}))
 
 	for _, item := range fromList {
@@ -29,6 +39,12 @@ func (set Set[T]) ToSlice() []T {
 	return ret
 }
 
-func (set Set[T]) Add(element T) {
+func (set Set[T]) Insert(element T) {
 	set[element] = struct{}{}
+}
+
+func (set Set[T]) InsertIter(iterator iter.Seq[T]) {
+	for elem := range iterator {
+		set[elem] = struct{}{}
+	}
 }

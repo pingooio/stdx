@@ -8,9 +8,9 @@ import "math/big"
 //
 // This is fundamentally different than the Unmarshaler interface that
 // several packages provide. A Deserializer will generally create the
-// final struct or value rather than unmarshaling to itself.
+// final struct or value rather than unmarshalling to itself.
 //
-// This interface and the associated unmarshaling code is EXPERIMENTAL!
+// This interface and the associated unmarshalling code is EXPERIMENTAL!
 // It is not currently covered by any Semantic Versioning guarantees.
 // Use at your own risk.
 type deserializer interface {

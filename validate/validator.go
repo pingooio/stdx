@@ -368,7 +368,7 @@ func IsUUID(str string) bool {
 	return rxUUID.MatchString(str)
 }
 
-// Byte to index table for O(1) lookups when unmarshaling.
+// Byte to index table for O(1) lookups when unmarshalling.
 // We use 0xFF as sentinel value for invalid indexes.
 var ulidDec = [...]byte{
 	0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,
