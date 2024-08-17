@@ -39,6 +39,7 @@ COPY --chown=$USERNAME vimrc /home/$USERNAME/.vimrc
 # setup go
 RUN mkdir -p /home/$USERNAME/.local/gopath
 COPY --from=go /usr/local/go /home/$USERNAME/.local/go
+RUN go telemetry off
 
 # setup git
 RUN git config --global push.autoSetupRemote true
