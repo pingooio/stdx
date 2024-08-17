@@ -19,7 +19,7 @@ import (
 	"sort"
 	"strings"
 
-	flag "github.com/spf13/pflag"
+	flag "github.com/pingooio/stdx/pflag"
 )
 
 const (

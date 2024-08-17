@@ -15,7 +15,6 @@ require (
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/klauspost/cpuid/v2 v2.2.8
 	github.com/minio/minio-go/v7 v7.0.75
-	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.9.0
 	github.com/yuin/goldmark v1.7.4
 	github.com/zeebo/blake3 v0.2.4

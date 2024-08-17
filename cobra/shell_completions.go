@@ -15,7 +15,7 @@
 package cobra
 
 import (
-	"github.com/spf13/pflag"
+	"github.com/pingooio/stdx/pflag"
 )
 
 // MarkFlagRequired instructs the various shell completion implementations to

@@ -41,6 +41,7 @@ $ cd cobra && rm -rf doc go.mod go.sum && cd ..
 
 `pcre` is a fork of https://github.com/GRbit/go-pcre commit fe320facab0ca15e13786dc0774f5e86929728d2 - License: BSD 3-Clause
 
+`pflag` is a fork of github.com/spf13/pflag commit fe320facab0ca15e13786dc0774f5e86929728d2 - License: BSD 3-Clause
 
 `retry` is a fork of https://github.com/avast/retry-go commit 27363a141859f4031a7726c5bffcd670fb42d286 - License: MIT
 

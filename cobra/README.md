@@ -74,12 +74,12 @@ and flags that are only available to that command.
 In the example above, 'port' is the flag.
 
 Flag functionality is provided by the [pflag
-library](https://github.com/spf13/pflag), a fork of the flag standard library
+library](https://github.com/pingooio/stdx/pflag), a fork of the flag standard library
 which maintains the same interface while adding POSIX compliance.
 
 # Installing
 Using Cobra is easy. First, use `go get` to install the latest version
-of the library.     
+of the library.
 
 ```
 go get -u github.com/spf13/cobra@latest

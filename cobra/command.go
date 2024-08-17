@@ -27,7 +27,7 @@ import (
 	"sort"
 	"strings"
 
-	flag "github.com/spf13/pflag"
+	flag "github.com/pingooio/stdx/pflag"
 )
 
 const FlagSetByCobraAnnotation = "cobra_annotation_flag_set_by_cobra"
