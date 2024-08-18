@@ -25,8 +25,8 @@ import (
 	"strings"
 	"time"
 
-	. "gopkg.in/check.v1"
-	"gopkg.in/yaml.v3"
+	. "github.com/pingooio/stdx/deprecated/check"
+	"github.com/pingooio/stdx/yaml"
 )
 
 var unmarshalIntTest = 123

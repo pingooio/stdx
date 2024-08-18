@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/pingooio/stdx/testify/assert"
 )
 
 func TestDoAllFailed(t *testing.T) {

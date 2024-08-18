@@ -11,8 +11,8 @@ import (
 	"testing"
 
 	"github.com/pingooio/stdx/crypto"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/pingooio/stdx/testify/assert"
+	"github.com/pingooio/stdx/testify/require"
 )
 
 func TestReader(t *testing.T) {

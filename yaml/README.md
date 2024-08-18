@@ -36,18 +36,18 @@ supported since they're a poor design and are gone in YAML 1.2.
 Installation and usage
 ----------------------
 
-The import path for the package is *gopkg.in/yaml.v3*.
+The import path for the package is *github.com/pingooio/stdx/yaml*.
 
 To install it, run:
 
-    go get gopkg.in/yaml.v3
+    go get github.com/pingooio/stdx/yaml
 
 API documentation
 -----------------
 
 If opened in a browser, the import path itself leads to the API documentation:
 
-  - [https://gopkg.in/yaml.v3](https://gopkg.in/yaml.v3)
+  - [https://github.com/pingooio/stdx/yaml](https://github.com/pingooio/stdx/yaml)
 
 API stability
 -------------
@@ -72,7 +72,7 @@ import (
         "fmt"
         "log"
 
-        "gopkg.in/yaml.v3"
+        "github.com/pingooio/stdx/yaml"
 )
 
 var data = `
@@ -94,27 +94,27 @@ type T struct {
 
 func main() {
         t := T{}
-    
+
         err := yaml.Unmarshal([]byte(data), &t)
         if err != nil {
                 log.Fatalf("error: %v", err)
         }
         fmt.Printf("--- t:\n%v\n\n", t)
-    
+
         d, err := yaml.Marshal(&t)
         if err != nil {
                 log.Fatalf("error: %v", err)
         }
         fmt.Printf("--- t dump:\n%s\n\n", string(d))
-    
+
         m := make(map[interface{}]interface{})
-    
+
         err = yaml.Unmarshal([]byte(data), &m)
         if err != nil {
                 log.Fatalf("error: %v", err)
         }
         fmt.Printf("--- m:\n%v\n\n", m)
-    
+
         d, err = yaml.Marshal(&m)
         if err != nil {
                 log.Fatalf("error: %v", err)

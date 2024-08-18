@@ -24,7 +24,7 @@ import (
 	"github.com/gokyle/twofactor"
 	"github.com/pingooio/stdx/otp"
 	"github.com/pingooio/stdx/otp/totp"
-	"github.com/stretchr/testify/require"
+	"github.com/pingooio/stdx/testify/require"
 )
 
 func TestTwoFactor(t *testing.T) {

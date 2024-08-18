@@ -5,7 +5,7 @@ import (
 	"io"
 	"os"
 	"testing"
-	// "github.com/kr/pretty"
+	// "github.com/pingooio/stdx/deprecated/pretty"
 )
 
 var testRssFeedXML = RssFeedXml{

@@ -58,3 +58,7 @@ func (set Set[T]) InsertIter(iterator iter.Seq[T]) {
 		set[elem] = struct{}{}
 	}
 }
+
+func (set Set[T]) Delete(element T) {
+	delete(set, element)
+}

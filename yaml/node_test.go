@@ -20,10 +20,11 @@ import (
 	"fmt"
 	"os"
 
-	. "gopkg.in/check.v1"
-	"gopkg.in/yaml.v3"
 	"io"
 	"strings"
+
+	. "github.com/pingooio/stdx/deprecated/check"
+	"github.com/pingooio/stdx/yaml"
 )
 
 var nodeTests = []struct {

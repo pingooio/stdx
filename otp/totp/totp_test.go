@@ -20,7 +20,7 @@ package totp
 import (
 	"github.com/pingooio/stdx/otp"
 	"github.com/pingooio/stdx/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/pingooio/stdx/testify/require"
 
 	"encoding/base32"
 	"testing"

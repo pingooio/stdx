@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/pingooio/stdx/testify/require"
 )
 
 func testDialFromListeningPort(t *testing.T, network, host string) {

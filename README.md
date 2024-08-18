@@ -6,6 +6,7 @@ The code is licensed under AGPL-3.0 (see `LICENSE.txt`)
 
 `barcode` is a fork of https://github.com/pingooio/stdx/barcode commit 65580ac6e377baeeebd5bb702e15795ead22e48d - License: MIT
 
+`check` is a fork of https://github.com/go-check/check commit 10cb98267c6cb43ea9cd6793f29ff4089c306974 - License: MIT
 
 `cobra` is a fork of https://github.com/spf13/cobra commit 212ea4078323771dc49b6f25a41d84efbaac3a4c to remove a lot of dependencies (`doc` directory deleted) - License: Apache 2.0
 
@@ -25,6 +26,8 @@ $ cd cobra && rm -rf doc go.mod go.sum && cd ..
 
 `feeds` is a fork of https://github.com/jlelse/feeds commit 189f94254ad4b61b3b1908cf493f94390dc79870 - License: BSD 2-Clause
 
+`difflib` is a fork of https://github.com/pmezard/go-difflib commit 5d4384ee4fb2527b0a1256a821ebfc92f91efefc - License: MIT
+
 `goldmark-highlighting` is a fork of https://github.com/yuin/goldmark-highlighting commit 37449abec8cc453aad3ea47d44583b172b20f4b1 - License: MIT
 
 `hostrouter` is a fork of https://github.com/go-chi/hostrouter commit 03da900f6d45aaf0d5a1f392e2bafe8437ae5102 - License: MIT
@@ -38,6 +41,8 @@ $ cd cobra && rm -rf doc go.mod go.sum && cd ..
 `namesgenerator` is a fork of https://github.com/moby/moby/blob/master/pkg/namesgenerator/names-generator.go commit 0f052eb4f56c05dcb8c444823ebde6ce0fac7197 - License: Apache 2.0
 
 `otp` is a fork of https://github.com/pingooio/stdx/otp commit c62dc589378ae5c364d36819ddfb03fe391635ad - License: Apache 2.0
+
+`objx` is a fork of https://github.com/stretchr/objx commit 57832dc6e27fd96037781d1737abf48c4e1edba0 - License: MIT
 
 `pcre` is a fork of https://github.com/GRbit/go-pcre commit fe320facab0ca15e13786dc0774f5e86929728d2 - License: BSD 3-Clause
 
@@ -53,9 +58,13 @@ $ cd cobra && rm -rf doc go.mod go.sum && cd ..
 
 `singleinstance` is a fork of https://github.com/snabb/sitemap commit ac70ad656cd7f36cc5623306806a3583707c9a56 - License: MIT
 
-`sitemap` is a fork of https://github.com/postfinance/singlecommit 43dccf267e7c560d78380cbc074044ee27fb6e97 - License: MIT
+`sitemap` is a fork of https://github.com/postfinance/sitemap commit 43dccf267e7c560d78380cbc074044ee27fb6e97 - License: MIT
+
+`spew` is a fork of https://github.com/davecgh/go-spew commit d8f796af33cc11cb798c1aaeb27a4ebc5099927d - License: ISC
 
 `sysinfo` is a fork of https://github.com/pingooio/stdx/sysinfo commit 99e836ba64f229922382eecd8a346e6b3d1b560a - License: MIT
+
+`testify` is a fork of https://github.com/stretchr/testify commit b074924938f86d417f1c9a845c7e8b0784d7f937 - License: MIT
 
 `toml` is a fork of https://github.com/pingooio/stdx/toml commit 1ba7f5b05951c7331f4eefea9bce295e2cb141f2 - License: MIT
 

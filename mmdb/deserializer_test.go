@@ -5,7 +5,7 @@ import (
 	"net"
 	"testing"
 
-	"github.com/stretchr/testify/require"
+	"github.com/pingooio/stdx/testify/require"
 )
 
 func TestDecodingToDeserializer(t *testing.T) {

@@ -9,7 +9,7 @@ import (
 	"testing"
 
 	"github.com/pingooio/stdx/testify/assert"
-	"github.com/stretchr/testify/require"
+	"github.com/pingooio/stdx/testify/require"
 )
 
 func TestBool(t *testing.T) {
