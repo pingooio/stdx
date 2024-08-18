@@ -8,6 +8,8 @@ The code is licensed under AGPL-3.0 (see `LICENSE.txt`)
 
 `check` is a fork of https://github.com/go-check/check commit 10cb98267c6cb43ea9cd6793f29ff4089c306974 - License: MIT
 
+`cmd` is a fork of https://github.com/google/go-cmp commit c3ad8435e7bef96af35732bc0789e5a2278c6d5f - License: BSD 3-Clause
+
 `cobra` is a fork of https://github.com/spf13/cobra commit 212ea4078323771dc49b6f25a41d84efbaac3a4c to remove a lot of dependencies (`doc` directory deleted) - License: Apache 2.0
 
 ```shell

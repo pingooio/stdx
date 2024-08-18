@@ -13,7 +13,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/google/go-cmp/cmp"
+	"github.com/pingooio/stdx/cmp"
 )
 
 func TestInversePrefix(t *testing.T) {
