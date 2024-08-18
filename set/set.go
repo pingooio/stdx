@@ -12,10 +12,20 @@ func NewWithCapacity[T comparable](capacity uint64) Set[T] {
 	return Set[T](make(map[T]struct{}, capacity))
 }
 
-func NewFromList[T comparable](fromList []T) Set[T] {
+func NewFromSlice[T comparable](fromList []T) Set[T] {
 	ret := Set[T](make(map[T]struct{}))
 
 	for _, item := range fromList {
+		ret[item] = struct{}{}
+	}
+
+	return ret
+}
+
+func NewFromIter[T comparable](fromiter iter.Seq[T]) Set[T] {
+	ret := Set[T](make(map[T]struct{}))
+
+	for item := range fromiter {
 		ret[item] = struct{}{}
 	}
 
