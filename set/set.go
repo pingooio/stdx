@@ -49,7 +49,8 @@ func (set Set[T]) ToSlice() []T {
 	return ret
 }
 
-func (set Set[T]) ToIter() iter.Seq[T] {
+// Iter returns an iterator yelding the elements of the set
+func (set Set[T]) Iter() iter.Seq[T] {
 	return func(yield func(T) bool) {
 		for element := range set {
 			if !yield(element) {
