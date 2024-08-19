@@ -65,12 +65,13 @@ func RandBytes(n uint64) []byte {
 }
 
 // RandInt64Between returns a uniform random value in [min, max).
-func RandInt64Between(min, max int64) (int64, error) {
+func RandInt64Between(min, max int64) int64 {
 	// crypto/rand should never return an error
 	// See https://github.com/golang/go/issues/66821
 	n, err := cryptorand.Int(cryptorand.Reader, big.NewInt(max-min))
 	if err != nil {
 		panic(err)
 	}
-	return n.Int64(), nil
+
+	return n.Int64()
 }

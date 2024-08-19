@@ -11,3 +11,7 @@ func (uuid UUID) Equal(other UUID) bool {
 func (uuid UUID) IsNil() bool {
 	return uuid.Equal(Nil)
 }
+
+func (uuid UUID) Bytes() []byte {
+	return uuid[:]
+}
