@@ -7,6 +7,7 @@ alias gp="git push"
 export GOPATH="$HOME/.local/gopath"
 export GOROOT="$HOME/.local/go"
 export GOPROXY=direct
+export GOTOOLCHAIN="local"
 
 export TZ="UTC"
 export DO_NOT_TRACK=1

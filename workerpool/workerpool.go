@@ -149,11 +149,11 @@ func (workerPool *WorkerPool) handleJob(ctx context.Context, job queue.Job) {
 failjob:
 	workerPool.logger.Error("workerpool: job failed", slog.Group("job",
 		slog.String("job.id", job.ID.String()), slog.String("type", job.Type),
-	), slog.String("err", err.Error()))
+	), slogx.Err(err))
 	err = workerPool.queue.FailJob(ctx, job)
 	if err != nil {
 		workerPool.logger.Error("workerpool: error marking job as failed", slog.String("job.id", job.ID.String()),
-			slog.String("err", err.Error()))
+			slogx.Err(err))
 		return
 	}
 }
