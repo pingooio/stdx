@@ -9,29 +9,26 @@ import (
 func TestGetMap(t *testing.T) {
 	expectedNumberOfCountries := 249
 
-	err := countries.Init()
-	if err != nil {
-		t.Error(err)
-		return
-	}
-	countries := countries.GetMap()
+	countries := countries.All()
 
 	if len(countries) != expectedNumberOfCountries {
 		t.Errorf("Invalid number of countries. Got %d, expected: %d", len(countries), expectedNumberOfCountries)
 	}
 }
 
-func TestGetList(t *testing.T) {
-	expectedNumberOfCountries := 249
-
-	err := countries.Init()
-	if err != nil {
-		t.Error(err)
-		return
+func TestGetCountry(t *testing.T) {
+	tests := []struct {
+		code string
+		name string
+	}{
+		{"FR", "France"},
+		{"XX", "Unknown"},
 	}
-	countries := countries.GetList()
 
-	if len(countries) != expectedNumberOfCountries {
-		t.Errorf("Invalid number of countries. Got %d, expected: %d", len(countries), expectedNumberOfCountries)
+	for _, test := range tests {
+		countryName, _ := countries.Name(test.code)
+		if countryName != test.name {
+			t.Errorf("Code: %s -> Expected: %s | Got: %s", test.code, test.name, countryName)
+		}
 	}
 }
