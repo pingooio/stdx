@@ -120,8 +120,6 @@ func (workerPool *WorkerPool) Start(ctx context.Context) {
 func (workerPool *WorkerPool) handleJob(ctx context.Context, job queue.Job) {
 	var err error
 	logger := slogx.FromCtx(ctx)
-	var started time.Time
-	var duration time.Duration
 
 	jobHandler, jobHandlerExists := workerPool.jobHandlers[job.Type]
 	if !jobHandlerExists {
@@ -130,16 +128,15 @@ func (workerPool *WorkerPool) handleJob(ctx context.Context, job queue.Job) {
 		goto failjob
 	}
 
-	started = time.Now().UTC()
 	err = jobHandler(ctx, job.RawData)
-	duration = time.Since(started)
 	if err != nil {
 		goto failjob
-	} else {
-		logger.Info("workerpool: job successfully executd", slog.Duration("duration", duration), slog.Group("job",
-			slog.String("type", job.Type), slog.String("id", job.ID.String()),
-		))
 	}
+	// else {
+	// 	logger.Info("workerpool: job successfully executd", slog.Duration("duration", duration), slog.Group("job",
+	// 		slog.String("type", job.Type), slog.String("id", job.ID.String()),
+	// 	))
+	// }
 
 	err = workerPool.queue.DeleteJob(ctx, job.ID)
 	if err != nil {
