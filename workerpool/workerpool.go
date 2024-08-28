@@ -21,16 +21,19 @@ type WorkerPool struct {
 	queue          queue.Queue
 	concurrencyMax uint32
 	jobHandlers    map[string]internalJobHandler
+	logger         *slog.Logger
 }
 
 type Options struct {
 	// default: 200
 	ConcurrencyMax uint32
+	Logger         *slog.Logger
 }
 
 func NewPool(queue queue.Queue, options *Options) (worker *WorkerPool, err error) {
 	opts := Options{
 		ConcurrencyMax: 200,
+		Logger:         slog.New(slogx.NewDiscardHandler()),
 	}
 
 	if options.ConcurrencyMax != 0 {
@@ -42,11 +45,16 @@ func NewPool(queue queue.Queue, options *Options) (worker *WorkerPool, err error
 		opts.ConcurrencyMax = options.ConcurrencyMax
 	}
 
+	if options.Logger != nil {
+		opts.Logger = options.Logger
+	}
+
 	worker = &WorkerPool{
 		queue:       queue,
 		jobHandlers: make(map[string]internalJobHandler),
 
 		concurrencyMax: opts.ConcurrencyMax,
+		logger:         opts.Logger,
 	}
 	return
 }
@@ -72,7 +80,6 @@ func AddHandler[T any](workerPool *WorkerPool, jobType string, handler JobHandle
 func (workerPool *WorkerPool) Start(ctx context.Context) {
 	jobsChan := make(chan queue.Job, workerPool.concurrencyMax)
 	var wg sync.WaitGroup
-	logger := slogx.FromCtx(ctx)
 
 	wg.Add(int(workerPool.concurrencyMax))
 
@@ -86,7 +93,7 @@ func (workerPool *WorkerPool) Start(ctx context.Context) {
 		}(ctx, jobsChan)
 	}
 
-	logger.Info("workerpool: Starting", slog.Uint64("concurrencyMax", uint64(workerPool.concurrencyMax)))
+	workerPool.logger.Info("workerpool: Starting", slog.Uint64("concurrencyMax", uint64(workerPool.concurrencyMax)))
 
 	ticker := time.NewTicker(20 * time.Millisecond)
 	defer ticker.Stop()
@@ -94,7 +101,7 @@ func (workerPool *WorkerPool) Start(ctx context.Context) {
 	for {
 		select {
 		case <-ctx.Done():
-			logger.Info("workerpool: Shutting down")
+			workerPool.logger.Info("workerpool: Shutting down")
 			close(jobsChan)
 			// workerPool.queue.Stop(ctx)
 			wg.Wait()
@@ -105,7 +112,7 @@ func (workerPool *WorkerPool) Start(ctx context.Context) {
 
 		jobs, err := workerPool.queue.Pull(ctx, uint64(workerPool.concurrencyMax))
 		if err != nil {
-			logger.Error("workerpool: error pulling jobs from queue", slog.String("err", err.Error()))
+			workerPool.logger.Error("workerpool: error pulling jobs from queue", slog.String("err", err.Error()))
 			time.Sleep(100 * time.Millisecond)
 			continue
 		}
@@ -119,11 +126,10 @@ func (workerPool *WorkerPool) Start(ctx context.Context) {
 
 func (workerPool *WorkerPool) handleJob(ctx context.Context, job queue.Job) {
 	var err error
-	logger := slogx.FromCtx(ctx)
 
 	jobHandler, jobHandlerExists := workerPool.jobHandlers[job.Type]
 	if !jobHandlerExists {
-		logger.Error("workerpool: job handler not found", slog.String("job.type", job.Type),
+		workerPool.logger.Error("workerpool: job handler not found", slog.String("job.type", job.Type),
 			slog.String("job.id", job.ID.String()))
 		goto failjob
 	}
@@ -140,18 +146,18 @@ func (workerPool *WorkerPool) handleJob(ctx context.Context, job queue.Job) {
 
 	err = workerPool.queue.DeleteJob(ctx, job.ID)
 	if err != nil {
-		logger.Error("workerpool: error deleting job", slog.String("job.id", job.ID.String()),
+		workerPool.logger.Error("workerpool: error deleting job", slog.String("job.id", job.ID.String()),
 			slog.String("err", err.Error()))
 	}
 	return
 
 failjob:
-	logger.Error("workerpool: job failed", slog.Group("job",
-		slog.String("id", job.ID.String()), slog.String("type", job.Type),
+	workerPool.logger.Error("workerpool: job failed", slog.Group("job",
+		slog.String("job.id", job.ID.String()), slog.String("type", job.Type),
 	), slogx.Err(err))
 	err = workerPool.queue.FailJob(ctx, job)
 	if err != nil {
-		logger.Error("workerpool: error marking job as failed", slog.String("job.id", job.ID.String()),
+		workerPool.logger.Error("workerpool: error marking job as failed", slog.String("job.id", job.ID.String()),
 			slogx.Err(err))
 		return
 	}
