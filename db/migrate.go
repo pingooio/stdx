@@ -24,7 +24,7 @@ func Migrate(ctx context.Context, logger *slog.Logger, db DB, migrations []Migra
 		return
 	}
 
-	logger.Info("migrate: Creating/checking migrations table...")
+	logger.Debug("migrate: Creating/checking migrations table...")
 
 	err = createMigrationTable(ctx, db)
 	if err != nil {
@@ -53,7 +53,7 @@ func Migrate(ctx context.Context, logger *slog.Logger, db DB, migrations []Migra
 			logger.Info("migrate: Running migration", slog.Int64("migrations.id", migration.ID), slog.String("migration.name", migration.Name))
 			// we need to run the migration so we continue to code below
 		case nil:
-			logger.Info("migrate: Skipping migration", slog.Int64("migrations.id", migration.ID), slog.String("migration.name", migration.Name))
+			logger.Debug("migrate: Skipping migration", slog.Int64("migrations.id", migration.ID), slog.String("migration.name", migration.Name))
 			continue
 		default:
 			err = fmt.Errorf("migrate.Migrate: looking up migration by id: %w", err)

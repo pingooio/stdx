@@ -39,8 +39,8 @@ func (set Set[T]) Contains(item T) bool {
 
 func (set Set[T]) ToSlice() []T {
 	ret := make([]T, len(set))
-	i := 0
 
+	i := 0
 	for elem := range set {
 		ret[i] = elem
 		i += 1
