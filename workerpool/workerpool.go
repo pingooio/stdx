@@ -155,7 +155,8 @@ failjob:
 	workerPool.logger.Error("workerpool: job failed", slog.Group("job",
 		slog.String("job.id", job.ID.String()), slog.String("type", job.Type),
 	), slogx.Err(err))
-	err = workerPool.queue.FailJob(ctx, job)
+	// We use a context.Background() instead of ctx to let the job fail even if the context is cancelled
+	err = workerPool.queue.FailJob(context.Background(), job)
 	if err != nil {
 		workerPool.logger.Error("workerpool: error marking job as failed", slog.String("job.id", job.ID.String()),
 			slogx.Err(err))
