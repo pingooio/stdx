@@ -41,7 +41,6 @@ type Writer struct {
 	recordsBuffer      []record
 	recordsBufferMutex sync.Mutex
 	childWriter        io.Writer
-	ctx                context.Context
 }
 
 type record struct {
@@ -87,7 +86,6 @@ func NewWriter(ctx context.Context, lokiEndpoint string, streams map[string]stri
 		recordsBuffer:      make([]record, 0, options.DefaultRecordsBufferSize),
 		recordsBufferMutex: sync.Mutex{},
 		childWriter:        options.ChildWriter,
-		ctx:                ctx,
 	}
 
 	go func() {
@@ -98,7 +96,7 @@ func NewWriter(ctx context.Context, lokiEndpoint string, streams map[string]stri
 				time.Sleep(20 * time.Millisecond)
 			} else {
 				select {
-				case <-writer.ctx.Done():
+				case <-ctx.Done():
 					done = true
 				case <-time.After(time.Duration(writer.flushTimeout) * time.Millisecond):
 				}
@@ -106,7 +104,7 @@ func NewWriter(ctx context.Context, lokiEndpoint string, streams map[string]stri
 
 			go func() {
 				// TODO: as of now, if the HTTP request fail after X retries, we discard/lose the logs
-				err := writer.flushLogs(context.Background())
+				err := writer.flushLogs()
 				if err != nil {
 					log.Println(err.Error())
 					return

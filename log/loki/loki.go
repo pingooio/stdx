@@ -25,7 +25,9 @@ type lokiPushStream struct {
 }
 
 // https://grafana.com/docs/loki/latest/reference/api/#push-log-entries-to-loki
-func (writer *Writer) flushLogs(ctx context.Context) (err error) {
+func (writer *Writer) flushLogs() (err error) {
+	ctx := context.Background()
+
 	writer.recordsBufferMutex.Lock()
 
 	if len(writer.recordsBuffer) == 0 || writer.lokiEndpoint == "" {
