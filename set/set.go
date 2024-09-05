@@ -1,6 +1,9 @@
 package set
 
-import "iter"
+import (
+	"iter"
+	"maps"
+)
 
 type Set[T comparable] map[T]struct{}
 
@@ -72,4 +75,8 @@ func (set Set[T]) InsertIter(iterator iter.Seq[T]) {
 
 func (set Set[T]) Delete(element T) {
 	delete(set, element)
+}
+
+func (set Set[T]) Equal(target Set[T]) bool {
+	return maps.Equal(set, target)
 }

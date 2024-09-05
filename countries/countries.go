@@ -8,6 +8,7 @@ import (
 // sources
 // https://gist.github.com/keeguon/2310008
 // see also ttps://restcountries.eu/rest/v2/all
+// https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
 
 //go:embed countries.json
 var Bytes []byte
@@ -79,6 +80,7 @@ var allCountries = map[string]string{
 	"BG": "Bulgaria",
 	"BF": "Burkina Faso",
 	"BI": "Burundi",
+	"BQ": "Bonaire, Sint Eustatius and Saba",
 	"KH": "Cambodia",
 	"CM": "Cameroon",
 	"CA": "Canada",
