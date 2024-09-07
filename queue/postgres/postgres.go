@@ -120,7 +120,7 @@ func (pgqueue *PostgreSQLQueue) validateJob(now time.Time, newJob queue.NewJobIn
 		scheduledFor = (*newJob.ScheduledFor).UTC()
 	}
 
-	jobType := strings.TrimSpace(newJob.Type)
+	jobType := strings.TrimSpace(newJob.Data.JobType())
 	if jobType == "" {
 		err = ErrJobTypeIsNotValid
 		return

@@ -66,9 +66,12 @@ type Queue interface {
 	GetFailedJobs(ctx context.Context) (jobs []Job, err error)
 }
 
+type JobData interface {
+	JobType() string
+}
+
 type NewJobInput struct {
-	Type string
-	Data any
+	Data JobData
 
 	// ScheduledFor is the date when the job should be scheduled for
 	// default: time.Now()

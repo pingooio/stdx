@@ -71,7 +71,7 @@ func (pgqueue *PostgreSQLQueue) Push(ctx context.Context, tx db.Queryer, newJob 
 		scheduledFor = (*newJob.ScheduledFor).UTC()
 	}
 
-	jobType := strings.TrimSpace(newJob.Type)
+	jobType := strings.TrimSpace(newJob.Data.JobType())
 	if jobType == "" {
 		err = ErrJobTypeIsNotValid
 		return
