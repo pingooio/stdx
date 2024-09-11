@@ -1,6 +1,8 @@
 package set
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestEqual(t *testing.T) {
 	tests := []struct {
