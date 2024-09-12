@@ -13,6 +13,7 @@ import (
 	"github.com/pingooio/stdx/db"
 	"github.com/pingooio/stdx/guid"
 	"github.com/pingooio/stdx/queue"
+	"github.com/pingooio/stdx/uuid"
 )
 
 var (
@@ -179,7 +180,7 @@ func (pgqueue *PostgreSQLQueue) validateJob(now time.Time, newJob queue.NewJobIn
 	// note that for some distributed databases this may have a performance impact as it will produce
 	// hot partitions
 	job = queue.Job{
-		ID:             guid.NewTimeBased(),
+		ID:             uuid.NewV7(),
 		CreatedAt:      now,
 		UpdatedAt:      now,
 		ScheduledFor:   scheduledFor,

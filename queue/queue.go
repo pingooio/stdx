@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/pingooio/stdx/db"
-	"github.com/pingooio/stdx/guid"
+	"github.com/pingooio/stdx/uuid"
 )
 
 // TODO: detect job that have expired (timeout)
@@ -58,10 +58,10 @@ type Queue interface {
 	PushMany(ctx context.Context, newJobs []NewJobInput) error
 	// pull fetches at most `number_of_jobs` from the queue.
 	Pull(ctx context.Context, numberOfJobs uint64) ([]Job, error)
-	DeleteJob(ctx context.Context, jobID guid.GUID) error
+	DeleteJob(ctx context.Context, jobID uuid.UUID) error
 	FailJob(ctx context.Context, job Job) error
 	Clear(ctx context.Context) error
-	GetJob(ctx context.Context, jobID guid.GUID) (job Job, err error)
+	GetJob(ctx context.Context, jobID uuid.UUID) (job Job, err error)
 
 	GetFailedJobs(ctx context.Context) (jobs []Job, err error)
 }
@@ -96,7 +96,7 @@ type NewJobInput struct {
 }
 
 type Job struct {
-	ID             guid.GUID `db:"id" json:"id"`
+	ID             uuid.UUID `db:"id" json:"id"`
 	CreatedAt      time.Time `db:"created_at" json:"created_at"`
 	UpdatedAt      time.Time `db:"updated_at" json:"updated_at"`
 	ScheduledFor   time.Time `db:"scheduled_for" json:"scheduled_for"`

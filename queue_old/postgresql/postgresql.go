@@ -14,6 +14,7 @@ import (
 	"github.com/pingooio/stdx/db"
 	"github.com/pingooio/stdx/guid"
 	"github.com/pingooio/stdx/queue"
+	"github.com/pingooio/stdx/uuid"
 )
 
 var (
@@ -128,7 +129,7 @@ func (pgqueue *PostgreSQLQueue) Push(ctx context.Context, tx db.Queryer, newJob 
 	// see https://www.cybertec-postgresql.com/en/unexpected-downsides-of-uuid-keys-in-postgresql
 	// https://news.ycombinator.com/item?id=36429986
 	job := queue.Job{
-		ID:             guid.NewTimeBased(),
+		ID:             uuid.NewV7(),
 		CreatedAt:      now,
 		UpdatedAt:      now,
 		ScheduledFor:   scheduledFor,
