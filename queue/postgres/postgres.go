@@ -11,7 +11,6 @@ import (
 	"log/slog"
 
 	"github.com/pingooio/stdx/db"
-	"github.com/pingooio/stdx/guid"
 	"github.com/pingooio/stdx/queue"
 	"github.com/pingooio/stdx/uuid"
 )
@@ -174,11 +173,11 @@ func (pgqueue *PostgreSQLQueue) validateJob(now time.Time, newJob queue.NewJobIn
 		return
 	}
 
-	// time-based GUIDs are used to avoid index fragmentation and increase insert performance
+	// UUIDv7 are used to avoid index fragmentation and increase insert performance
 	// see https://www.cybertec-postgresql.com/en/unexpected-downsides-of-uuid-keys-in-postgresql
 	// https://news.ycombinator.com/item?id=36429986
 	// note that for some distributed databases this may have a performance impact as it will produce
-	// hot partitions
+	// hot partitions but it can be solved with hashing
 	job = queue.Job{
 		ID:             uuid.NewV7(),
 		CreatedAt:      now,
@@ -242,7 +241,7 @@ func (pgqueue *PostgreSQLQueue) Pull(ctx context.Context, numberOfJobs uint64) (
 	return ret, nil
 }
 
-func (pgqueue *PostgreSQLQueue) DeleteJob(ctx context.Context, jobID guid.GUID) error {
+func (pgqueue *PostgreSQLQueue) DeleteJob(ctx context.Context, jobID uuid.UUID) error {
 	query := "DELETE FROM queue WHERE id = $1"
 
 	_, err := pgqueue.db.Exec(ctx, query, jobID)
@@ -332,7 +331,7 @@ func (pgqueue *PostgreSQLQueue) GetFailedJobs(ctx context.Context) (jobs []queue
 	return jobs, err
 }
 
-func (pgqueue *PostgreSQLQueue) GetJob(ctx context.Context, jobID guid.GUID) (job queue.Job, err error) {
+func (pgqueue *PostgreSQLQueue) GetJob(ctx context.Context, jobID uuid.UUID) (job queue.Job, err error) {
 	query := "SELECT * FROM queue WHERE id = $1"
 	err = pgqueue.db.Get(ctx, &job, query, jobID)
 	return job, err
