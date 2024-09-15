@@ -25,6 +25,7 @@ type DB interface {
 	Ping(ctx context.Context) error
 	SetMaxIdleConns(n int)
 	SetMaxOpenConns(n int)
+	SetConnMaxIdleTime(d time.Duration)
 	SetConnMaxLifetime(d time.Duration)
 	Stats() sql.DBStats
 	Acquire(ctx context.Context) (conn *sql.Conn, err error)
@@ -62,8 +63,8 @@ func Connect(databaseURL string, poolSize int) (dbPool *Database, err error) {
 	}
 
 	dbPool.SetMaxOpenConns(poolSize)
-	dbPool.SetMaxIdleConns(int(poolSize / 2))
-	dbPool.SetConnMaxLifetime(30 * time.Minute)
+	dbPool.SetMaxIdleConns(poolSize)
+	dbPool.SetConnMaxIdleTime(30 * time.Minute)
 
 	err = dbPool.Ping(context.Background())
 	if err != nil {
