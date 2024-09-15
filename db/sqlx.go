@@ -10,9 +10,16 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
+// ensure that Database satisfies the DB interface
+var _ DB = (*Database)(nil)
+
 // Database is wrapper of `sqlx.DB` which implements `DB`
 type Database struct {
 	sqlxDB *sqlx.DB
+}
+
+func (db *Database) Acquire(ctx context.Context) (*sql.Conn, error) {
+	return db.sqlxDB.Conn(ctx)
 }
 
 // Ping verifies a connection to the database is still alive, establishing a connection if necessary.
