@@ -11,6 +11,7 @@ import (
 	"fmt"
 	"io"
 	"net"
+	"net/netip"
 	"net/url"
 	"reflect"
 	"regexp"
@@ -608,20 +609,14 @@ func IsWinFilePath(str string) bool {
 	if rxARWinPath.MatchString(str) {
 		//check windows path limit see:
 		//  http://msdn.microsoft.com/en-us/library/aa365247(VS.85).aspx#maxpath
-		if len(str[3:]) > 32767 {
-			return false
-		}
-		return true
+		return len(str[3:]) <= 32767
 	}
 	return false
 }
 
 // IsUnixFilePath checks both relative & absolute paths in Unix
 func IsUnixFilePath(str string) bool {
-	if rxARUnixPath.MatchString(str) {
-		return true
-	}
-	return false
+	return rxARUnixPath.MatchString(str)
 }
 
 // IsDataURI checks if a string is base64 encoded data URI such as an image
@@ -812,7 +807,8 @@ func IsDialString(str string) bool {
 
 // IsIP checks if a string is either IP version 4 or 6. Alias for `net.ParseIP`
 func IsIP(str string) bool {
-	return net.ParseIP(str) != nil
+	_, err := netip.ParseAddr(str)
+	return err == nil
 }
 
 // IsPort checks if a string represents a valid port
@@ -825,19 +821,19 @@ func IsPort(str string) bool {
 
 // IsIPv4 checks if the string is an IP version 4.
 func IsIPv4(str string) bool {
-	ip := net.ParseIP(str)
-	return ip != nil && strings.Contains(str, ".")
+	ip, err := netip.ParseAddr(str)
+	return err == nil && ip.Is4()
 }
 
 // IsIPv6 checks if the string is an IP version 6.
 func IsIPv6(str string) bool {
-	ip := net.ParseIP(str)
-	return ip != nil && strings.Contains(str, ":")
+	ip, err := netip.ParseAddr(str)
+	return err == nil && ip.Is6()
 }
 
 // IsCIDR checks if the string is an valid CIDR notiation (IPV4 & IPV6)
 func IsCIDR(str string) bool {
-	_, _, err := net.ParseCIDR(str)
+	_, err := netip.ParsePrefix(str)
 	return err == nil
 }
 
@@ -958,10 +954,8 @@ func IsRsaPublicKey(str string, keylen int) bool {
 
 // IsRegex checks if a give string is a valid regex with RE2 syntax or not
 func IsRegex(str string) bool {
-	if _, err := regexp.Compile(str); err == nil {
-		return true
-	}
-	return false
+	_, err := regexp.Compile(str)
+	return err == nil
 }
 
 func toJSONName(tag string) string {
