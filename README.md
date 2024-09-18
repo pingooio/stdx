@@ -32,6 +32,8 @@ $ cd cobra && rm -rf doc go.mod go.sum && cd ..
 
 `goldmark-highlighting` is a fork of https://github.com/yuin/goldmark-highlighting commit 37449abec8cc453aad3ea47d44583b172b20f4b1 - License: MIT
 
+`go-gitdiff` is a fork of https://github.com/bluekeyes/go-gitdiff commit 8584cd59afe0fd5af926a98ea3ef650fa4b1f952 - License: MIT
+
 `hostrouter` is a fork of https://github.com/go-chi/hostrouter commit 03da900f6d45aaf0d5a1f392e2bafe8437ae5102 - License: MIT
 
 `imaging` is a fork of https://github.com/disintegration/imaging commit d40f48ce0f098c53ab1fcd6e0e402da682262da5 - License: MIT
