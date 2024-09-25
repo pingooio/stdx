@@ -129,8 +129,10 @@ func (workerPool *WorkerPool) handleJob(ctx context.Context, job queue.Job) {
 
 	jobHandler, jobHandlerExists := workerPool.jobHandlers[job.Type]
 	if !jobHandlerExists {
-		workerPool.logger.Error("workerpool: job handler not found", slog.String("job.type", job.Type),
-			slog.String("job.id", job.ID.String()))
+		workerPool.logger.Error("workerpool: job handler not found", slog.Group("job",
+			slog.String("job.id", job.ID.String()),
+			slog.String("job.type", job.Type),
+		))
 		goto failjob
 	}
 
