@@ -13,7 +13,7 @@ import (
 	"github.com/pingooio/stdx/queue"
 )
 
-type JobHandler[I any] func(ctx context.Context, input I) (err error)
+type JobHandler[I queue.JobData] func(ctx context.Context, input I) (err error)
 
 type internalJobHandler = func(ctx context.Context, payload []byte) (err error)
 
@@ -59,7 +59,7 @@ func NewPool(queue queue.Queue, options *Options) (worker *WorkerPool, err error
 	return
 }
 
-func AddHandler[T any](workerPool *WorkerPool, jobType string, handler JobHandler[T]) {
+func AddHandler[T queue.JobData](workerPool *WorkerPool, jobType string, handler JobHandler[T]) {
 	if _, exists := workerPool.jobHandlers[jobType]; exists {
 		panic(fmt.Sprintf("workerpool: job handler already exists for %s", jobType))
 	}
