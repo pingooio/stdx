@@ -7,16 +7,12 @@ import (
 	"time"
 )
 
-func ServerInternalErrorPlaintext(res http.ResponseWriter, message *string) {
-	var data string
+func ServerErrorNotFound(res http.ResponseWriter, message *string) {
+	ServeError(res, "Not Found\n", http.StatusNotFound)
+}
 
-	if message == nil {
-		data = "Internal Error\n"
-	} else {
-		data = *message
-	}
-
-	ServeError(res, data, http.StatusInternalServerError)
+func ServerErrorInternal(res http.ResponseWriter) {
+	ServeError(res, "Internal Error\n", http.StatusInternalServerError)
 }
 
 // TODO: Do we force close the TCP connection?

@@ -59,8 +59,9 @@ func NewPool(queue queue.Queue, options *Options) (worker *WorkerPool, err error
 	return
 }
 
-func AddHandler[T queue.JobData](workerPool *WorkerPool, jobData T, handler JobHandler[T]) {
-	jobType := jobData.JobType()
+func AddHandler[T queue.JobData](workerPool *WorkerPool, handler JobHandler[T]) {
+	var _jobData T
+	jobType := _jobData.JobType()
 
 	if _, exists := workerPool.jobHandlers[jobType]; exists {
 		panic(fmt.Sprintf("workerpool: job handler already exists for %s", jobType))
