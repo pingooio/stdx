@@ -4,6 +4,8 @@ The code is licensed under AGPL-3.0 (see `LICENSE.txt`)
 
 ## Libs
 
+`ahocorasick` is a fork of https://github.com/cloudflare/ahocorasick commit 054963ec939627782012c7c34eefd2942488d4e1 - License:  BSD-3-Clause
+
 `barcode` is a fork of https://github.com/pingooio/stdx/barcode commit 65580ac6e377baeeebd5bb702e15795ead22e48d - License: MIT
 
 `check` is a fork of https://github.com/go-check/check commit 10cb98267c6cb43ea9cd6793f29ff4089c306974 - License: MIT
