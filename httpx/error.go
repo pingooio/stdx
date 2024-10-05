@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-func ServerErrorNotFound(res http.ResponseWriter, message *string) {
+func ServerErrorNotFound(res http.ResponseWriter) {
 	ServeError(res, "Not Found\n", http.StatusNotFound)
 }
 
