@@ -119,7 +119,6 @@ func (workerPool *WorkerPool) Start(ctx context.Context) {
 			time.Sleep(100 * time.Millisecond)
 			continue
 		}
-		_ = jobs
 
 		for _, job := range jobs {
 			jobsChan <- job
