@@ -21,7 +21,7 @@ func ServerErrorInternal(res http.ResponseWriter) {
 func ServerErrorForbidden(res http.ResponseWriter) {
 	sleepForMs := rand.Int64N(500) + 1000
 	time.Sleep(time.Duration(sleepForMs) * time.Millisecond)
-	res.Header().Set(HeaderConnection, "close")
+	// res.Header().Set(HeaderConnection, "close")
 	ServeError(res, "Forbidden\n", http.StatusForbidden)
 }
 
