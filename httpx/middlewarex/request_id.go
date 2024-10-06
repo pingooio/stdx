@@ -4,7 +4,7 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/pingooio/stdx/guid"
+	"github.com/pingooio/stdx/uuid"
 )
 
 type requestIDContextKey struct{}
@@ -16,7 +16,7 @@ func RequestID(header string) func(next http.Handler) http.Handler {
 	isHeaderEmpty := header == ""
 	return func(next http.Handler) http.Handler {
 		fn := func(w http.ResponseWriter, r *http.Request) {
-			requestID := guid.NewTimeBased()
+			requestID := uuid.NewV7()
 
 			if !isHeaderEmpty {
 				w.Header().Set(header, requestID.String())

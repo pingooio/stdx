@@ -4,8 +4,8 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/pingooio/stdx/guid"
 	"github.com/pingooio/stdx/log/slogx"
+	"github.com/pingooio/stdx/uuid"
 )
 
 // SetLogger injects `logger` in the context of requests
@@ -18,7 +18,7 @@ func SetLogger(logger *slog.Logger) func(next http.Handler) http.Handler {
 			)
 
 			reqIDContextValue := ctx.Value(RequestIDCtxKey)
-			if requestID, ok := reqIDContextValue.(guid.GUID); ok {
+			if requestID, ok := reqIDContextValue.(uuid.UUID); ok {
 				routeLogger = routeLogger.With(slog.String("request_id", requestID.String()))
 			}
 
