@@ -76,3 +76,8 @@ func (m *Map[K, V]) Iter() iter.Seq2[K, V] {
 		}
 	}
 }
+
+func (m *Map[K, V]) Get(key K) (V, bool) {
+	v, ok := m.data[key]
+	return v, ok
+}
