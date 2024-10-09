@@ -92,7 +92,7 @@ type CustomHostnameOwnershipVerificationHTTP struct {
 }
 
 // CustomMetadata defines custom metadata for the hostname. This requires logic to be implemented by Cloudflare to act on the data provided.
-type CustomMetadata map[string]interface{}
+type CustomMetadata map[string]any
 
 // SSLValidationError represents errors that occurred during SSL validation.
 type SSLValidationError struct {

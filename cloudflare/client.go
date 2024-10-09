@@ -32,13 +32,13 @@ func NewClient(apiToken string, httpClient *http.Client) *Client {
 type requestParams struct {
 	Method      string
 	URL         string
-	Payload     interface{}
+	Payload     any
 	ServerToken *string
 }
 
-func (client *Client) request(ctx context.Context, params requestParams, dst interface{}) error {
-	url := client.baseURL + params.URL
+func (client *Client) request(ctx context.Context, params requestParams, dst any) error {
 	var apiRes ApiResponse
+	url := client.baseURL + params.URL
 
 	req, err := http.NewRequestWithContext(ctx, params.Method, url, nil)
 	if err != nil {
@@ -46,11 +46,11 @@ func (client *Client) request(ctx context.Context, params requestParams, dst int
 	}
 
 	if params.Payload != nil {
-		payloadData, err := json.Marshal(params.Payload)
+		requestBody, err := json.Marshal(params.Payload)
 		if err != nil {
 			return err
 		}
-		req.Body = io.NopCloser(bytes.NewBuffer(payloadData))
+		req.Body = io.NopCloser(bytes.NewReader(requestBody))
 	}
 
 	req.Header.Add(httpx.HeaderAccept, httpx.MediaTypeJson)
