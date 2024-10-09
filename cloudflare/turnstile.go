@@ -29,6 +29,7 @@ type TurnstileVerifyResponse struct {
 	CData       string    `json:"cdata"`
 }
 
+// https://developers.cloudflare.com/turnstile/get-started/server-side-validation/
 func (client *Client) VerifyTurnstileToken(ctx context.Context, input TurnstileVerifyRequest) (res TurnstileVerifyResponse, err error) {
 	err = client.challengeRequest(ctx, requestParams{
 		Payload: input,
