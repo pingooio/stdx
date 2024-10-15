@@ -22,6 +22,10 @@ func (db *Database) Acquire(ctx context.Context) (*sql.Conn, error) {
 	return db.sqlxDB.Conn(ctx)
 }
 
+func (db *Database) Close() error {
+	return db.sqlxDB.Close()
+}
+
 // Ping verifies a connection to the database is still alive, establishing a connection if necessary.
 func (db *Database) Ping(ctx context.Context) error {
 	return db.sqlxDB.PingContext(ctx)

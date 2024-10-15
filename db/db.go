@@ -29,6 +29,7 @@ type DB interface {
 	SetConnMaxLifetime(d time.Duration)
 	Stats() sql.DBStats
 	Acquire(ctx context.Context) (conn *sql.Conn, err error)
+	Close() error
 	Queryer
 	Txer
 }

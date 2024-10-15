@@ -16,7 +16,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.2.8
 	github.com/minio/minio-go/v7 v7.0.78
 	github.com/rogpeppe/go-internal v1.13.1
-	github.com/yuin/goldmark v1.7.6
+	github.com/yuin/goldmark v1.7.7
 	github.com/zeebo/blake3 v0.2.4
 	golang.org/x/crypto v0.28.0
 	golang.org/x/image v0.21.0
