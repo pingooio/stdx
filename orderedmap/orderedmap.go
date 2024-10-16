@@ -64,7 +64,7 @@ func (m *Map[K, V]) UnmarshalJSON(data []byte) (err error) {
 // UnmarshalYAML implements the yaml.Unmarshaler interface.
 func (m *Map[K, V]) UnmarshalYAML(value *yaml.Node) error {
 	if value.Kind != yaml.MappingNode {
-		return fmt.Errorf("pipeline must contain YAML mapping, has %v", value.Kind)
+		return fmt.Errorf("input is not a YAML map. Got %v instead", value.Kind)
 	}
 
 	if m.items == nil {
@@ -83,11 +83,8 @@ func (m *Map[K, V]) UnmarshalYAML(value *yaml.Node) error {
 			return err
 		}
 
-		esc, _ := yaml.Marshal(key) //Escape the key
-		keysIndex[key] = bytes.Index([]byte(value.Value), esc)
+		keysIndex[key] = index
 		m.items = append(m.items, Item[K, V]{Key: key, Value: val})
-
-		// m.Set(key, val)
 	}
 
 	sort.Slice(m.items, func(i, j int) bool { return keysIndex[m.items[i].Key] < keysIndex[m.items[j].Key] })
