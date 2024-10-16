@@ -3,6 +3,7 @@ package orderedmap
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"iter"
 	"sort"
 
@@ -40,22 +41,57 @@ func (m *Map[K, V]) UnmarshalJSON(data []byte) (err error) {
 	return nil
 }
 
-func (m *Map[K, V]) UnmarshalYAML(yamlNode *yaml.Node) (err error) {
-	err = yamlNode.Decode(&m.data)
-	if err != nil {
-		return
+// func (m *Map[K, V]) UnmarshalYAML(yamlNode *yaml.Node) (err error) {
+// 	err = yamlNode.Decode(&m.data)
+// 	if err != nil {
+// 		return
+// 	}
+
+// 	m.items = make([]Item[K, V], 0, len(m.data))
+
+// 	index := make(map[K]int)
+// 	for key, value := range m.data {
+// 		m.items = append(m.items, Item[K, V]{Key: key, Value: value})
+// 		esc, _ := yaml.Marshal(key) //Escape the key
+// 		fmt.Println(string(esc), bytes.Index([]byte(yamlNode.Value), esc))
+// 		index[key] = bytes.Index([]byte(yamlNode.Value), esc)
+// 	}
+
+// 	sort.Slice(m.items, func(i, j int) bool { return index[m.items[i].Key] < index[m.items[j].Key] })
+// 	return nil
+// }
+
+// UnmarshalYAML implements the yaml.Unmarshaler interface.
+func (m *Map[K, V]) UnmarshalYAML(value *yaml.Node) error {
+	if value.Kind != yaml.MappingNode {
+		return fmt.Errorf("pipeline must contain YAML mapping, has %v", value.Kind)
 	}
 
-	m.items = make([]Item[K, V], 0, len(m.data))
+	if m.items == nil {
+		m.items = make([]Item[K, V], 0, len(m.data))
+	}
 
-	index := make(map[K]int)
-	for key, value := range m.data {
-		m.items = append(m.items, Item[K, V]{Key: key, Value: value})
+	keysIndex := make(map[K]int)
+	for index := 0; index < len(value.Content); index += 2 {
+		var key K
+		var val V
+
+		if err := value.Content[index].Decode(&key); err != nil {
+			return err
+		}
+		if err := value.Content[index+1].Decode(&val); err != nil {
+			return err
+		}
+
 		esc, _ := yaml.Marshal(key) //Escape the key
-		index[key] = bytes.Index([]byte(yamlNode.Value), esc)
+		keysIndex[key] = bytes.Index([]byte(value.Value), esc)
+		m.items = append(m.items, Item[K, V]{Key: key, Value: val})
+
+		// m.Set(key, val)
 	}
 
-	sort.Slice(m.items, func(i, j int) bool { return index[m.items[i].Key] < index[m.items[j].Key] })
+	sort.Slice(m.items, func(i, j int) bool { return keysIndex[m.items[i].Key] < keysIndex[m.items[j].Key] })
+
 	return nil
 }
 
