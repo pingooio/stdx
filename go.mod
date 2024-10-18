@@ -5,9 +5,9 @@ go 1.23
 require (
 	github.com/alecthomas/chroma/v2 v2.14.0
 	github.com/aws/aws-sdk-go-v2 v1.32.2
-	github.com/aws/aws-sdk-go-v2/config v1.27.43
+	github.com/aws/aws-sdk-go-v2/config v1.28.0
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.41
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.65.3
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.66.0
 	github.com/creack/pty v1.1.23
 	github.com/fsnotify/fsnotify v1.7.0
 	github.com/go-chi/chi/v5 v5.1.0
@@ -16,7 +16,7 @@ require (
 	github.com/klauspost/cpuid/v2 v2.2.8
 	github.com/minio/minio-go/v7 v7.0.78
 	github.com/rogpeppe/go-internal v1.13.1
-	github.com/yuin/goldmark v1.7.7
+	github.com/yuin/goldmark v1.7.8
 	github.com/zeebo/blake3 v0.2.4
 	golang.org/x/crypto v0.28.0
 	golang.org/x/image v0.21.0
