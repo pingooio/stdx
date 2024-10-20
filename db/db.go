@@ -65,7 +65,7 @@ func Connect(databaseURL string, poolSize int) (dbPool *Database, err error) {
 
 	dbPool.SetMaxOpenConns(poolSize)
 	dbPool.SetMaxIdleConns(poolSize)
-	dbPool.SetConnMaxIdleTime(30 * time.Minute)
+	// dbPool.SetConnMaxIdleTime(30 * time.Minute)
 
 	err = dbPool.Ping(context.Background())
 	if err != nil {
