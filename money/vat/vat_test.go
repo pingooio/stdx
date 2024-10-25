@@ -1,12 +1,13 @@
 package vat
 
 import (
+	"context"
 	"strings"
 	"testing"
 )
 
 func TestCheck(t *testing.T) {
-	r, err := CheckVAT("IE6388047V")
+	r, err := CheckVAT(context.Background(), "IE6388047V")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -42,7 +43,7 @@ func TestIsValidVAT(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		v, err := IsValidVAT(tt.vatNumber)
+		v, err := IsValidVAT(context.Background(), tt.vatNumber)
 		if err == nil {
 			if tt.isValid != v {
 				t.Errorf("Expected %v for %v, got %v", tt.isValid, tt.vatNumber, v)

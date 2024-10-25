@@ -2,14 +2,16 @@ package vat
 
 import (
 	"bytes"
+	"context"
 	"encoding/xml"
 	"errors"
 	"io"
-	"net/http"
 	"regexp"
 	"strings"
 	"text/template"
 	"time"
+
+	"github.com/pingooio/stdx/httpx"
 )
 
 type VATresponse struct {
@@ -21,7 +23,7 @@ type VATresponse struct {
 	Address     string
 }
 
-const serviceUrl = "http://ec.europa.eu/taxation_customs/vies/services/checkVatService"
+const serviceUrl = "https://ec.europa.eu/taxation_customs/vies/services/checkVatService"
 
 const envelope = `
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:v1="http://schemas.conversesolutions.com/xsd/dmticta/v1">
@@ -44,7 +46,7 @@ var (
 )
 
 // Check returns *VATresponse for vat number
-func CheckVAT(vatNumber string) (*VATresponse, error) {
+func CheckVAT(ctx context.Context, vatNumber string) (*VATresponse, error) {
 	vatNumber = sanitizeVatNumber(vatNumber)
 
 	e, err := getEnvelope(vatNumber)
@@ -52,9 +54,7 @@ func CheckVAT(vatNumber string) (*VATresponse, error) {
 		return nil, err
 	}
 	eb := bytes.NewBufferString(e)
-	client := http.Client{
-		Timeout: time.Duration(time.Duration(Timeout) * time.Second),
-	}
+	client := httpx.DefaultClient()
 	res, err := client.Post(serviceUrl, "text/xml;charset=UTF-8", eb)
 	if err != nil {
 		return nil, ErrVATserviceUnreachable
@@ -119,8 +119,8 @@ func CheckVAT(vatNumber string) (*VATresponse, error) {
 }
 
 // IsValid returns true if vat number is correct
-func IsValidVAT(vatNumber string) (bool, error) {
-	r, err := CheckVAT(vatNumber)
+func IsValidVAT(ctx context.Context, vatNumber string) (bool, error) {
+	r, err := CheckVAT(ctx, vatNumber)
 	if err != nil {
 		return false, err
 	}
