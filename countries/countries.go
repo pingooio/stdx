@@ -35,7 +35,7 @@ func Name(countryCode string) (countryName string, err error) {
 	countryName = Unknown
 
 	countryName, exists := allCountries[countryCode]
-	if !exists {
+	if !exists || countryCode == CodeUnknown {
 		err = ErrCountryNotFound
 		return
 	}
