@@ -9,12 +9,13 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.42
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.66.2
 	github.com/creack/pty v1.1.23
-	github.com/fsnotify/fsnotify v1.7.0
+	github.com/fsnotify/fsnotify v1.8.0
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/klauspost/cpuid/v2 v2.2.8
-	github.com/minio/minio-go/v7 v7.0.79
+	github.com/minio/minio-go/v7 v7.0.80
+	github.com/mmcloughlin/avo v0.6.0
 	github.com/rogpeppe/go-internal v1.13.1
 	github.com/yuin/goldmark v1.7.8
 	github.com/zeebo/blake3 v0.2.4
@@ -53,4 +54,5 @@ require (
 	github.com/rs/xid v1.6.0 // indirect
 	golang.org/x/net v0.30.0 // indirect
 	golang.org/x/sync v0.8.0 // indirect
+	golang.org/x/tools v0.26.0 // indirect
 )

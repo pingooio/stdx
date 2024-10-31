@@ -80,6 +80,8 @@ $ cd cobra && rm -rf doc go.mod go.sum && cd ..
 
 `validate` is a fork of https://github.com/asaskevich/govalidator commit f21760c49a8d602d863493de796926d2a5c1138d - License: MIT
 
+`xxh3` is a fork of https://github.com/zeebo/xxh3 commit 3808c706a06a56abd56cecf5a2760d3ba1e2e49a - License: BSD-2-Clause
+
 `yaml` is a fork of https://github.com/go-yaml/yaml commit f6f7691b1fdeb513f56608cd2c32c51f8194bf51 - License: MIT and Apache 2.0
 
 
