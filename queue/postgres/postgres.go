@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"slices"
 	"strings"
 	"time"
 
@@ -25,8 +26,43 @@ var (
 )
 
 const (
-	MaxPullBatchSize = 200
+	MaxPullBatchSize          = 200
+	POSTGRES_MAX_QUERY_PARAMS = 65_535 - 1
 )
+
+func buildQuery(initialQuery string, argsPerRecord int, arguments []any) (query string, err error) {
+	argsLen := len(arguments)
+
+	if argsLen%argsPerRecord != 0 {
+		return "", errors.New("BuildQuery: len(arguments) %% argsPerRecord != 0")
+	}
+
+	queryBuilder := strings.Builder{}
+	queryBuilder.Grow(len(arguments)*5 + 2)
+
+	queryBuilder.WriteString(initialQuery)
+	if !strings.HasSuffix(initialQuery, " ") {
+		queryBuilder.WriteRune(' ')
+	}
+	queryBuilder.WriteRune('(')
+
+	for i := 1; i <= argsLen; i += 1 {
+		queryBuilder.WriteString(fmt.Sprintf("$%d", i))
+
+		if i%argsPerRecord == 0 {
+			if i == argsLen {
+				queryBuilder.WriteRune(')')
+			} else {
+				queryBuilder.WriteString("),(")
+
+			}
+		} else {
+			queryBuilder.WriteString(",")
+		}
+	}
+
+	return queryBuilder.String(), nil
+}
 
 type PostgreSQLQueue struct {
 	db     db.DB
@@ -91,15 +127,27 @@ func (pgqueue *PostgreSQLQueue) PushMany(ctx context.Context, newJobs []queue.Ne
 		}
 	}
 
-	// TODO: improve perf with only 1 query
-	query := `INSERT INTO queue
-		(id, created_at, updated_at, scheduled_for, failed_attempts, status, type, data, retry_max, retry_delay, retry_strategy, timeout)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)`
-
+	// we batch insert as much as possible
 	err = pgqueue.db.Transaction(ctx, func(tx db.Tx) (txErr error) {
-		for _, job := range jobs {
-			_, txErr = tx.Exec(ctx, query, job.ID, job.CreatedAt, job.UpdatedAt, job.ScheduledFor, job.FailedAttempts,
-				job.Status, job.Type, job.RawData, job.RetryMax, job.RetryDelay, job.RetryStrategy, job.Timeout)
+		// Postgres only accept queries with a limited number of parameters. Thus, because we may have a huge
+		// number of items to insert (20k+) where each have many columns, we need to chunk
+		// the batch inserts by POSTGRES_MAX_QUERY_PARAMS / number of columns.
+		for jobsChunk := range slices.Chunk(jobs, POSTGRES_MAX_QUERY_PARAMS/12) {
+			query := `INSERT INTO queue
+				(id, created_at, updated_at, scheduled_for, failed_attempts, status, type, data, retry_max, retry_delay, retry_strategy, timeout)
+				VALUES`
+			args := make([]any, 0, len(jobsChunk)*12)
+			for _, job := range jobsChunk {
+				args = append(args, job.ID, job.CreatedAt, job.UpdatedAt, job.ScheduledFor, job.FailedAttempts,
+					job.Status, job.Type, job.RawData, job.RetryMax, job.RetryDelay, job.RetryStrategy, job.Timeout)
+			}
+
+			query, txErr = buildQuery(query, 12, args)
+			if txErr != nil {
+				return fmt.Errorf("queue: building PushMany PostgreSQL query: %w", txErr)
+			}
+
+			_, txErr = tx.Exec(ctx, query, args...)
 			if txErr != nil {
 				return txErr
 			}
