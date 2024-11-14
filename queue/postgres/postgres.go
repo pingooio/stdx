@@ -26,7 +26,7 @@ var (
 )
 
 const (
-	MaxPullBatchSize          = 200
+	MaxPullBatchSize          = 1000
 	POSTGRES_MAX_QUERY_PARAMS = 65_535 - 1
 )
 
