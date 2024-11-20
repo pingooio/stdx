@@ -101,7 +101,7 @@ func loadCloudflareIps() (err error) {
 // Ips are fetched from https://api.cloudflare.com/client/v4/ips and can be formated using | python3 -m json.tool
 // Changelog: https://www.cloudflare.com/en-gb/ips/
 // API Docs: https://developers.cloudflare.com/api/operations/cloudflare-i-ps-cloudflare-ip-details
-func (client *Client) FetchCloudflareIps(ctx context.Context) (res CloudflareIpsResult, err error) {
+func (client *Client) GetCloudflareIps(ctx context.Context) (res CloudflareIpsResult, err error) {
 	err = client.request(ctx, requestParams{
 		Method: http.MethodGet,
 		URL:    "/client/v4/ips",

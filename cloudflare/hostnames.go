@@ -113,7 +113,8 @@ type SSLValidationRecord struct {
 	Emails []string `json:"emails,omitempty"`
 }
 
-func (client *Client) AddCustomHostname(ctx context.Context, zone, hostname string) (hostnameID string, err error) {
+// https://developers.cloudflare.com/api/operations/custom-hostname-for-a-zone-create-custom-hostname
+func (client *Client) CreateCustomHostname(ctx context.Context, zone, hostname string) (hostnameID string, err error) {
 	var res CustomHostname
 	input := CustomHostname{
 		Hostname: hostname,
@@ -143,7 +144,8 @@ func (client *Client) AddCustomHostname(ctx context.Context, zone, hostname stri
 	return
 }
 
-func (client *Client) RemoveCustomHostname(ctx context.Context, zone, hostnameID string) (err error) {
+// https://developers.cloudflare.com/api/operations/custom-hostname-for-a-zone-delete-custom-hostname-(-and-any-issued-ssl-certificates)
+func (client *Client) DeleteCustomHostname(ctx context.Context, zone, hostnameID string) (err error) {
 	err = client.request(ctx, requestParams{
 		Method: http.MethodDelete,
 		URL:    fmt.Sprintf("/client/v4/zones/%s/custom_hostnames/%s", zone, hostnameID),
@@ -152,6 +154,7 @@ func (client *Client) RemoveCustomHostname(ctx context.Context, zone, hostnameID
 	return
 }
 
+// https://developers.cloudflare.com/api/operations/custom-hostname-for-a-zone-custom-hostname-details
 func (client *Client) GetCustomHostnameDetails(ctx context.Context, zone, hostnameID string) (res CustomHostname, err error) {
 	err = client.request(ctx, requestParams{
 		Method: http.MethodGet,

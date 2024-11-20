@@ -92,7 +92,7 @@ type ApiResponse struct {
 }
 
 type ApiError struct {
-	Code    string `json:"code"`
+	Code    int64  `json:"code"`
 	Message string `json:"message"`
 }
 
