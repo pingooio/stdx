@@ -164,7 +164,7 @@ func (workerPool *WorkerPool) handleJob(ctx context.Context, job queue.Job) {
 	}, retry.Context(context.Background()), retry.Attempts(3), retry.Delay(50*time.Millisecond), retry.MaxDelay(100*time.Millisecond))
 	if err != nil {
 		workerPool.logger.Error("workerpool: error deleting job", slog.String("job.id", job.ID.String()),
-			slog.String("err", err.Error()))
+			slogx.Err(err))
 	}
 	return
 
