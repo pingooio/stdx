@@ -3,6 +3,7 @@ package workerpool
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"log/slog"
 	"math"
@@ -11,6 +12,7 @@ import (
 
 	"github.com/pingooio/stdx/log/slogx"
 	"github.com/pingooio/stdx/queue"
+	"github.com/pingooio/stdx/retry"
 )
 
 type JobHandler[I queue.JobData] func(ctx context.Context, input I) (err error)
@@ -22,15 +24,17 @@ type WorkerPool struct {
 	concurrencyMax uint32
 	jobHandlers    map[string]internalJobHandler
 	logger         *slog.Logger
+	onError        func(ctx context.Context, job queue.Job, err error)
 }
 
 type Options struct {
 	// default: 200
 	ConcurrencyMax uint32
 	Logger         *slog.Logger
+	OnError        func(ctx context.Context, job queue.Job, err error)
 }
 
-func NewPool(queue queue.Queue, options *Options) (worker *WorkerPool, err error) {
+func NewPool(inputQueue queue.Queue, options *Options) (worker *WorkerPool, err error) {
 	opts := Options{
 		ConcurrencyMax: 200,
 		Logger:         slog.New(slogx.NewDiscardHandler()),
@@ -49,12 +53,26 @@ func NewPool(queue queue.Queue, options *Options) (worker *WorkerPool, err error
 		opts.Logger = options.Logger
 	}
 
+	if options.OnError != nil {
+		opts.OnError = options.OnError
+	} else {
+		// default error handler
+		opts.OnError = func(ctx context.Context, job queue.Job, err error) {
+			opts.Logger.Error("workerpool: job failed", slogx.Err(err),
+				slog.Group("job",
+					slog.String("job.id", job.ID.String()), slog.String("type", job.Type),
+				),
+			)
+		}
+	}
+
 	worker = &WorkerPool{
-		queue:       queue,
+		queue:       inputQueue,
 		jobHandlers: make(map[string]internalJobHandler),
 
+		logger:         options.Logger,
 		concurrencyMax: opts.ConcurrencyMax,
-		logger:         opts.Logger,
+		onError:        options.OnError,
 	}
 	return
 }
@@ -131,10 +149,7 @@ func (workerPool *WorkerPool) handleJob(ctx context.Context, job queue.Job) {
 
 	jobHandler, jobHandlerExists := workerPool.jobHandlers[job.Type]
 	if !jobHandlerExists {
-		workerPool.logger.Error("workerpool: job handler not found", slog.Group("job",
-			slog.String("job.id", job.ID.String()),
-			slog.String("job.type", job.Type),
-		))
+		err = errors.New("workerpool: job handler not found")
 		goto failjob
 	}
 
@@ -142,13 +157,10 @@ func (workerPool *WorkerPool) handleJob(ctx context.Context, job queue.Job) {
 	if err != nil {
 		goto failjob
 	}
-	// else {
-	// 	logger.Info("workerpool: job successfully executd", slog.Duration("duration", duration), slog.Group("job",
-	// 		slog.String("type", job.Type), slog.String("id", job.ID.String()),
-	// 	))
-	// }
 
-	err = workerPool.queue.DeleteJob(ctx, job.ID)
+	err = retry.Do(func() (retryErr error) {
+		return workerPool.queue.DeleteJob(ctx, job.ID)
+	}, retry.Context(ctx), retry.Attempts(3), retry.Delay(50*time.Millisecond), retry.MaxDelay(100*time.Millisecond))
 	if err != nil {
 		workerPool.logger.Error("workerpool: error deleting job", slog.String("job.id", job.ID.String()),
 			slog.String("err", err.Error()))
@@ -156,9 +168,7 @@ func (workerPool *WorkerPool) handleJob(ctx context.Context, job queue.Job) {
 	return
 
 failjob:
-	workerPool.logger.Error("workerpool: job failed", slog.Group("job",
-		slog.String("job.id", job.ID.String()), slog.String("type", job.Type),
-	), slogx.Err(err))
+	workerPool.onError(ctx, job, err)
 	// We use a context.Background() instead of ctx to let the job fail even if the context is cancelled
 	err = workerPool.queue.FailJob(context.Background(), job)
 	if err != nil {
