@@ -158,7 +158,7 @@ func (workerPool *WorkerPool) handleJob(ctx context.Context, job queue.Job) {
 		goto failjob
 	}
 
-	err = retry.Do(func() (retryErr error) {
+	err = retry.Do(func() error {
 		// We use a context.Background() instead of ctx to delete  the job fail even if the context is cancelled
 		return workerPool.queue.DeleteJob(context.Background(), job.ID)
 	}, retry.Context(context.Background()), retry.Attempts(3), retry.Delay(50*time.Millisecond), retry.MaxDelay(100*time.Millisecond))
