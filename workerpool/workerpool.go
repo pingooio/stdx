@@ -73,7 +73,7 @@ func NewPool(inputQueue queue.Queue, options *Options) (worker *WorkerPool, err 
 
 		logger:         options.Logger,
 		concurrencyMax: opts.ConcurrencyMax,
-		onError:        options.OnError,
+		onError:        opts.OnError,
 	}
 	return
 }
