@@ -38,7 +38,7 @@ func NewTimeBased() GUID {
 }
 
 // NewFormTime generates a new time-based guid from the given time
-func NewFormTime(time time.Time) GUID {
+func NewFromTime(time time.Time) GUID {
 	uuid := uuid.NewV7FromTime(time)
 	return GUID(uuid)
 }
