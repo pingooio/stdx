@@ -6,6 +6,7 @@ package uuid
 
 import (
 	"io"
+	"time"
 )
 
 // UUID version 7 features a time-ordered value field derived from the widely
@@ -21,7 +22,7 @@ import (
 // Uses the randomness pool if it was enabled with EnableRandPool.
 func NewV7() UUID {
 	uuid := Must(newRandom())
-	makeV7(uuid[:])
+	makeV7(uuid[:], timeNow())
 	return uuid
 }
 
@@ -34,14 +35,20 @@ func NewV7FromReader(r io.Reader) (UUID, error) {
 		return uuid, err
 	}
 
-	makeV7(uuid[:])
+	makeV7(uuid[:], timeNow())
 	return uuid, nil
+}
+
+func NewV7FromTime(t time.Time) UUID {
+	uuid := Must(newRandom())
+	makeV7(uuid[:], t)
+	return uuid
 }
 
 // makeV7 fill 48 bits time (uuid[0] - uuid[5]), set version b0111 (uuid[6])
 // uuid[8] already has the right version number (Variant is 10)
 // see function NewV7 and NewV7FromReader
-func makeV7(uuid []byte) {
+func makeV7(uuid []byte, time time.Time) {
 	/*
 		 0                   1                   2                   3
 		 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
@@ -57,7 +64,7 @@ func makeV7(uuid []byte) {
 	*/
 	_ = uuid[15] // bounds check
 
-	t, s := getV7Time()
+	t, s := getV7Time(time)
 
 	uuid[0] = byte(t >> 40)
 	uuid[1] = byte(t >> 32)
@@ -81,11 +88,11 @@ const nanoPerMilli = 1000000
 // getV7Time returns the time in milliseconds and nanoseconds / 256.
 // The returned (milli << 12 + seq) is guaranteed to be greater than
 // (milli << 12 + seq) returned by any previous call to getV7Time.
-func getV7Time() (milli, seq int64) {
+func getV7Time(time time.Time) (milli, seq int64) {
 	timeMu.Lock()
 	defer timeMu.Unlock()
 
-	nano := timeNow().UnixNano()
+	nano := time.UnixNano()
 	milli = nano / nanoPerMilli
 	// Sequence number is between 0 and 3906 (nanoPerMilli>>8)
 	seq = (nano - milli*nanoPerMilli) >> 8

@@ -298,7 +298,7 @@ func (f *testFunc) CommentWithoutT(receiver string) string {
 }
 
 // Standard header https://go.dev/s/generatedcode.
-var headerTemplate = `// Code generated with github.com/stretchr/testify/_codegen; DO NOT EDIT.
+var headerTemplate = `// Code generated with github.com/pingooio/stdx/testify/_codegen; DO NOT EDIT.
 
 package {{.Name}}
 

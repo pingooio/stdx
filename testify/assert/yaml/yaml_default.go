@@ -13,8 +13,8 @@
 //
 //   - testify_yaml_fail: [Unmarshal] always fails with an error
 //   - testify_yaml_custom: [Unmarshal] is a variable. Caller must initialize it
-//     before calling any of [github.com/stretchr/testify/assert.YAMLEq] or
-//     [github.com/stretchr/testify/assert.YAMLEqf].
+//     before calling any of [github.com/pingooio/stdx/testify/assert.YAMLEq] or
+//     [github.com/pingooio/stdx/testify/assert.YAMLEqf].
 //
 // Usage:
 //
@@ -22,11 +22,11 @@
 //
 // You can check with "go list" which implementation is linked:
 //
-//	go list -f '{{.Imports}}' github.com/stretchr/testify/assert/yaml
-//	go list -tags testify_yaml_fail -f '{{.Imports}}' github.com/stretchr/testify/assert/yaml
-//	go list -tags testify_yaml_custom -f '{{.Imports}}' github.com/stretchr/testify/assert/yaml
+//	go list -f '{{.Imports}}' github.com/pingooio/stdx/testify/assert/yaml
+//	go list -tags testify_yaml_fail -f '{{.Imports}}' github.com/pingooio/stdx/testify/assert/yaml
+//	go list -tags testify_yaml_custom -f '{{.Imports}}' github.com/pingooio/stdx/testify/assert/yaml
 //
-// [PR #1120]: https://github.com/stretchr/testify/pull/1120
+// [PR #1120]: https://github.com/pingooio/stdx/testify/pull/1120
 package yaml
 
 import goyaml "github.com/pingooio/stdx/yaml"

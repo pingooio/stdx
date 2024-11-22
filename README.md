@@ -6,6 +6,8 @@ The code is licensed under AGPL-3.0 (see `LICENSE.txt`)
 
 `ahocorasick` is a fork of https://github.com/cloudflare/ahocorasick commit 054963ec939627782012c7c34eefd2942488d4e1 - License:  BSD-3-Clause
 
+`automaxprocs` is a fork of https://github.com/uber-go/automaxprocs commit 1ea14c35ce47a73089b824e504d1c92eeb61a5a6 - License: MIT
+
 `barcode` is a fork of https://github.com/pingooio/stdx/barcode commit 65580ac6e377baeeebd5bb702e15795ead22e48d - License: MIT
 
 `check` is a fork of https://github.com/go-check/check commit 10cb98267c6cb43ea9cd6793f29ff4089c306974 - License: MIT
@@ -35,6 +37,8 @@ $ cd cobra && rm -rf doc go.mod go.sum && cd ..
 `goldmark-highlighting` is a fork of https://github.com/yuin/goldmark-highlighting commit 37449abec8cc453aad3ea47d44583b172b20f4b1 - License: MIT
 
 `go-gitdiff` is a fork of https://github.com/bluekeyes/go-gitdiff commit 8584cd59afe0fd5af926a98ea3ef650fa4b1f952 - License: MIT
+
+`gostub` is a fork of https://github.com/prashantv/gostub commit 9529e671b031c4a693f2d4c7861efbd3ba9152e5 - License: MIT
 
 `hostrouter` is a fork of https://github.com/go-chi/hostrouter commit 03da900f6d45aaf0d5a1f392e2bafe8437ae5102 - License: MIT
 
@@ -70,7 +74,7 @@ $ cd cobra && rm -rf doc go.mod go.sum && cd ..
 
 `sysinfo` is a fork of https://github.com/pingooio/stdx/sysinfo commit 99e836ba64f229922382eecd8a346e6b3d1b560a - License: MIT
 
-`testify` is a fork of https://github.com/stretchr/testify commit b074924938f86d417f1c9a845c7e8b0784d7f937 - License: MIT
+`testify` is a fork of https://github.com/pingooio/stdx/testify commit b074924938f86d417f1c9a845c7e8b0784d7f937 - License: MIT
 
 `toml` is a fork of https://github.com/pingooio/stdx/toml commit 1ba7f5b05951c7331f4eefea9bce295e2cb141f2 - License: MIT
 

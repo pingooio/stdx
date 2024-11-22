@@ -4,6 +4,7 @@ import (
 	"database/sql/driver"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/pingooio/stdx/base32"
 	"github.com/pingooio/stdx/crypto"
@@ -33,6 +34,12 @@ func NewRandom() GUID {
 
 func NewTimeBased() GUID {
 	uuid := uuid.NewV7()
+	return GUID(uuid)
+}
+
+// NewFormTime generates a new time-based guid from the given time
+func NewFormTime(time time.Time) GUID {
+	uuid := uuid.NewV7FromTime(time)
 	return GUID(uuid)
 }
 

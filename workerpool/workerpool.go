@@ -31,7 +31,8 @@ type Options struct {
 	// default: 200
 	ConcurrencyMax uint32
 	Logger         *slog.Logger
-	OnError        func(ctx context.Context, job queue.Job, err error)
+	// The default OnError handler is to log the error
+	OnError func(ctx context.Context, job queue.Job, err error)
 }
 
 func NewPool(inputQueue queue.Queue, options *Options) (worker *WorkerPool, err error) {
