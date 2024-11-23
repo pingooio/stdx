@@ -28,6 +28,7 @@ var (
 const (
 	MaxPullBatchSize          = 1000
 	POSTGRES_MAX_QUERY_PARAMS = 65_535 - 1
+	jobNumberOfColumns        = 12
 )
 
 func buildQuery(initialQuery string, argsPerRecord int, arguments []any) (query string, err error) {
@@ -116,56 +117,67 @@ func (pgqueue *PostgreSQLQueue) Push(ctx context.Context, tx db.Queryer, newJob 
 	return
 }
 
-func (pgqueue *PostgreSQLQueue) PushMany(ctx context.Context, newJobs []queue.NewJobInput) (err error) {
+func (pgqueue *PostgreSQLQueue) PushMany(ctx context.Context, tx db.Tx, newJobs []queue.NewJobInput) error {
+	// for now we use smaller batch size to reduce the amount of used memory
+	const BATCH_SIZE = 500
+	// Postgres only accepts queries with a limited number of parameters. Thus, because we may have a huge
+	// number of items to insert (20k+) where each have many columns, we need to chunk
+	// the batch inserts by POSTGRES_MAX_QUERY_PARAMS / number of columns.
+	// const BATCH_SIZE = POSTGRES_MAX_QUERY_PARAMS/jobNumberOfColumns
 	now := time.Now().UTC()
-	jobs := make([]queue.Job, len(newJobs))
+	var err error
 
-	for i := range newJobs {
-		jobs[i], err = pgqueue.validateJob(now, newJobs[i])
+	// we commit / rollback the transaction only if it was started by "us"
+	commitTransaction := false
+	if tx == nil {
+		commitTransaction = true
+		tx, err := pgqueue.db.Begin(ctx)
 		if err != nil {
-			return
+			return fmt.Errorf("queue: Starting DB transaction: %w", err)
 		}
+		defer tx.Rollback()
 	}
 
-	// we batch insert as much as possible
-	err = pgqueue.db.Transaction(ctx, func(tx db.Tx) (txErr error) {
-		// Postgres only accept queries with a limited number of parameters. Thus, because we may have a huge
-		// number of items to insert (20k+) where each have many columns, we need to chunk
-		// the batch inserts by POSTGRES_MAX_QUERY_PARAMS / number of columns.
-		for jobsChunk := range slices.Chunk(jobs, POSTGRES_MAX_QUERY_PARAMS/12) {
-			query := `INSERT INTO queue
+	// batch insert up to the limit
+	for jobsChunk := range slices.Chunk(newJobs, BATCH_SIZE) {
+		query := `INSERT INTO queue
 				(id, created_at, updated_at, scheduled_for, failed_attempts, status, type, data, retry_max, retry_delay, retry_strategy, timeout)
 				VALUES`
-			args := make([]any, 0, len(jobsChunk)*12)
-			for _, job := range jobsChunk {
-				args = append(args, job.ID, job.CreatedAt, job.UpdatedAt, job.ScheduledFor, job.FailedAttempts,
-					job.Status, job.Type, job.RawData, job.RetryMax, job.RetryDelay, job.RetryStrategy, job.Timeout)
+		args := make([]any, 0, len(jobsChunk)*jobNumberOfColumns)
+		for i := range jobsChunk {
+			job, err := pgqueue.validateJob(now, newJobs[i])
+			if err != nil {
+				return err
 			}
-
-			query, txErr = buildQuery(query, 12, args)
-			if txErr != nil {
-				return fmt.Errorf("queue: building PushMany PostgreSQL query: %w", txErr)
-			}
-
-			_, txErr = tx.Exec(ctx, query, args...)
-			if txErr != nil {
-				return txErr
-			}
+			args = append(args, job.ID, job.CreatedAt, job.UpdatedAt, job.ScheduledFor, job.FailedAttempts,
+				job.Status, job.Type, job.RawData, job.RetryMax, job.RetryDelay, job.RetryStrategy, job.Timeout)
 		}
 
-		return nil
-	})
-	if err != nil {
-		return
+		query, err = buildQuery(query, jobNumberOfColumns, args)
+		if err != nil {
+			return fmt.Errorf("queue: building PushMany PostgreSQL query: %w", err)
+		}
+
+		_, err = tx.Exec(ctx, query, args...)
+		if err != nil {
+			return fmt.Errorf("queue: inserting jobs: %w", err)
+		}
 	}
 
-	return
+	if commitTransaction {
+		err = tx.Commit()
+		if err != nil {
+			return fmt.Errorf("queue: Comitting DB transaction: %w", err)
+		}
+	}
+
+	return nil
 }
 
 func (pgqueue *PostgreSQLQueue) validateJob(now time.Time, newJob queue.NewJobInput) (job queue.Job, err error) {
 	scheduledFor := now
 	if newJob.ScheduledFor != nil {
-		scheduledFor = (*newJob.ScheduledFor).UTC()
+		scheduledFor = newJob.ScheduledFor.UTC()
 	}
 
 	jobType := strings.TrimSpace(newJob.Data.JobType())
@@ -240,7 +252,7 @@ func (pgqueue *PostgreSQLQueue) validateJob(now time.Time, newJob queue.NewJobIn
 		RetryStrategy:  retryStrategy,
 		Timeout:        jobTimeout,
 	}
-	return
+	return job, nil
 }
 
 // pull fetches at most `number_of_jobs` from the queue.

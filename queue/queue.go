@@ -55,7 +55,7 @@ var (
 
 type Queue interface {
 	Push(ctx context.Context, tx db.Queryer, newJob NewJobInput) error
-	PushMany(ctx context.Context, newJobs []NewJobInput) error
+	PushMany(ctx context.Context, t db.Tx, newJobs []NewJobInput) error
 	// pull fetches at most `number_of_jobs` from the queue.
 	Pull(ctx context.Context, numberOfJobs uint64) ([]Job, error)
 	DeleteJob(ctx context.Context, jobID uuid.UUID) error
