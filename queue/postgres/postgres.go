@@ -131,7 +131,7 @@ func (pgqueue *PostgreSQLQueue) PushMany(ctx context.Context, tx db.Tx, newJobs 
 	commitTransaction := false
 	if tx == nil {
 		commitTransaction = true
-		tx, err := pgqueue.db.Begin(ctx)
+		tx, err = pgqueue.db.Begin(ctx)
 		if err != nil {
 			return fmt.Errorf("queue: Starting DB transaction: %w", err)
 		}
