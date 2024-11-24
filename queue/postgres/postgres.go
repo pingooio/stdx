@@ -31,6 +31,9 @@ const (
 	jobNumberOfColumns        = 12
 )
 
+// ensure that PostgreSQLQueue satisfies the Queue interface
+var _ queue.Queue = (*PostgreSQLQueue)(nil)
+
 func buildQuery(initialQuery string, argsPerRecord int, arguments []any) (query string, err error) {
 	argsLen := len(arguments)
 
