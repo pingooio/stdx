@@ -7,14 +7,14 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.32.5
 	github.com/aws/aws-sdk-go-v2/config v1.28.5
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.46
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.67.1
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.69.0
 	github.com/creack/pty v1.1.24
 	github.com/fsnotify/fsnotify v1.8.0
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/klauspost/cpuid/v2 v2.2.9
-	github.com/minio/minio-go/v7 v7.0.80
+	github.com/minio/minio-go/v7 v7.0.81
 	github.com/mmcloughlin/avo v0.6.0
 	github.com/rogpeppe/go-internal v1.13.1
 	github.com/yuin/goldmark v1.7.8
