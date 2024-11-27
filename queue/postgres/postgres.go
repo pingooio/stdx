@@ -146,22 +146,22 @@ func (pgqueue *PostgreSQLQueue) PushMany(ctx context.Context, tx db.Tx, newJobs 
 		query := `INSERT INTO queue
 				(id, created_at, updated_at, scheduled_for, failed_attempts, status, type, data, retry_max, retry_delay, retry_strategy, timeout)
 				VALUES`
-		args := make([]any, 0, len(jobsChunk)*jobNumberOfColumns)
+		valuesToInsert := make([]any, 0, len(jobsChunk)*jobNumberOfColumns)
 		for i := range jobsChunk {
 			job, err := pgqueue.validateJob(now, jobsChunk[i])
 			if err != nil {
 				return err
 			}
-			args = append(args, job.ID, job.CreatedAt, job.UpdatedAt, job.ScheduledFor, job.FailedAttempts,
+			valuesToInsert = append(valuesToInsert, job.ID, job.CreatedAt, job.UpdatedAt, job.ScheduledFor, job.FailedAttempts,
 				job.Status, job.Type, job.RawData, job.RetryMax, job.RetryDelay, job.RetryStrategy, job.Timeout)
 		}
 
-		query, err = buildQuery(query, jobNumberOfColumns, args)
+		query, err = buildQuery(query, jobNumberOfColumns, valuesToInsert)
 		if err != nil {
 			return fmt.Errorf("queue: building PushMany PostgreSQL query: %w", err)
 		}
 
-		_, err = tx.Exec(ctx, query, args...)
+		_, err = tx.Exec(ctx, query, valuesToInsert...)
 		if err != nil {
 			return fmt.Errorf("queue: inserting jobs: %w", err)
 		}
