@@ -121,12 +121,13 @@ func (pgqueue *PostgreSQLQueue) Push(ctx context.Context, tx db.Queryer, newJob 
 }
 
 func (pgqueue *PostgreSQLQueue) PushMany(ctx context.Context, tx db.Tx, newJobs []queue.NewJobInput) error {
-	// for now we use smaller batch size to reduce the amount of used memory
-	const BATCH_SIZE = 500
 	// Postgres only accepts queries with a limited number of parameters. Thus, because we may have a huge
 	// number of items to insert (20k+) where each have many columns, we need to chunk
 	// the batch inserts by POSTGRES_MAX_QUERY_PARAMS / number of columns.
-	// const BATCH_SIZE = POSTGRES_MAX_QUERY_PARAMS/jobNumberOfColumns
+	//
+	// But for now we use smaller batch size to reduce the amount of used memory.
+	BATCH_SIZE := 500 // min(500, POSTGRES_MAX_QUERY_PARAMS/jobNumberOfColumns)
+
 	now := time.Now().UTC()
 	var err error
 
