@@ -148,7 +148,7 @@ func (pgqueue *PostgreSQLQueue) PushMany(ctx context.Context, tx db.Tx, newJobs 
 				VALUES`
 		args := make([]any, 0, len(jobsChunk)*jobNumberOfColumns)
 		for i := range jobsChunk {
-			job, err := pgqueue.validateJob(now, newJobs[i])
+			job, err := pgqueue.validateJob(now, jobsChunk[i])
 			if err != nil {
 				return err
 			}
