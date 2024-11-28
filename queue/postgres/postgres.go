@@ -148,8 +148,8 @@ func (pgqueue *PostgreSQLQueue) PushMany(ctx context.Context, tx db.Tx, newJobs 
 				(id, created_at, updated_at, scheduled_for, failed_attempts, status, type, data, retry_max, retry_delay, retry_strategy, timeout)
 				VALUES`
 		valuesToInsert := make([]any, 0, len(jobsChunk)*jobNumberOfColumns)
-		for i := range jobsChunk {
-			job, err := pgqueue.validateJob(now, jobsChunk[i])
+		for _, newJobInput := range jobsChunk {
+			job, err := pgqueue.validateJob(now, newJobInput)
 			if err != nil {
 				return err
 			}
