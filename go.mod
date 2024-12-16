@@ -10,16 +10,16 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.71.0
 	github.com/creack/pty v1.1.24
 	github.com/fsnotify/fsnotify v1.8.0
-	github.com/go-chi/chi/v5 v5.1.0
+	github.com/go-chi/chi/v5 v5.2.0
 	github.com/jackc/pgx/v5 v5.7.1
 	github.com/jmoiron/sqlx v1.4.0
 	github.com/klauspost/cpuid/v2 v2.2.9
-	github.com/minio/minio-go/v7 v7.0.81
+	github.com/minio/minio-go/v7 v7.0.82
 	github.com/mmcloughlin/avo v0.6.0
 	github.com/rogpeppe/go-internal v1.13.1
 	github.com/yuin/goldmark v1.7.8
 	github.com/zeebo/blake3 v0.2.4
-	golang.org/x/crypto v0.30.0
+	golang.org/x/crypto v0.31.0
 	golang.org/x/image v0.23.0
 	golang.org/x/mod v0.22.0
 	golang.org/x/sys v0.28.0
@@ -44,7 +44,7 @@ require (
 	github.com/dlclark/regexp2 v1.11.4 // indirect
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-ini/ini v1.67.0 // indirect
-	github.com/goccy/go-json v0.10.3 // indirect
+	github.com/goccy/go-json v0.10.4 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
