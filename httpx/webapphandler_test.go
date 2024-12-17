@@ -29,7 +29,7 @@ package httpx
 // 		},
 // 	}
 // 	for i := range elems {
-// 		elems[i].Hash = sha256.Sum256([]byte(elems[i].Input))
+// 		elems[i].Hash = blake3.Sum256([]byte(elems[i].Input))
 // 		elems[i].Expected = base64.RawURLEncoding.EncodeToString(elems[i].Hash[:])
 // 	}
 
@@ -42,7 +42,7 @@ package httpx
 // }
 
 // func BenchmarkEncodeEtagOptimized(b *testing.B) {
-// 	hash := sha256.Sum256([]byte("Hello World!"))
+// 	hash := blake3.Sum256([]byte("Hello World!"))
 
 // 	b.Run("strconv.Quote(base64.RawURLEncoding.EncodeToString(hash))", func(b *testing.B) {
 // 		b.ReportAllocs()
