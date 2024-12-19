@@ -7,7 +7,7 @@ import (
 	"errors"
 
 	"github.com/pingooio/stdx/crypto/chacha20"
-	"github.com/zeebo/blake3"
+	"lukechampine.com/blake3"
 	// "golang.org/x/crypto/chacha20"
 )
 
@@ -16,8 +16,8 @@ const (
 	NonceSize = 32
 	TagSize   = 32
 
-	encryptionKeyContext    = "bchacha20-blake3 2023-12-31 23:59:59:999 encryption key"
-	athenticationKeyContext = "bchacha20-blake3 2024-01-01 00:00:00:000 authentication key"
+	encryptionKeyContext    = "BChaCha20-BLAKE3 2023-12-31 23:59:59:999 encryption key"
+	athenticationKeyContext = "BChaCha20-BLAKE3 2024-01-01 00:00:00:000 authentication key"
 )
 
 var (
@@ -59,13 +59,13 @@ func (x *BChaCha20Blake3) Seal(dst, nonce, plaintext, additionalData []byte) []b
 	chacha20Cipher.XORKeyStream(ciphertext, plaintext)
 
 	// _ = tag
-	macHasher, _ := blake3.NewKeyed(authenticationKey[:])
+	macHasher := blake3.New(32, authenticationKey[:])
 	macHasher.Write(additionalData)
 	// macHasher.Write(nonce)
 	macHasher.Write(ciphertext)
-	writeUint64(macHasher, uint64(len(additionalData)))
+	writeUint64LittleEndian(macHasher, uint64(len(additionalData)))
 	// writeUint64(macHasher, uint64(len(nonce)))
-	writeUint64(macHasher, uint64(len(ciphertext)))
+	writeUint64LittleEndian(macHasher, uint64(len(ciphertext)))
 	macHasher.Sum(tag[:0])
 
 	return ret
@@ -85,13 +85,13 @@ func (x *BChaCha20Blake3) Open(dst, nonce, ciphertext, additionalData []byte) ([
 	chacha20Cipher, _ := chacha20.New(encryptionKey[:], nonce[24:32])
 
 	var computedTag [TagSize]byte
-	macHasher, _ := blake3.NewKeyed(authenticationKey[:])
+	macHasher := blake3.New(32, authenticationKey[:])
 	macHasher.Write(additionalData)
 	// macHasher.Write(nonce)
 	macHasher.Write(ciphertext)
-	writeUint64(macHasher, uint64(len(additionalData)))
+	writeUint64LittleEndian(macHasher, uint64(len(additionalData)))
 	// writeUint64(macHasher, uint64(len(nonce)))
-	writeUint64(macHasher, uint64(len(ciphertext)))
+	writeUint64LittleEndian(macHasher, uint64(len(ciphertext)))
 	macHasher.Sum(computedTag[:0])
 
 	ret, plaintext := sliceForAppend(dst, len(ciphertext))
@@ -109,16 +109,16 @@ func (x *BChaCha20Blake3) Open(dst, nonce, ciphertext, additionalData []byte) ([
 }
 
 func deriveKey(out, parentKey []byte, context string, nonce []byte) {
-	var keyMaterial [12 + KeySize + 8 + 8]byte
+	var keyMaterial [12 + KeySize]byte
 
 	copy(keyMaterial[0:12], nonce)
 	copy(keyMaterial[12:44], parentKey)
-	binary.LittleEndian.PutUint64(keyMaterial[44:52], uint64(len(nonce)))
-	binary.LittleEndian.PutUint64(keyMaterial[52:60], uint64(len(parentKey)))
+	// binary.LittleEndian.PutUint64(keyMaterial[44:52], uint64(len(nonce)))
+	// binary.LittleEndian.PutUint64(keyMaterial[52:60], uint64(len(parentKey)))
 
 	// blake3x.DeriveKey(out, context, keyMaterial[:])
 
-	blake3.DeriveKey(context, keyMaterial[:], out)
+	blake3.DeriveKey(out, context, keyMaterial[:])
 
 	// hasher := blake3.NewDeriveKey(context)
 	// hasher.Write(nonce)
@@ -143,7 +143,7 @@ func sliceForAppend(in []byte, n int) (head, tail []byte) {
 	return
 }
 
-func writeUint64(p *blake3.Hasher, n uint64) {
+func writeUint64LittleEndian(p *blake3.Hasher, n uint64) {
 	var buf [8]byte
 	binary.LittleEndian.PutUint64(buf[:], n)
 	p.Write(buf[:])
