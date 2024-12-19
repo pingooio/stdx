@@ -8,7 +8,10 @@ The code is licensed under AGPL-3.0 (see `LICENSE.txt`)
 
 `automaxprocs` is a fork of https://github.com/uber-go/automaxprocs commit 1ea14c35ce47a73089b824e504d1c92eeb61a5a6 - License: MIT
 
-`barcode` is a fork of https://github.com/pingooio/stdx/barcode commit 65580ac6e377baeeebd5bb702e15795ead22e48d - License: MIT
+`barcode` is a fork of https://github.com/pingooio/stdx/barcode commit 4f5562c16b85a956bc8d650dc15344e1e1eb7c8c - License: MIT
+
+`crypto/blake3` is a fork of https://github.com/lukechampine/blake3 commit 65580ac6e377baeeebd5bb702e15795ead22e48d - License: MIT
+
 
 `check` is a fork of https://github.com/go-check/check commit 10cb98267c6cb43ea9cd6793f29ff4089c306974 - License: MIT
 

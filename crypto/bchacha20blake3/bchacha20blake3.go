@@ -6,8 +6,8 @@ import (
 	"encoding/binary"
 	"errors"
 
+	"github.com/pingooio/stdx/crypto/blake3"
 	"github.com/pingooio/stdx/crypto/chacha20"
-	"lukechampine.com/blake3"
 	// "golang.org/x/crypto/chacha20"
 )
 
