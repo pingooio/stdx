@@ -12,7 +12,7 @@ RUN apt-get install -y --no-install-recommends \
     bash curl wget psmisc ca-certificates lsb-release openssh-client \
     # dev tools. dnsutils for dig.
     git vim make binutils coreutils cmake build-essential pkg-config \
-    zip gnupg gcc g++ htop wrk zstd upx gdb dnsutils \
+    zip gnupg gcc g++ htop wrk zstd upx gdb dnsutils jq b3sum \
     musl musl-dev musl-tools libc6-dev clang libclang-dev lld \
     # useful data. mailcap for mimetypes. tzdata for timezones.
     mailcap tzdata libpcre3-dev
@@ -38,8 +38,8 @@ COPY --chown=$USERNAME vimrc /home/$USERNAME/.vimrc
 
 # setup go
 RUN mkdir -p /home/$USERNAME/.local/gopath
-COPY --from=go /usr/local/go /home/$USERNAME/.local/go
-RUN go telemetry off
+COPY --from=go /usr/local/go /usr/local/go
+RUN /usr/local/go/bin/go telemetry off
 
 # setup git
 RUN git config --global push.autoSetupRemote true
