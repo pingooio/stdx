@@ -1,17 +1,15 @@
-package bchacha20blake3_test
+package bchacha20blake3
 
 import (
 	"bytes"
 	"crypto/rand"
 	"errors"
 	"testing"
-
-	"github.com/pingooio/stdx/crypto/bchacha20blake3"
 )
 
-func TestBasic(t *testing.T) {
-	var key [bchacha20blake3.KeySize]byte
-	var nonce [bchacha20blake3.NonceSize]byte
+func TestEncryptDecrypt(t *testing.T) {
+	var key [KeySize]byte
+	var nonce [NonceSize]byte
 
 	originalPlaintext := []byte("Hello World")
 	additionalData := []byte("!")
@@ -19,7 +17,7 @@ func TestBasic(t *testing.T) {
 	rand.Read(key[:])
 	rand.Read(nonce[:])
 
-	cipher, _ := bchacha20blake3.New(key[:])
+	cipher, _ := New(key[:])
 	ciphertext := cipher.Seal(nil, nonce[:], originalPlaintext, additionalData)
 
 	decryptedPlaintext, err := cipher.Open(nil, nonce[:], ciphertext, additionalData)
@@ -35,8 +33,8 @@ func TestBasic(t *testing.T) {
 }
 
 func TestAdditionalData(t *testing.T) {
-	var key [bchacha20blake3.KeySize]byte
-	var nonce [bchacha20blake3.NonceSize]byte
+	var key [KeySize]byte
+	var nonce [NonceSize]byte
 
 	originalPlaintext := []byte("Hello World")
 	additionalData := []byte("!")
@@ -44,12 +42,40 @@ func TestAdditionalData(t *testing.T) {
 	rand.Read(key[:])
 	rand.Read(nonce[:])
 
-	cipher, _ := bchacha20blake3.New(key[:])
+	cipher, _ := New(key[:])
 	ciphertext := cipher.Seal(nil, nonce[:], originalPlaintext, additionalData)
 
 	_, err := cipher.Open(nil, nonce[:], ciphertext, []byte{})
-	if !errors.Is(err, bchacha20blake3.ErrOpen) {
-		t.Errorf("expected error (%s) | got (%s)", bchacha20blake3.ErrOpen, err)
+	if !errors.Is(err, ErrOpen) {
+		t.Errorf("expected error (%s) | got (%s)", ErrOpen, err)
 		return
 	}
+}
+
+func BenchmarkZeroize(b *testing.B) {
+	var key [32]byte
+
+	b.Run("zeroizeKey", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(32)
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			zeroizeKey(key)
+		}
+	})
+
+	b.Run("zeroize", func(b *testing.B) {
+		b.ReportAllocs()
+		b.SetBytes(32)
+		b.ResetTimer()
+		for i := 0; i < b.N; i++ {
+			zeroize(key[:])
+		}
+	})
+}
+
+// Deprecated: Use zeroize instead.
+func zeroizeKey(input [32]byte) {
+	var zeros [32]byte
+	copy(input[:], zeros[:])
 }

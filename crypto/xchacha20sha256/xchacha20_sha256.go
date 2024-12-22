@@ -9,7 +9,6 @@ import (
 	"hash"
 
 	"github.com/pingooio/stdx/crypto/chacha20"
-	"github.com/zeebo/blake3"
 )
 
 const (
@@ -94,13 +93,14 @@ func (x *XChaCha20Sha256) Open(dst, nonce, ciphertext, additionalData []byte) ([
 	return ret, nil
 }
 
-func deriveKey(out, parentKey []byte, context string) []byte {
-	hasher := blake3.NewDeriveKey(context)
-	hasher.Write(parentKey)
-	// hasher.Write(binary.LittleEndian.AppendUint64([]byte{}, uint64(len(nonce))))
-	// hasher.Write(binary.LittleEndian.AppendUint64([]byte{}, uint64(len(parentKey))))
-	return hasher.Sum(out)
-}
+// func deriveKey(parentKey []byte, context string) (subKey [32]byte) {
+// 	blake3.DeriveKey(subKey[:], context, parentKey)
+// 	return subKey
+// 	// hasher.Write(parentKey)
+// 	// // hasher.Write(binary.LittleEndian.AppendUint64([]byte{}, uint64(len(nonce))))
+// 	// // hasher.Write(binary.LittleEndian.AppendUint64([]byte{}, uint64(len(parentKey))))
+// 	// return hasher.Sum(out)
+// }
 
 // sliceForAppend takes a slice and a requested number of bytes. It returns a
 // slice with the contents of the given slice followed by that many bytes and a

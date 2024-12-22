@@ -18,7 +18,6 @@ require (
 	github.com/mmcloughlin/avo v0.6.0
 	github.com/rogpeppe/go-internal v1.13.1
 	github.com/yuin/goldmark v1.7.8
-	github.com/zeebo/blake3 v0.2.4
 	golang.org/x/crypto v0.31.0
 	golang.org/x/image v0.23.0
 	golang.org/x/mod v0.22.0

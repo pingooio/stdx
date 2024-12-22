@@ -16,46 +16,48 @@ const (
 	NonceSize = 32
 	TagSize   = 32
 
-	encryptionKeyContext    = "BChaCha20-BLAKE3 2023-12-31 23:59:59:999 encryption key"
-	athenticationKeyContext = "BChaCha20-BLAKE3 2024-01-01 00:00:00:000 authentication key"
+	// encryptionKeyContext    = "ChaCha20-BLAKE3 2023-12-31 encryption key ChaCha20"
+	encryptionKeyContext    = "ChaCha20-BLAKE3 encryption key ChaCha20"
+	athenticationKeyContext = "ChaCha20-BLAKE3 authentication key BLAKE3"
 )
 
 var (
-	ErrOpen = errors.New("bchacha20blake3: error decrypting ciphertext")
+	ErrOpen = errors.New("chacha20blake3: error decrypting ciphertext")
 )
 
-type BChaCha20Blake3 struct {
+type ChaCha20Blake3 struct {
 	key [KeySize]byte
 }
 
-// ensure that BChaCha20Blake3 implements `cipher.AEAD` interface at build time
-var _ cipher.AEAD = (*BChaCha20Blake3)(nil)
+// ensure that ChaCha20Blake3 implements `cipher.AEAD` interface at build time
+var _ cipher.AEAD = (*ChaCha20Blake3)(nil)
 
-func New(key []byte) (*BChaCha20Blake3, error) {
-	ret := new(BChaCha20Blake3)
+func New(key []byte) (*ChaCha20Blake3, error) {
+	ret := new(ChaCha20Blake3)
 	copy(ret.key[:], key)
 	return ret, nil
 }
 
-func (*BChaCha20Blake3) NonceSize() int {
+func (*ChaCha20Blake3) NonceSize() int {
 	return NonceSize
 }
 
-func (*BChaCha20Blake3) Overhead() int {
+func (*ChaCha20Blake3) Overhead() int {
 	return TagSize
 }
 
-func (x *BChaCha20Blake3) Seal(dst, nonce, plaintext, additionalData []byte) []byte {
+func (x *ChaCha20Blake3) Seal(dst, nonce, plaintext, additionalData []byte) []byte {
 	var encryptionKey [32]byte
 	var authenticationKey [32]byte
 
-	deriveKey(encryptionKey[:0], x.key[:], encryptionKeyContext, nil)
-	deriveKey(authenticationKey[:0], x.key[:], athenticationKeyContext, nonce)
+	deriveKey(encryptionKey[:], x.key[:], encryptionKeyContext, nil)
+	deriveKey(authenticationKey[:], x.key[:], athenticationKeyContext, nonce)
 
 	ret, out := sliceForAppend(dst, len(plaintext)+TagSize)
 	ciphertext, tag := out[:len(plaintext)], out[len(plaintext):]
 
 	chacha20Cipher, _ := chacha20.New(encryptionKey[:], nonce[24:32])
+	// chacha20Cipher, _ := chacha20.NewUnauthenticatedCipher(encryptionKey[:], nonce[20:32])
 	chacha20Cipher.XORKeyStream(ciphertext, plaintext)
 
 	// _ = tag
@@ -68,21 +70,24 @@ func (x *BChaCha20Blake3) Seal(dst, nonce, plaintext, additionalData []byte) []b
 	writeUint64LittleEndian(macHasher, uint64(len(ciphertext)))
 	macHasher.Sum(tag[:0])
 
+	zeroize(encryptionKey[:])
+	zeroize(authenticationKey[:])
+
 	return ret
 }
 
-func (x *BChaCha20Blake3) Open(dst, nonce, ciphertext, additionalData []byte) ([]byte, error) {
+func (x *ChaCha20Blake3) Open(dst, nonce, ciphertext, additionalData []byte) ([]byte, error) {
 	var encryptionKey [32]byte
 	var authenticationKey [32]byte
 
-	deriveKey(encryptionKey[:0], x.key[:], encryptionKeyContext, nil)
-
-	deriveKey(authenticationKey[:0], x.key[:], athenticationKeyContext, nonce)
+	deriveKey(encryptionKey[:], x.key[:], encryptionKeyContext, nil)
+	deriveKey(authenticationKey[:], x.key[:], athenticationKeyContext, nonce)
 
 	tag := ciphertext[len(ciphertext)-TagSize:]
 	ciphertext = ciphertext[:len(ciphertext)-TagSize]
 
 	chacha20Cipher, _ := chacha20.New(encryptionKey[:], nonce[24:32])
+	// chacha20Cipher, _ := chacha20.NewUnauthenticatedCipher(encryptionKey[:], nonce[20:32])
 
 	var computedTag [TagSize]byte
 	macHasher := blake3.New(32, authenticationKey[:])
@@ -97,28 +102,27 @@ func (x *BChaCha20Blake3) Open(dst, nonce, ciphertext, additionalData []byte) ([
 	ret, plaintext := sliceForAppend(dst, len(ciphertext))
 
 	if subtle.ConstantTimeCompare(computedTag[:], tag) != 1 {
-		// for i := range plaintext {
-		// 	plaintext[i] = 0
-		// }
 		return nil, ErrOpen
 	}
 
 	chacha20Cipher.XORKeyStream(plaintext, ciphertext)
 
+	zeroize(encryptionKey[:])
+	zeroize(authenticationKey[:])
+
 	return ret, nil
 }
 
 func deriveKey(out, parentKey []byte, context string, nonce []byte) {
-	var keyMaterial [12 + KeySize]byte
+	// it seems that it's faster to use slices as arguments instead of arrays, as slices are passed as pointers
 
-	copy(keyMaterial[0:12], nonce)
-	copy(keyMaterial[12:44], parentKey)
-	// binary.LittleEndian.PutUint64(keyMaterial[44:52], uint64(len(nonce)))
-	// binary.LittleEndian.PutUint64(keyMaterial[52:60], uint64(len(parentKey)))
+	// we use a fixed-size array even if nonce is null to avoid heap allocations
+	var keyMaterial [KeySize + NonceSize]byte
 
-	// blake3x.DeriveKey(out, context, keyMaterial[:])
+	copy(keyMaterial[:], nonce)
+	copy(keyMaterial[len(nonce):], parentKey[:])
 
-	blake3.DeriveKey(out, context, keyMaterial[:])
+	blake3.DeriveKey(out[:], context, keyMaterial[:len(nonce)+len(parentKey)])
 
 	// hasher := blake3.NewDeriveKey(context)
 	// hasher.Write(nonce)
@@ -147,4 +151,10 @@ func writeUint64LittleEndian(p *blake3.Hasher, n uint64) {
 	var buf [8]byte
 	binary.LittleEndian.PutUint64(buf[:], n)
 	p.Write(buf[:])
+}
+
+func zeroize(input []byte) {
+	for i := range input {
+		input[i] = 0
+	}
 }

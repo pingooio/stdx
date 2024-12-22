@@ -13,7 +13,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zeebo/blake3"
+	"github.com/pingooio/stdx/crypto/blake3"
 )
 
 var ErrDir = errors.New("path is a folder")
@@ -191,7 +191,7 @@ func loadFilesMetdata(folder fs.FS, config *WebappHandlerConfig) (ret map[string
 		defer file.Close()
 
 		// we hash the file to generate its Etag
-		hasher := blake3.New()
+		hasher := blake3.New(32, nil)
 		_, errWalk = io.Copy(hasher, file)
 		if errWalk != nil {
 			return fmt.Errorf("webappHandler: error hashing file %s: %w", path, errWalk)

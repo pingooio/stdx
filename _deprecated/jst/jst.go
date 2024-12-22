@@ -11,8 +11,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/pingooio/stdx/crypto/blake3"
 	"github.com/pingooio/stdx/crypto/chacha20"
-	"github.com/zeebo/blake3"
 )
 
 // jst.v1.local.[header].[payload].[signature]
@@ -135,7 +135,7 @@ func (provider *Provider) IssueToken(payload any, expiresAt *time.Time, options 
 	_, _ = tokenBuffer.WriteString(payloadBase64)
 
 	// we can ignore error as we are sure that the key is of the good size
-	macHasher, _ := blake3.NewKeyed(authenticationKey)
+	macHasher := blake3.New(32, authenticationKey)
 	macHasher.Write(tokenBuffer.Bytes())
 	signature := macHasher.Sum(nil)
 	signatureBase64 := base64.RawURLEncoding.EncodeToString(signature)

@@ -6,10 +6,8 @@ import (
 	"encoding/binary"
 	"errors"
 
-	"github.com/zeebo/blake3"
-
+	"github.com/pingooio/stdx/crypto/blake3"
 	// "golang.org/x/crypto/chacha20"
-
 	"github.com/pingooio/stdx/crypto/chacha20"
 )
 
@@ -63,6 +61,9 @@ func (cipher *ChaCha20Blake3) Seal(dst, nonce, plaintext, additionalData []byte)
 
 	// first get a new ChaCha20 cipher instance
 	chacha20Cipher, _ := chacha20.New(cipher.key[:], nonce)
+	// var ietfNonce [12]byte
+	// copy(ietfNonce[:], nonce)
+	// chacha20Cipher, _ := chacha20.NewUnauthenticatedCipher(cipher.key[:], ietfNonce[:])
 
 	// then perform the KDF step to get the authentication key and increase the ChaCha20 counter
 	chacha20Cipher.XORKeyStream(authenticationKey[:], authenticationKey[:])
@@ -72,7 +73,7 @@ func (cipher *ChaCha20Blake3) Seal(dst, nonce, plaintext, additionalData []byte)
 	chacha20Cipher.XORKeyStream(ciphertext, plaintext)
 
 	// and finally MAC the AAD + ciphertext with the authentication key
-	macHasher, _ := blake3.NewKeyed(authenticationKey[:])
+	macHasher := blake3.New(32, authenticationKey[:])
 	macHasher.Write(additionalData)
 	macHasher.Write(ciphertext)
 	writeUint64(macHasher, uint64(len(additionalData)))
@@ -93,12 +94,15 @@ func (cipher *ChaCha20Blake3) Open(dst, nonce, ciphertext, additionalData []byte
 	ciphertext = ciphertext[:len(ciphertext)-TagSize]
 
 	chacha20Cipher, _ := chacha20.New(cipher.key[:], nonce)
+	// var ietfNonce [12]byte
+	// copy(ietfNonce[:], nonce)
+	// chacha20Cipher, _ := chacha20.NewUnauthenticatedCipher(cipher.key[:], ietfNonce[:])
 
 	chacha20Cipher.XORKeyStream(authenticationKey[:], authenticationKey[:])
 	chacha20Cipher.SetCounter(1)
 
 	var computedTag [TagSize]byte
-	macHasher, _ := blake3.NewKeyed(authenticationKey[:])
+	macHasher := blake3.New(32, authenticationKey[:])
 	macHasher.Write(additionalData)
 	macHasher.Write(ciphertext)
 	writeUint64(macHasher, uint64(len(additionalData)))
