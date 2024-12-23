@@ -48,6 +48,10 @@ func (hr Routes) Routes() []chi.Route {
 	return hr[""].Routes()
 }
 
+func (hr Routes) Find(rctx *chi.Context, method, path string) string {
+	return hr[""].Find(rctx, method, path)
+}
+
 func (hr Routes) Middlewares() chi.Middlewares {
 	return chi.Middlewares{}
 }
