@@ -10,6 +10,8 @@ The code is licensed under AGPL-3.0 (see `LICENSE.txt`)
 
 `barcode` is a fork of https://github.com/pingooio/stdx/barcode commit 4f5562c16b85a956bc8d650dc15344e1e1eb7c8c - License: MIT
 
+`base64` is a fork of https://github.com/segmentio/asm commit 1cfacc81a878d4a07b13f51f2368cd86893d23fa - License: MIT-0
+
 `crypto/blake3` is a fork of https://github.com/lukechampine/blake3 commit 65580ac6e377baeeebd5bb702e15795ead22e48d - License: MIT
 
 
