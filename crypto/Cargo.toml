@@ -1,0 +1,14 @@
+[package]
+name = "crypto"
+version = "0.1.0"
+edition = "2021"
+authors = ["Sylvain Kerkour"]
+
+[lib]
+path = "./src/crypto.rs"
+
+[dependencies]
+aws-lc-rs = { workspace = true }
+
+[dev-dependencies]
+hex = { path = "../hex" }

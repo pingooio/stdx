@@ -1,0 +1,31 @@
+[package]
+name = "ipnetwork"
+version = "0.20.0"
+authors = ["Abhishek Chanda <abhishek.becs@gmail.com>", "Linus Färnstrand <faern@faern.net>"]
+description = "A library to work with IP CIDRs in Rust"
+license = "Apache-2.0"
+repository = "https://github.com/bloom42/stdx"
+keywords = ["network", "ip", "address", "cidr"]
+readme = "README.md"
+categories = ["network-programming", "parser-implementations"]
+edition = "2021"
+
+[dependencies]
+serde = { workspace = true }
+# schemars = { version = "0.8.17", optional = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }
+# criterion = {version = "0.5.1", features= ["html_reports"]}
+# does-it-json = "0.0.4"
+
+[badges]
+travis-ci = { repository = "achanda/ipnetwork" }
+maintenance = { status = "passively-maintained" }
+
+# [features]
+# default = ["serde"]
+
+# [[bench]]
+# name = "parse_bench"
+# harness = false

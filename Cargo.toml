@@ -1,0 +1,104 @@
+[workspace]
+resolver = "2"
+
+members = [
+    "countries",
+    "crypto",
+    "docker",
+    "html_escape",
+    "net",
+    "strings",
+    "uuid",
+
+    "acme",
+    "anyerr",
+    "async-trait",
+    "base32",
+    "base64",
+    "cfg-if",
+    "constant_time_eq",
+    "crc32fast",
+    "cron",
+    "embed",
+    "embed/embed_utils",
+    "embed/embed_impl",
+    "form_urlencoded",
+    "getopts",
+    "hex",
+    "hostname",
+    "httpdate",
+    "ipnetwork",
+    "itoa",
+    "mail_builder",
+    "maxminddb",
+    "memmem",
+    "mime_guess",
+    "num_cpus",
+    "percent_encoding",
+    "pin_project_lite",
+    "postmark",
+    "ryu",
+    "serde_urlencoded",
+    "serde_yaml",
+    "thiserror",
+    "thiserror/impl",
+    "tld",
+    "unsafe_libyaml",
+]
+
+[workspace.dependencies]
+aws-lc-rs = "1"
+bytes = "1"
+chrono = { version = "0.4", default-features = false, features = ["clock", "oldtime", "serde", "std", ] }
+futures-util = "0.3"
+hyper = { version = "1", features = ["full"] }
+indexmap = { version = "2" }
+libc = "0.2"
+memchr = "2"
+mime = "0.3"
+nom = "7"
+rand = "0.8"
+reqwest = { version = "0.12", default-features = false, features = ["charset", "gzip", "http2", "multipart", "json", "rustls-tls", "zstd"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["full"] }
+tracing = "0.1"
+walkdir = "2"
+
+
+# For macros
+syn = { version = "2", default-features = false, features = ["derive", "extra-traits", "parsing", "proc-macro", "printing"] }
+quote = "1"
+proc-macro2 = "1"
+
+
+[patch.crates-io]
+async-trait = { path = "./async-trait" }
+base64 = { path = "./base64" }
+cfg-if = { path = "./cfg-if" }
+constant_time_eq = { path = "./constant_time_eq" }
+crc32fast = { path = "./crc32fast" }
+form_urlencoded = { path = "./form_urlencoded" }
+getopts = { path = "./getopts" }
+hex = { path = "./hex" }
+hostname = { path = "./hostname" }
+httpdate = { path = "./httpdate" }
+itoa = { path = "./itoa" }
+memmem = { path = "./memmem" }
+mime_guess = { path = "./mime_guess" }
+num_cpus = { path = "./num_cpus" }
+percent-encoding = { path = "./percent_encoding" }
+pin-project-lite = { path = "./pin_project_lite" }
+ryu = { path = "./ryu" }
+serde_urlencoded = { path = "./serde_urlencoded" }
+thiserror = { path = "./thiserror" }
+thiserror-impl  = { path = "./thiserror/impl" }
+uuid = { path = "./uuid" }
+
+
+aws-lc-rs = { git = "https://github.com/aws/aws-lc-rs", rev = "cb17eb3ee50417b5708e63819c29c490da4e844f" }
+ring  = { git = "https://github.com/briansmith/ring", rev = "7c0024abaf4fd59250c9b79cc41a029aa0ef3497" }
+serde  = { git = "https://github.com/serde-rs/serde", rev = "d5bc546ca53be0b31984a06a8ad587cbea4ca5ce" } # v1.0.203
+serde_derive  = { git = "https://github.com/serde-rs/serde", rev = "d5bc546ca53be0b31984a06a8ad587cbea4ca5ce" } # v1.0.203
+serde_json  = { git = "https://github.com/serde-rs/json", rev = "0ae247ca63be75e6c7e6e0e9cd8916e618cf8f24" } # v1.0.117
+
