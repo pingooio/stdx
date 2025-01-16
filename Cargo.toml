@@ -101,4 +101,3 @@ ring  = { git = "https://github.com/briansmith/ring", rev = "7c0024abaf4fd59250c
 serde  = { git = "https://github.com/serde-rs/serde", rev = "d5bc546ca53be0b31984a06a8ad587cbea4ca5ce" } # v1.0.203
 serde_derive  = { git = "https://github.com/serde-rs/serde", rev = "d5bc546ca53be0b31984a06a8ad587cbea4ca5ce" } # v1.0.203
 serde_json  = { git = "https://github.com/serde-rs/json", rev = "0ae247ca63be75e6c7e6e0e9cd8916e618cf8f24" } # v1.0.117
-
