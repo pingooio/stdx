@@ -25,7 +25,7 @@ async fn static_embed(req: &mut Request, res: &mut Response) {
 
   match Asset::get(&path) {
     Some(content) => {
-      let hash = hex::encode(content.metadata.sha256_hash());
+      let hash = hex::encode(content.metadata.sha3_256_hash());
       // if etag is matched, return 304
       if req
         .headers()

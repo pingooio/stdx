@@ -1,10 +1,11 @@
 #![forbid(unsafe_code)]
 
-use crypto::hash::Sha256;
 use std::borrow::Cow;
 use std::path::Path;
 use std::time::SystemTime;
 use std::{fs, io};
+
+use crypto::hash::sha3;
 
 #[cfg_attr(all(debug_assertions, not(feature = "debug-embed")), allow(unused))]
 pub struct FileEntry {
@@ -66,8 +67,8 @@ impl Metadata {
     }
   }
 
-  /// The SHA256 hash of the file
-  pub fn sha256_hash(&self) -> [u8; 32] {
+  /// The SHA3-256 hash of the file
+  pub fn sha3_256_hash(&self) -> [u8; 32] {
     self.hash
   }
 
@@ -94,7 +95,7 @@ pub fn read_file_from_fs(file_path: &Path) -> io::Result<EmbeddedFile> {
   let data = fs::read(file_path)?;
   let data = Cow::from(data);
 
-  let hash = Sha256::hash(&data);
+  let hash = sha3::hash_256(&data);
 
   let source_date_epoch = match std::env::var("SOURCE_DATE_EPOCH") {
     Ok(value) => value.parse::<u64>().ok(),

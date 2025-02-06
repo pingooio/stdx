@@ -13,7 +13,7 @@ fn hash_is_accurate() {
   hasher.update(index_file.data);
   let expected_hash: [u8; 32] = hasher.finalize().into();
 
-  assert_eq!(index_file.metadata.sha256_hash(), expected_hash);
+  assert_eq!(index_file.metadata.sha3_256_hash(), expected_hash);
 }
 
 #[test]
