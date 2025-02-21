@@ -300,7 +300,7 @@ where
                 };
                 base_set.into_iter().step_by(*step as usize).collect()
             }
-            RootSpecifier::NamedPoint(ref name) => (&[Self::ordinal_from_name(name)?])
+            RootSpecifier::NamedPoint(name) => (&[Self::ordinal_from_name(name)?])
                 .iter()
                 .cloned()
                 .collect::<OrdinalSet>(),
