@@ -15,10 +15,10 @@ use std::error::{self, Request};
 #[cfg(any(feature = "std", anyhow_no_ptr_addr_of))]
 use crate::ptr::Mut;
 use crate::{
+    Error, StdError,
     backtrace::Backtrace,
     chain::Chain,
     ptr::{Own, Ref},
-    Error, StdError,
 };
 
 impl Error {
@@ -170,10 +170,7 @@ impl Error {
         C: Display + Send + Sync + 'static,
         E: StdError + Send + Sync + 'static,
     {
-        let error: ContextError<C, E> = ContextError {
-            context,
-            error,
-        };
+        let error: ContextError<C, E> = ContextError { context, error };
 
         let vtable = &ErrorVTable {
             object_drop: object_drop::<ContextError<C, E>>,
@@ -239,9 +236,7 @@ impl Error {
         // underlying ErrorImpl<E> is preserved in the vtable provided by the
         // caller rather than a builtin fat pointer vtable.
         let inner = Own::new(inner).cast::<ErrorImpl>();
-        Error {
-            inner,
-        }
+        Error { inner }
     }
 
     /// Wrap the error value with additional context.
@@ -304,10 +299,7 @@ impl Error {
     where
         C: Display + Send + Sync + 'static,
     {
-        let error: ContextError<C, Error> = ContextError {
-            context,
-            error: self,
-        };
+        let error: ContextError<C, Error> = ContextError { context, error: self };
 
         let vtable = &ErrorVTable {
             object_drop: object_drop::<ContextError<C, Error>>,

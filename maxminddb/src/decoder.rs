@@ -81,9 +81,7 @@ impl<'de> Decoder<'de> {
 
     fn decode_any<V: Visitor<'de>>(&mut self, visitor: V) -> DecodeResult<V::Value> {
         match self.decode_any_value()? {
-            Value::Any {
-                prev_ptr,
-            } => {
+            Value::Any { prev_ptr } => {
                 let res = self.decode_any(visitor);
                 self.current_ptr = prev_ptr;
                 res
@@ -112,9 +110,7 @@ impl<'de> Decoder<'de> {
                 let prev_ptr = self.current_ptr;
                 self.current_ptr = new_ptr;
 
-                Value::Any {
-                    prev_ptr,
-                }
+                Value::Any { prev_ptr }
             }
             2 => Value::String(self.decode_string(size)?),
             3 => Value::F64(self.decode_double(size)?),
@@ -140,10 +136,7 @@ impl<'de> Decoder<'de> {
     }
 
     fn decode_array(&mut self, size: usize) -> Value<'_, 'de> {
-        Value::Array(ArrayAccess {
-            de: self,
-            count: size,
-        })
+        Value::Array(ArrayAccess { de: self, count: size })
     }
 
     fn decode_bool(&mut self, size: usize) -> DecodeResult<bool> {

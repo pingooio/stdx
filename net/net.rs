@@ -40,13 +40,7 @@ mod test {
             port: &'static str,
         }
         let tests = [
-            (
-                "",
-                Expected {
-                    host: "",
-                    port: "",
-                },
-            ),
+            ("", Expected { host: "", port: "" }),
             (
                 "localhost",
                 Expected {
@@ -61,13 +55,7 @@ mod test {
                     port: "",
                 },
             ),
-            (
-                "[::1]",
-                Expected {
-                    host: "::1",
-                    port: "",
-                },
-            ),
+            ("[::1]", Expected { host: "::1", port: "" }),
             (
                 "localhost:8080",
                 Expected {

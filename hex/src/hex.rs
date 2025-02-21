@@ -496,10 +496,7 @@ mod test {
     pub fn test_invalid_char() {
         assert_eq!(
             Vec::from_hex("66ag").unwrap_err(),
-            FromHexError::InvalidHexCharacter {
-                c: 'g',
-                index: 3
-            }
+            FromHexError::InvalidHexCharacter { c: 'g', index: 3 }
         );
     }
 
@@ -514,10 +511,7 @@ mod test {
     pub fn test_from_hex_whitespace() {
         assert_eq!(
             Vec::from_hex("666f 6f62617").unwrap_err(),
-            FromHexError::InvalidHexCharacter {
-                c: ' ',
-                index: 4
-            }
+            FromHexError::InvalidHexCharacter { c: ' ', index: 4 }
         );
     }
 

@@ -4,7 +4,7 @@ use core::fmt;
 #[cfg(any(feature = "std", test))]
 use std::error;
 
-use crate::engine::{general_purpose::STANDARD, DecodeEstimate, Engine};
+use crate::engine::{DecodeEstimate, Engine, general_purpose::STANDARD};
 
 /// Errors that can occur while decoding.
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -153,14 +153,14 @@ pub fn decoded_len_estimate(encoded_len: usize) -> usize {
 #[cfg(test)]
 mod tests {
     use rand::{
-        distributions::{Distribution, Uniform},
         Rng,
+        distributions::{Distribution, Uniform},
     };
 
     use super::*;
     use crate::{
         alphabet,
-        engine::{general_purpose, Config, GeneralPurpose},
+        engine::{Config, GeneralPurpose, general_purpose},
         tests::{assert_encode_sanity, random_engine},
     };
 

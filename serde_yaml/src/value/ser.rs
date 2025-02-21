@@ -5,8 +5,9 @@ use serde::ser::{self, Serialize};
 use crate::{
     error::{self, Error, ErrorImpl},
     value::{
+        Mapping, Number, Sequence, Tag, TaggedValue, Value,
         tagged::{self, MaybeTag},
-        to_value, Mapping, Number, Sequence, Tag, TaggedValue, Value,
+        to_value,
     },
 };
 
@@ -193,9 +194,7 @@ impl ser::Serializer for Serializer {
             None => Sequence::new(),
             Some(len) => Sequence::with_capacity(len),
         };
-        Ok(SerializeArray {
-            sequence,
-        })
+        Ok(SerializeArray { sequence })
     }
 
     fn serialize_tuple(self, len: usize) -> Result<SerializeArray> {
@@ -359,14 +358,9 @@ impl ser::SerializeMap for SerializeMap {
             SerializeMap::Tagged(tagged) => {
                 let mut mapping = Mapping::new();
                 mapping.insert(Value::String(tagged.tag.to_string()), mem::take(&mut tagged.value));
-                *self = SerializeMap::Untagged {
-                    mapping,
-                    next_key: key,
-                };
+                *self = SerializeMap::Untagged { mapping, next_key: key };
             }
-            SerializeMap::Untagged {
-                next_key, ..
-            } => *next_key = key,
+            SerializeMap::Untagged { next_key, .. } => *next_key = key,
         }
         Ok(())
     }
@@ -377,10 +371,7 @@ impl ser::SerializeMap for SerializeMap {
     {
         let (mapping, key) = match self {
             SerializeMap::CheckForTag | SerializeMap::Tagged(_) => unreachable!(),
-            SerializeMap::Untagged {
-                mapping,
-                next_key,
-            } => (mapping, next_key),
+            SerializeMap::Untagged { mapping, next_key } => (mapping, next_key),
         };
         match key.take() {
             Some(key) => mapping.insert(key, to_value(value)?),
@@ -746,9 +737,7 @@ impl ser::SerializeMap for SerializeMap {
                     next_key: None,
                 };
             }
-            SerializeMap::Untagged {
-                mapping, ..
-            } => {
+            SerializeMap::Untagged { mapping, .. } => {
                 mapping.insert(to_value(key)?, to_value(value)?);
             }
         }
@@ -759,9 +748,7 @@ impl ser::SerializeMap for SerializeMap {
         Ok(match self {
             SerializeMap::CheckForTag => Value::Mapping(Mapping::new()),
             SerializeMap::Tagged(tagged) => Value::Tagged(Box::new(tagged)),
-            SerializeMap::Untagged {
-                mapping, ..
-            } => Value::Mapping(mapping),
+            SerializeMap::Untagged { mapping, .. } => Value::Mapping(mapping),
         })
     }
 }

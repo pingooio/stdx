@@ -14,9 +14,7 @@ pub struct Years {
 
 impl TimeUnitField for Years {
     fn from_optional_ordinal_set(ordinal_set: Option<OrdinalSet>) -> Self {
-        Years {
-            ordinals: ordinal_set,
-        }
+        Years { ordinals: ordinal_set }
     }
     fn name() -> Cow<'static, str> {
         Cow::from("Years")

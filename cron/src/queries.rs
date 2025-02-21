@@ -1,4 +1,4 @@
-use chrono::{offset::TimeZone, DateTime, Datelike, Duration, Timelike};
+use chrono::{DateTime, Datelike, Duration, Timelike, offset::TimeZone};
 
 use crate::{
     ordinal::Ordinal,

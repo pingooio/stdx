@@ -1,7 +1,7 @@
+use crate::ser::Error;
 use crate::ser::key::KeySink;
 use crate::ser::part::PartSerializer;
 use crate::ser::value::ValueSink;
-use crate::ser::Error;
 use form_urlencoded::Serializer as UrlEncodedSerializer;
 use form_urlencoded::Target as UrlEncodedTarget;
 use serde::ser;

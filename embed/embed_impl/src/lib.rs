@@ -13,7 +13,7 @@ use std::{
   iter::FromIterator,
   path::{Path, PathBuf},
 };
-use syn::{parse_macro_input, Data, DeriveInput, Expr, ExprLit, Fields, Lit, Meta, MetaNameValue};
+use syn::{Data, DeriveInput, Expr, ExprLit, Fields, Lit, Meta, MetaNameValue, parse_macro_input};
 
 fn embedded(
   ident: &syn::Ident, relative_folder_path: Option<&str>, absolute_folder_path: String, prefix: Option<&str>, includes: &[String], excludes: &[String],

@@ -6,12 +6,11 @@ use std::{
 
 use rand::{Rng as _, RngCore as _};
 
-use super::decoder::{DecoderReader, BUF_SIZE};
+use super::decoder::{BUF_SIZE, DecoderReader};
 use crate::{
-    alphabet,
-    engine::{general_purpose::STANDARD, Engine, GeneralPurpose},
+    DecodeError, PAD_BYTE, alphabet,
+    engine::{Engine, GeneralPurpose, general_purpose::STANDARD},
     tests::{random_alphabet, random_config, random_engine},
-    DecodeError, PAD_BYTE,
 };
 
 #[test]

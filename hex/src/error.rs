@@ -23,10 +23,7 @@ impl std::error::Error for FromHexError {}
 impl fmt::Display for FromHexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            FromHexError::InvalidHexCharacter {
-                c,
-                index,
-            } => {
+            FromHexError::InvalidHexCharacter { c, index } => {
                 write!(f, "Invalid character {:?} at position {}", c, index)
             }
             FromHexError::OddLength => write!(f, "Odd number of digits"),
@@ -50,11 +47,7 @@ mod tests {
     #[cfg(feature = "alloc")]
     fn test_display() {
         assert_eq!(
-            FromHexError::InvalidHexCharacter {
-                c: '\n',
-                index: 5
-            }
-            .to_string(),
+            FromHexError::InvalidHexCharacter { c: '\n', index: 5 }.to_string(),
             "Invalid character '\\n' at position 5"
         );
 

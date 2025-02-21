@@ -2,7 +2,7 @@ use std::{
     marker::PhantomData,
     mem::{self, MaybeUninit},
     ops::Deref,
-    ptr::{addr_of, NonNull},
+    ptr::{NonNull, addr_of},
 };
 
 pub(crate) struct Owned<T, Init = T> {

@@ -91,9 +91,7 @@ pub mod singleton_map {
         T: Serialize,
         S: Serializer,
     {
-        value.serialize(SingletonMap {
-            delegate: serializer,
-        })
+        value.serialize(SingletonMap { delegate: serializer })
     }
 
     #[allow(missing_docs)]
@@ -102,9 +100,7 @@ pub mod singleton_map {
         T: Deserialize<'de>,
         D: Deserializer<'de>,
     {
-        T::deserialize(SingletonMap {
-            delegate: deserializer,
-        })
+        T::deserialize(SingletonMap { delegate: deserializer })
     }
 
     struct SingletonMap<D> {
@@ -119,9 +115,7 @@ pub mod singleton_map {
         where
             S: Serializer,
         {
-            self.delegate.serialize(SingletonMap {
-                delegate: serializer,
-            })
+            self.delegate.serialize(SingletonMap { delegate: serializer })
         }
     }
 
@@ -251,9 +245,7 @@ pub mod singleton_map {
         where
             V: ?Sized + Serialize,
         {
-            self.delegate.serialize_some(&SingletonMap {
-                delegate: value,
-            })
+            self.delegate.serialize_some(&SingletonMap { delegate: value })
         }
 
         fn serialize_seq(self, len: Option<usize>) -> Result<Self::SerializeSeq, Self::Error> {
@@ -282,10 +274,7 @@ pub mod singleton_map {
             let mut map = self.delegate.serialize_map(Some(1))?;
             map.serialize_key(variant)?;
             let sequence = Sequence::with_capacity(len);
-            Ok(SerializeTupleVariantAsSingletonMap {
-                map,
-                sequence,
-            })
+            Ok(SerializeTupleVariantAsSingletonMap { map, sequence })
         }
 
         fn serialize_map(self, len: Option<usize>) -> Result<Self::SerializeMap, Self::Error> {
@@ -306,10 +295,7 @@ pub mod singleton_map {
             let mut map = self.delegate.serialize_map(Some(1))?;
             map.serialize_key(variant)?;
             let mapping = Mapping::with_capacity(len);
-            Ok(SerializeStructVariantAsSingletonMap {
-                map,
-                mapping,
-            })
+            Ok(SerializeStructVariantAsSingletonMap { map, mapping })
         }
 
         fn collect_str<T>(self, value: &T) -> Result<Self::Ok, Self::Error>
@@ -674,9 +660,7 @@ pub mod singleton_map {
         where
             D: Deserializer<'de>,
         {
-            self.delegate.visit_some(SingletonMap {
-                delegate: deserializer,
-            })
+            self.delegate.visit_some(SingletonMap { delegate: deserializer })
         }
 
         fn visit_unit<E>(self) -> Result<Self::Value, E>
@@ -740,10 +724,7 @@ pub mod singleton_map {
         where
             V: Visitor<'de>,
         {
-            let value = self.delegate.next_value_seed(TupleVariantSeed {
-                len,
-                visitor,
-            })?;
+            let value = self.delegate.next_value_seed(TupleVariantSeed { len, visitor })?;
             match self.delegate.next_key()? {
                 None => Ok(value),
                 Some(IgnoredAny) => Err(de::Error::invalid_value(Unexpected::Map, &"map with a single key")),
@@ -925,9 +906,7 @@ pub mod singleton_map_recursive {
         T: Serialize,
         S: Serializer,
     {
-        value.serialize(SingletonMapRecursive {
-            delegate: serializer,
-        })
+        value.serialize(SingletonMapRecursive { delegate: serializer })
     }
 
     #[allow(missing_docs)]
@@ -936,9 +915,7 @@ pub mod singleton_map_recursive {
         T: Deserialize<'de>,
         D: Deserializer<'de>,
     {
-        T::deserialize(SingletonMapRecursive {
-            delegate: deserializer,
-        })
+        T::deserialize(SingletonMapRecursive { delegate: deserializer })
     }
 
     struct SingletonMapRecursive<D> {
@@ -953,9 +930,7 @@ pub mod singleton_map_recursive {
         where
             S: Serializer,
         {
-            self.delegate.serialize(SingletonMapRecursive {
-                delegate: serializer,
-            })
+            self.delegate.serialize(SingletonMapRecursive { delegate: serializer })
         }
     }
 
@@ -1059,12 +1034,8 @@ pub mod singleton_map_recursive {
         where
             T: ?Sized + Serialize,
         {
-            self.delegate.serialize_newtype_struct(
-                name,
-                &SingletonMapRecursive {
-                    delegate: value,
-                },
-            )
+            self.delegate
+                .serialize_newtype_struct(name, &SingletonMapRecursive { delegate: value })
         }
 
         fn serialize_newtype_variant<T>(
@@ -1078,12 +1049,7 @@ pub mod singleton_map_recursive {
             T: ?Sized + Serialize,
         {
             let mut map = self.delegate.serialize_map(Some(1))?;
-            map.serialize_entry(
-                variant,
-                &SingletonMapRecursive {
-                    delegate: value,
-                },
-            )?;
+            map.serialize_entry(variant, &SingletonMapRecursive { delegate: value })?;
             map.end()
         }
 
@@ -1095,9 +1061,7 @@ pub mod singleton_map_recursive {
         where
             V: ?Sized + Serialize,
         {
-            self.delegate.serialize_some(&SingletonMapRecursive {
-                delegate: value,
-            })
+            self.delegate.serialize_some(&SingletonMapRecursive { delegate: value })
         }
 
         fn serialize_seq(self, len: Option<usize>) -> Result<Self::SerializeSeq, Self::Error> {
@@ -1132,10 +1096,7 @@ pub mod singleton_map_recursive {
             let mut map = self.delegate.serialize_map(Some(1))?;
             map.serialize_key(variant)?;
             let sequence = Sequence::with_capacity(len);
-            Ok(SerializeTupleVariantAsSingletonMapRecursive {
-                map,
-                sequence,
-            })
+            Ok(SerializeTupleVariantAsSingletonMapRecursive { map, sequence })
         }
 
         fn serialize_map(self, len: Option<usize>) -> Result<Self::SerializeMap, Self::Error> {
@@ -1160,10 +1121,7 @@ pub mod singleton_map_recursive {
             let mut map = self.delegate.serialize_map(Some(1))?;
             map.serialize_key(variant)?;
             let mapping = Mapping::with_capacity(len);
-            Ok(SerializeStructVariantAsSingletonMapRecursive {
-                map,
-                mapping,
-            })
+            Ok(SerializeStructVariantAsSingletonMapRecursive { map, mapping })
         }
 
         fn collect_str<T>(self, value: &T) -> Result<Self::Ok, Self::Error>
@@ -1189,9 +1147,8 @@ pub mod singleton_map_recursive {
         where
             T: ?Sized + ser::Serialize,
         {
-            self.delegate.serialize_element(&SingletonMapRecursive {
-                delegate: elem,
-            })
+            self.delegate
+                .serialize_element(&SingletonMapRecursive { delegate: elem })
         }
 
         fn end(self) -> Result<Self::Ok, Self::Error> {
@@ -1210,9 +1167,8 @@ pub mod singleton_map_recursive {
         where
             T: ?Sized + ser::Serialize,
         {
-            self.delegate.serialize_element(&SingletonMapRecursive {
-                delegate: elem,
-            })
+            self.delegate
+                .serialize_element(&SingletonMapRecursive { delegate: elem })
         }
 
         fn end(self) -> Result<Self::Ok, Self::Error> {
@@ -1231,9 +1187,8 @@ pub mod singleton_map_recursive {
         where
             V: ?Sized + ser::Serialize,
         {
-            self.delegate.serialize_field(&SingletonMapRecursive {
-                delegate: value,
-            })
+            self.delegate
+                .serialize_field(&SingletonMapRecursive { delegate: value })
         }
 
         fn end(self) -> Result<Self::Ok, Self::Error> {
@@ -1283,18 +1238,15 @@ pub mod singleton_map_recursive {
         where
             T: ?Sized + ser::Serialize,
         {
-            self.delegate.serialize_key(&SingletonMapRecursive {
-                delegate: key,
-            })
+            self.delegate.serialize_key(&SingletonMapRecursive { delegate: key })
         }
 
         fn serialize_value<T>(&mut self, value: &T) -> Result<(), Self::Error>
         where
             T: ?Sized + ser::Serialize,
         {
-            self.delegate.serialize_value(&SingletonMapRecursive {
-                delegate: value,
-            })
+            self.delegate
+                .serialize_value(&SingletonMapRecursive { delegate: value })
         }
 
         fn serialize_entry<K, V>(&mut self, key: &K, value: &V) -> Result<(), Self::Error>
@@ -1303,12 +1255,8 @@ pub mod singleton_map_recursive {
             V: ?Sized + ser::Serialize,
         {
             self.delegate.serialize_entry(
-                &SingletonMapRecursive {
-                    delegate: key,
-                },
-                &SingletonMapRecursive {
-                    delegate: value,
-                },
+                &SingletonMapRecursive { delegate: key },
+                &SingletonMapRecursive { delegate: value },
             )
         }
 
@@ -1328,12 +1276,8 @@ pub mod singleton_map_recursive {
         where
             V: ?Sized + ser::Serialize,
         {
-            self.delegate.serialize_field(
-                key,
-                &SingletonMapRecursive {
-                    delegate: value,
-                },
-            )
+            self.delegate
+                .serialize_field(key, &SingletonMapRecursive { delegate: value })
         }
 
         fn end(self) -> Result<Self::Ok, Self::Error> {
@@ -1382,171 +1326,152 @@ pub mod singleton_map_recursive {
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_any(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_any(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_bool<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_bool(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_bool(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_i8<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_i8(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_i8(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_i16<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_i16(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_i16(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_i32<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_i32(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_i32(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_i64<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_i64(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_i64(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_i128<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_i128(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_i128(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_u8<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_u8(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_u8(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_u16<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_u16(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_u16(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_u32<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_u32(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_u32(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_u64<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_u64(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_u64(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_u128<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_u128(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_u128(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_f32<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_f32(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_f32(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_f64<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_f64(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_f64(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_char<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_char(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_char(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_str<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_str(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_str(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_string<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_string(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_string(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_bytes<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_bytes(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_bytes(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_byte_buf<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_byte_buf(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_byte_buf(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_option<V>(self, visitor: V) -> Result<V::Value, Self::Error>
@@ -1563,54 +1488,40 @@ pub mod singleton_map_recursive {
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_unit(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_unit(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_unit_struct<V>(self, name: &'static str, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_unit_struct(
-                name,
-                SingletonMapRecursive {
-                    delegate: visitor,
-                },
-            )
+            self.delegate
+                .deserialize_unit_struct(name, SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_newtype_struct<V>(self, name: &'static str, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_newtype_struct(
-                name,
-                SingletonMapRecursive {
-                    delegate: visitor,
-                },
-            )
+            self.delegate
+                .deserialize_newtype_struct(name, SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_seq<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_seq(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_seq(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_tuple<V>(self, len: usize, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_tuple(
-                len,
-                SingletonMapRecursive {
-                    delegate: visitor,
-                },
-            )
+            self.delegate
+                .deserialize_tuple(len, SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_tuple_struct<V>(
@@ -1622,22 +1533,16 @@ pub mod singleton_map_recursive {
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_tuple_struct(
-                name,
-                len,
-                SingletonMapRecursive {
-                    delegate: visitor,
-                },
-            )
+            self.delegate
+                .deserialize_tuple_struct(name, len, SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_map<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_map(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_map(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_struct<V>(
@@ -1649,13 +1554,8 @@ pub mod singleton_map_recursive {
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_struct(
-                name,
-                fields,
-                SingletonMapRecursive {
-                    delegate: visitor,
-                },
-            )
+            self.delegate
+                .deserialize_struct(name, fields, SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_enum<V>(
@@ -1677,18 +1577,16 @@ pub mod singleton_map_recursive {
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_identifier(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_identifier(SingletonMapRecursive { delegate: visitor })
         }
 
         fn deserialize_ignored_any<V>(self, visitor: V) -> Result<V::Value, Self::Error>
         where
             V: Visitor<'de>,
         {
-            self.delegate.deserialize_ignored_any(SingletonMapRecursive {
-                delegate: visitor,
-            })
+            self.delegate
+                .deserialize_ignored_any(SingletonMapRecursive { delegate: visitor })
         }
 
         fn is_human_readable(&self) -> bool {
@@ -1857,9 +1755,8 @@ pub mod singleton_map_recursive {
         where
             D: Deserializer<'de>,
         {
-            self.delegate.visit_some(SingletonMapRecursive {
-                delegate: deserializer,
-            })
+            self.delegate
+                .visit_some(SingletonMapRecursive { delegate: deserializer })
         }
 
         fn visit_unit<E>(self) -> Result<Self::Value, E>
@@ -1873,27 +1770,22 @@ pub mod singleton_map_recursive {
         where
             D: Deserializer<'de>,
         {
-            self.delegate.visit_newtype_struct(SingletonMapRecursive {
-                delegate: deserializer,
-            })
+            self.delegate
+                .visit_newtype_struct(SingletonMapRecursive { delegate: deserializer })
         }
 
         fn visit_seq<A>(self, seq: A) -> Result<Self::Value, A::Error>
         where
             A: SeqAccess<'de>,
         {
-            self.delegate.visit_seq(SingletonMapRecursive {
-                delegate: seq,
-            })
+            self.delegate.visit_seq(SingletonMapRecursive { delegate: seq })
         }
 
         fn visit_map<A>(self, map: A) -> Result<Self::Value, A::Error>
         where
             A: MapAccess<'de>,
         {
-            self.delegate.visit_map(SingletonMapRecursive {
-                delegate: map,
-            })
+            self.delegate.visit_map(SingletonMapRecursive { delegate: map })
         }
     }
 
@@ -1907,9 +1799,8 @@ pub mod singleton_map_recursive {
         where
             D: Deserializer<'de>,
         {
-            self.delegate.deserialize(SingletonMapRecursive {
-                delegate: deserializer,
-            })
+            self.delegate
+                .deserialize(SingletonMapRecursive { delegate: deserializer })
         }
     }
 
@@ -1923,9 +1814,8 @@ pub mod singleton_map_recursive {
         where
             T: DeserializeSeed<'de>,
         {
-            self.delegate.next_element_seed(SingletonMapRecursive {
-                delegate: seed,
-            })
+            self.delegate
+                .next_element_seed(SingletonMapRecursive { delegate: seed })
         }
     }
 
@@ -1939,18 +1829,14 @@ pub mod singleton_map_recursive {
         where
             K: DeserializeSeed<'de>,
         {
-            self.delegate.next_key_seed(SingletonMapRecursive {
-                delegate: seed,
-            })
+            self.delegate.next_key_seed(SingletonMapRecursive { delegate: seed })
         }
 
         fn next_value_seed<V>(&mut self, seed: V) -> Result<V::Value, Self::Error>
         where
             V: DeserializeSeed<'de>,
         {
-            self.delegate.next_value_seed(SingletonMapRecursive {
-                delegate: seed,
-            })
+            self.delegate.next_value_seed(SingletonMapRecursive { delegate: seed })
         }
     }
 
@@ -2001,9 +1887,8 @@ pub mod singleton_map_recursive {
         where
             D: Deserializer<'de>,
         {
-            self.delegate.visit_some(SingletonMapRecursive {
-                delegate: deserializer,
-            })
+            self.delegate
+                .visit_some(SingletonMapRecursive { delegate: deserializer })
         }
 
         fn visit_unit<E>(self) -> Result<Self::Value, E>
@@ -2056,9 +1941,9 @@ pub mod singleton_map_recursive {
         where
             T: DeserializeSeed<'de>,
         {
-            let value = self.delegate.next_value_seed(SingletonMapRecursive {
-                delegate: seed,
-            })?;
+            let value = self
+                .delegate
+                .next_value_seed(SingletonMapRecursive { delegate: seed })?;
             match self.delegate.next_key()? {
                 None => Ok(value),
                 Some(IgnoredAny) => Err(de::Error::invalid_value(Unexpected::Map, &"map with a single key")),
@@ -2071,9 +1956,7 @@ pub mod singleton_map_recursive {
         {
             let value = self.delegate.next_value_seed(TupleVariantSeed {
                 len,
-                visitor: SingletonMapRecursive {
-                    delegate: visitor,
-                },
+                visitor: SingletonMapRecursive { delegate: visitor },
             })?;
             match self.delegate.next_key()? {
                 None => Ok(value),
@@ -2088,9 +1971,7 @@ pub mod singleton_map_recursive {
             let value = self.delegate.next_value_seed(StructVariantSeed {
                 name: self.name,
                 fields,
-                visitor: SingletonMapRecursive {
-                    delegate: visitor,
-                },
+                visitor: SingletonMapRecursive { delegate: visitor },
             })?;
             match self.delegate.next_key()? {
                 None => Ok(value),

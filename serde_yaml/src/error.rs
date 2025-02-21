@@ -199,13 +199,7 @@ impl ErrorImpl {
 
     fn mark(&self) -> Option<libyaml::Mark> {
         match self {
-            ErrorImpl::Message(
-                _,
-                Some(Pos {
-                    mark,
-                    path: _,
-                }),
-            )
+            ErrorImpl::Message(_, Some(Pos { mark, path: _ }))
             | ErrorImpl::RecursionLimitExceeded(mark)
             | ErrorImpl::UnknownAnchor(mark) => Some(*mark),
             ErrorImpl::Libyaml(err) => Some(err.mark()),
@@ -217,13 +211,7 @@ impl ErrorImpl {
     fn message_no_mark(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
             ErrorImpl::Message(msg, None) => f.write_str(msg),
-            ErrorImpl::Message(
-                msg,
-                Some(Pos {
-                    mark: _,
-                    path,
-                }),
-            ) => {
+            ErrorImpl::Message(msg, Some(Pos { mark: _, path })) => {
                 if path != "." {
                     write!(f, "{}: ", path)?;
                 }

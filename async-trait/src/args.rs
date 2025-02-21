@@ -1,7 +1,7 @@
 use proc_macro2::Span;
 use syn::{
-    parse::{Error, Parse, ParseStream, Result},
     Token,
+    parse::{Error, Parse, ParseStream, Result},
 };
 
 #[derive(Copy, Clone)]
@@ -26,13 +26,9 @@ fn try_parse(input: ParseStream) -> Result<Args> {
     if input.peek(Token![?]) {
         input.parse::<Token![?]>()?;
         input.parse::<kw::Send>()?;
-        Ok(Args {
-            local: true,
-        })
+        Ok(Args { local: true })
     } else {
-        Ok(Args {
-            local: false,
-        })
+        Ok(Args { local: false })
     }
 }
 

@@ -3,7 +3,7 @@ use std::{
     ops,
 };
 
-use crate::{mapping, mapping::Entry, private, Mapping, Value};
+use crate::{Mapping, Value, mapping, mapping::Entry, private};
 
 /// A type that can be used to index into a `serde_yaml::Value`. See the `get`
 /// and `get_mut` methods of `Value`.

@@ -1,7 +1,7 @@
 use proc_macro2::Span;
 use syn::{
-    parse::{Error, Parse, ParseStream, Result},
     Attribute, ItemImpl, ItemTrait, Token,
+    parse::{Error, Parse, ParseStream, Result},
 };
 
 pub enum Item {

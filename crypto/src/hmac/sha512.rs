@@ -36,8 +36,7 @@ impl HmacSha512 {
 mod tests {
     use super::*;
 
-    const HELLO_WORLD_SIGNATURE: &str =
-        "dce414cb1ac4e7d400ebe75f437ba90ada41c339874276b0807b7a8d9d73b56dbde7898e99c4ed92659f30ccd40c712ee517fc229012cffcd798d9ef7e357dd8";
+    const HELLO_WORLD_SIGNATURE: &str = "dce414cb1ac4e7d400ebe75f437ba90ada41c339874276b0807b7a8d9d73b56dbde7898e99c4ed92659f30ccd40c712ee517fc229012cffcd798d9ef7e357dd8";
 
     #[test]
     fn hello_world_signature() {

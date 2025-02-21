@@ -1,6 +1,6 @@
 use std::{cmp, fmt, io};
 
-use crate::{engine::Engine, DecodeError, DecodeSliceError, PAD_BYTE};
+use crate::{DecodeError, DecodeSliceError, PAD_BYTE, engine::Engine};
 
 // This should be large, but it has to fit on the stack.
 pub(crate) const BUF_SIZE: usize = 1024;

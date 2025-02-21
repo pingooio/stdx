@@ -1,11 +1,11 @@
 use core::ptr::addr_of_mut;
 
 use crate::{
-    libc,
+    PointerExt, YAML_ANY_ENCODING, YAML_UTF8_ENCODING, YAML_UTF16LE_ENCODING, YAML_WRITER_ERROR, libc,
     ops::ForceAdd as _,
-    success::{Success, FAIL, OK},
+    success::{FAIL, OK, Success},
     yaml::size_t,
-    yaml_emitter_t, PointerExt, YAML_ANY_ENCODING, YAML_UTF16LE_ENCODING, YAML_UTF8_ENCODING, YAML_WRITER_ERROR,
+    yaml_emitter_t,
 };
 
 unsafe fn yaml_emitter_set_writer_error(emitter: *mut yaml_emitter_t, problem: *const libc::c_char) -> Success {

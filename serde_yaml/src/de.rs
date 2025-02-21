@@ -1,8 +1,8 @@
 use std::{fmt, io, mem, num::ParseIntError, str, sync::Arc};
 
 use serde::de::{
-    self, value::StrDeserializer, Deserialize, DeserializeOwned, DeserializeSeed, Expected, IgnoredAny, Unexpected,
-    Visitor,
+    self, Deserialize, DeserializeOwned, DeserializeSeed, Expected, IgnoredAny, Unexpected, Visitor,
+    value::StrDeserializer,
 };
 
 use crate::{
@@ -73,17 +73,13 @@ impl<'de> Deserializer<'de> {
     /// Creates a YAML deserializer from a `&str`.
     pub fn from_str(s: &'de str) -> Self {
         let progress = Progress::Str(s);
-        Deserializer {
-            progress,
-        }
+        Deserializer { progress }
     }
 
     /// Creates a YAML deserializer from a `&[u8]`.
     pub fn from_slice(v: &'de [u8]) -> Self {
         let progress = Progress::Slice(v);
-        Deserializer {
-            progress,
-        }
+        Deserializer { progress }
     }
 
     /// Creates a YAML deserializer from an `io::Read`.
@@ -96,9 +92,7 @@ impl<'de> Deserializer<'de> {
         R: io::Read + 'de,
     {
         let progress = Progress::Read(Box::new(rdr));
-        Deserializer {
-            progress,
-        }
+        Deserializer { progress }
     }
 
     fn de<T>(
@@ -475,9 +469,7 @@ impl<'de, 'document> DeserializerFromEvents<'de, 'document> {
                     document: self.document,
                     pos,
                     jumpcount: self.jumpcount,
-                    path: Path::Alias {
-                        parent: &self.path,
-                    },
+                    path: Path::Alias { parent: &self.path },
                     remaining_depth: self.remaining_depth,
                     current_enum: None,
                 })
@@ -715,9 +707,7 @@ impl<'de, 'document, 'map> de::MapAccess<'de> for MapAccess<'de, 'document, 'map
                     key,
                 }
             } else {
-                Path::Unknown {
-                    parent: &self.de.path,
-                }
+                Path::Unknown { parent: &self.de.path }
             },
             remaining_depth: self.de.remaining_depth,
             current_enum: None,
@@ -1130,9 +1120,7 @@ fn invalid_type(event: &Event, exp: &dyn Expected) -> Error {
     match event {
         Event::Alias(_) => unreachable!(),
         Event::Scalar(scalar) => {
-            let get_type = InvalidType {
-                exp,
-            };
+            let get_type = InvalidType { exp };
             match visit_scalar(get_type, scalar, false) {
                 Ok(void) => match void {},
                 Err(invalid_type) => invalid_type,
@@ -1175,7 +1163,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
         }
         loop {
             match next {
-                Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_any(visitor),
+                &Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_any(visitor),
                 Event::Scalar(scalar) => {
                     if let Some(tag) = enum_tag(&scalar.tag, tagged_already) {
                         *self.pos -= 1;
@@ -1227,7 +1215,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
         let (next, mark) = self.next_event_mark()?;
         loop {
             match next {
-                Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_bool(visitor),
+                &Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_bool(visitor),
                 Event::Scalar(scalar) if is_plain_or_tagged_literal_scalar(Tag::BOOL, scalar, tagged_already) => {
                     if let Ok(value) = str::from_utf8(&scalar.value) {
                         if let Some(boolean) = parse_bool(value) {
@@ -1271,7 +1259,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
         let (next, mark) = self.next_event_mark()?;
         loop {
             match next {
-                Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_i64(visitor),
+                &Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_i64(visitor),
                 Event::Scalar(scalar) if is_plain_or_tagged_literal_scalar(Tag::INT, scalar, tagged_already) => {
                     if let Ok(value) = str::from_utf8(&scalar.value) {
                         if let Some(int) = parse_signed_int(value, i64::from_str_radix) {
@@ -1294,7 +1282,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
         let (next, mark) = self.next_event_mark()?;
         loop {
             match next {
-                Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_i128(visitor),
+                &Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_i128(visitor),
                 Event::Scalar(scalar) if is_plain_or_tagged_literal_scalar(Tag::INT, scalar, tagged_already) => {
                     if let Ok(value) = str::from_utf8(&scalar.value) {
                         if let Some(int) = parse_signed_int(value, i128::from_str_radix) {
@@ -1338,7 +1326,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
         let (next, mark) = self.next_event_mark()?;
         loop {
             match next {
-                Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_u64(visitor),
+                &Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_u64(visitor),
                 Event::Scalar(scalar) if is_plain_or_tagged_literal_scalar(Tag::INT, scalar, tagged_already) => {
                     if let Ok(value) = str::from_utf8(&scalar.value) {
                         if let Some(int) = parse_unsigned_int(value, u64::from_str_radix) {
@@ -1361,7 +1349,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
         let (next, mark) = self.next_event_mark()?;
         loop {
             match next {
-                Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_u128(visitor),
+                &Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_u128(visitor),
                 Event::Scalar(scalar) if is_plain_or_tagged_literal_scalar(Tag::INT, scalar, tagged_already) => {
                     if let Ok(value) = str::from_utf8(&scalar.value) {
                         if let Some(int) = parse_unsigned_int(value, u128::from_str_radix) {
@@ -1391,7 +1379,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
         let (next, mark) = self.next_event_mark()?;
         loop {
             match next {
-                Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_f64(visitor),
+                &Event::Alias(mut pos) => break self.jump(&mut pos)?.deserialize_f64(visitor),
                 Event::Scalar(scalar) if is_plain_or_tagged_literal_scalar(Tag::FLOAT, scalar, tagged_already) => {
                     if let Ok(value) = str::from_utf8(&scalar.value) {
                         if let Some(float) = parse_f64(value) {
@@ -1430,7 +1418,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
                     Err(invalid_type(next, &visitor))
                 }
             }
-            Event::Alias(mut pos) => self.jump(&mut pos)?.deserialize_str(visitor),
+            &Event::Alias(mut pos) => self.jump(&mut pos)?.deserialize_str(visitor),
             other => Err(invalid_type(other, &visitor)),
         }
         .map_err(|err: Error| error::fix_mark(err, mark, self.path))
@@ -1463,7 +1451,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
         V: Visitor<'de>,
     {
         let is_some = match self.peek_event()? {
-            Event::Alias(mut pos) => {
+            &Event::Alias(mut pos) => {
                 *self.pos += 1;
                 return self.jump(&mut pos)?.deserialize_option(visitor);
             }
@@ -1524,7 +1512,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
                     Err(de::Error::invalid_value(Unexpected::Bytes(&scalar.value), &"null"))
                 }
             }
-            Event::Alias(mut pos) => self.jump(&mut pos)?.deserialize_unit(visitor),
+            &Event::Alias(mut pos) => self.jump(&mut pos)?.deserialize_unit(visitor),
             Event::Void => visitor.visit_unit(),
             other => Err(invalid_type(other, &visitor)),
         }
@@ -1553,7 +1541,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
     {
         let (next, mark) = self.next_event_mark()?;
         match next {
-            Event::Alias(mut pos) => self.jump(&mut pos)?.deserialize_seq(visitor),
+            &Event::Alias(mut pos) => self.jump(&mut pos)?.deserialize_seq(visitor),
             Event::SequenceStart(_) => self.visit_sequence(visitor, mark),
             other => {
                 if match other {
@@ -1594,7 +1582,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
     {
         let (next, mark) = self.next_event_mark()?;
         match next {
-            Event::Alias(mut pos) => self.jump(&mut pos)?.deserialize_map(visitor),
+            &Event::Alias(mut pos) => self.jump(&mut pos)?.deserialize_map(visitor),
             Event::MappingStart(_) => self.visit_mapping(visitor, mark),
             other => {
                 if match other {
@@ -1640,9 +1628,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
             if let Some(current_enum) = self.current_enum {
                 if let Event::Scalar(scalar) = next {
                     if !scalar.value.is_empty() {
-                        break visitor.visit_enum(UnitVariantAccess {
-                            de: self,
-                        });
+                        break visitor.visit_enum(UnitVariantAccess { de: self });
                     }
                 }
                 let message = if let Some(name) = current_enum.name {
@@ -1659,7 +1645,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
                 break Err(error::new(ErrorImpl::Message(message, None)));
             }
             break match next {
-                Event::Alias(mut pos) => {
+                &Event::Alias(mut pos) => {
                     *self.pos += 1;
                     self.jump(&mut pos)?.deserialize_enum(name, variants, visitor)
                 }
@@ -1671,9 +1657,7 @@ impl<'de, 'document> de::Deserializer<'de> for &mut DeserializerFromEvents<'de, 
                             tag,
                         });
                     }
-                    visitor.visit_enum(UnitVariantAccess {
-                        de: self,
-                    })
+                    visitor.visit_enum(UnitVariantAccess { de: self })
                 }
                 Event::MappingStart(mapping) => {
                     if let Some(tag) = parse_tag(&mapping.tag) {

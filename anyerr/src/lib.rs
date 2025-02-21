@@ -652,9 +652,9 @@ pub mod __private {
     pub use core::{concat, format_args, stringify};
 
     use self::not::Bool;
+    use crate::Error;
     #[doc(hidden)]
     pub use crate::ensure::{BothDebug, NotBothDebug};
-    use crate::Error;
 
     #[doc(hidden)]
     pub mod kind {

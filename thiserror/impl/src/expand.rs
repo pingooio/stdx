@@ -1,7 +1,7 @@
 use std::collections::BTreeSet as Set;
 
 use proc_macro2::TokenStream;
-use quote::{format_ident, quote, quote_spanned, ToTokens};
+use quote::{ToTokens, format_ident, quote, quote_spanned};
 use syn::{DeriveInput, GenericArgument, Member, PathArguments, Result, Token, Type};
 
 use crate::{

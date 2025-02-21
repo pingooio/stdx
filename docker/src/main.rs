@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use docker::{model::ListContainersOptions, Client};
+use docker::{Client, model::ListContainersOptions};
 
 #[tokio::main]
 async fn main() {

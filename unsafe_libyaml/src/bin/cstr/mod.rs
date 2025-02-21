@@ -12,9 +12,7 @@ pub struct CStr {
 
 impl CStr {
     pub unsafe fn from_ptr(ptr: *const c_char) -> Self {
-        CStr {
-            ptr: ptr.cast(),
-        }
+        CStr { ptr: ptr.cast() }
     }
 }
 

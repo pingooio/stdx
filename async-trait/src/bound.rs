@@ -1,6 +1,6 @@
 use proc_macro2::{Ident, Span, TokenStream};
-use quote::{quote, ToTokens};
-use syn::{punctuated::Punctuated, Token, TypeParamBound};
+use quote::{ToTokens, quote};
+use syn::{Token, TypeParamBound, punctuated::Punctuated};
 
 pub type Supertraits = Punctuated<TypeParamBound, Token![+]>;
 

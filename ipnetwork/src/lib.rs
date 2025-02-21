@@ -13,8 +13,8 @@ mod size;
 
 pub use crate::{
     error::{IpNetworkError, NetworkSizeError},
-    ipv4::{ipv4_mask_to_prefix, Ipv4Network, Ipv4NetworkIterator},
-    ipv6::{ipv6_mask_to_prefix, Ipv6Network, Ipv6NetworkIterator},
+    ipv4::{Ipv4Network, Ipv4NetworkIterator, ipv4_mask_to_prefix},
+    ipv6::{Ipv6Network, Ipv6NetworkIterator, ipv6_mask_to_prefix},
     size::NetworkSize,
 };
 
@@ -55,12 +55,7 @@ impl schemars::JsonSchema for IpNetwork {
 
     fn json_schema(r#gen: &mut schemars::r#gen::SchemaGenerator) -> schemars::schema::Schema {
         schemars::schema::SchemaObject {
-            metadata: Some(
-                schemars::schema::Metadata {
-                    ..Default::default()
-                }
-                .into(),
-            ),
+            metadata: Some(schemars::schema::Metadata { ..Default::default() }.into()),
             subschemas: Some(
                 schemars::schema::SubschemaValidation {
                     one_of: Some(vec![
@@ -321,9 +316,7 @@ impl IpNetwork {
             IpNetwork::V4(ip) => IpNetworkIteratorInner::V4(ip.iter()),
             IpNetwork::V6(ip) => IpNetworkIteratorInner::V6(ip.iter()),
         };
-        IpNetworkIterator {
-            inner,
-        }
+        IpNetworkIterator { inner }
     }
 }
 

@@ -1,23 +1,24 @@
 use core::{
-    mem::{size_of, MaybeUninit},
+    mem::{MaybeUninit, size_of},
     ptr::{self, addr_of_mut},
 };
 
 use crate::{
+    PointerExt,
     api::{yaml_free, yaml_malloc},
     externs::{memset, strcmp},
     fmt::WriteToPtr,
     libc,
     ops::ForceMul as _,
-    success::{Success, FAIL, OK},
+    success::{FAIL, OK, Success},
     yaml::{
-        yaml_anchors_t, yaml_char_t, yaml_document_t, yaml_emitter_t, yaml_event_t, yaml_mark_t, yaml_node_item_t,
-        yaml_node_pair_t, yaml_node_t, YAML_ALIAS_EVENT, YAML_ANY_ENCODING, YAML_DOCUMENT_END_EVENT,
-        YAML_DOCUMENT_START_EVENT, YAML_MAPPING_END_EVENT, YAML_MAPPING_NODE, YAML_MAPPING_START_EVENT,
-        YAML_SCALAR_EVENT, YAML_SCALAR_NODE, YAML_SEQUENCE_END_EVENT, YAML_SEQUENCE_NODE, YAML_SEQUENCE_START_EVENT,
-        YAML_STREAM_END_EVENT, YAML_STREAM_START_EVENT,
+        YAML_ALIAS_EVENT, YAML_ANY_ENCODING, YAML_DOCUMENT_END_EVENT, YAML_DOCUMENT_START_EVENT,
+        YAML_MAPPING_END_EVENT, YAML_MAPPING_NODE, YAML_MAPPING_START_EVENT, YAML_SCALAR_EVENT, YAML_SCALAR_NODE,
+        YAML_SEQUENCE_END_EVENT, YAML_SEQUENCE_NODE, YAML_SEQUENCE_START_EVENT, YAML_STREAM_END_EVENT,
+        YAML_STREAM_START_EVENT, yaml_anchors_t, yaml_char_t, yaml_document_t, yaml_emitter_t, yaml_event_t,
+        yaml_mark_t, yaml_node_item_t, yaml_node_pair_t, yaml_node_t,
     },
-    yaml_document_delete, yaml_emitter_emit, PointerExt,
+    yaml_document_delete, yaml_emitter_emit,
 };
 
 /// Start a YAML stream.

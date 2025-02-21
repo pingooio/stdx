@@ -12,8 +12,8 @@
 use std::fmt;
 
 use serde::{
-    de::{self, Error as _},
     Deserialize, Deserializer, Serialize, Serializer,
+    de::{self, Error as _},
 };
 
 use crate::{Error, Uuid};

@@ -5,8 +5,8 @@ use std::{
     mem,
     path::{Path, PathBuf},
     sync::{
-        atomic::{AtomicUsize, Ordering},
         Once,
+        atomic::{AtomicUsize, Ordering},
     },
 };
 
@@ -52,11 +52,7 @@ fn logical_cpus() -> usize {
         count as usize
     } else {
         let cpus = unsafe { libc::sysconf(libc::_SC_NPROCESSORS_ONLN) };
-        if cpus < 1 {
-            1
-        } else {
-            cpus as usize
-        }
+        if cpus < 1 { 1 } else { cpus as usize }
     }
 }
 
@@ -97,11 +93,7 @@ pub fn get_num_physical_cpus() -> usize {
     }
     let count = map.into_iter().fold(0, |acc, (_, cores)| acc + cores);
 
-    if count == 0 {
-        get_num_cpus()
-    } else {
-        count
-    }
+    if count == 0 { get_num_cpus() } else { count }
 }
 
 /// Cached CPUs calculated from cgroups.
@@ -119,11 +111,7 @@ fn cgroups_num_cpus() -> Option<usize> {
 
     let cpus = CGROUPS_CPUS.load(Ordering::Acquire);
 
-    if cpus > 0 {
-        Some(cpus)
-    } else {
-        None
-    }
+    if cpus > 0 { Some(cpus) } else { None }
 }
 
 fn init_cgroups() {

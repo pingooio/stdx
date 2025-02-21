@@ -35,10 +35,7 @@ pub trait List {
         } else {
             false
         };
-        let Info {
-            mut len,
-            typ,
-        } = self.find(labels);
+        let Info { mut len, typ } = self.find(labels);
         if fqdn {
             len += 1;
         }
@@ -47,11 +44,7 @@ pub trait List {
         }
         let offset = name.len() - len;
         let bytes = name.get(offset..)?;
-        Some(Suffix {
-            bytes,
-            fqdn,
-            typ,
-        })
+        Some(Suffix { bytes, fqdn, typ })
     }
 
     /// Get the registrable domain
@@ -69,10 +62,7 @@ pub trait List {
         let registrable_len = root_label.len() + 1 + suffix_len;
         let offset = name_len - registrable_len;
         let bytes = name.get(offset..)?;
-        Some(Domain {
-            bytes,
-            suffix,
-        })
+        Some(Domain { bytes, suffix })
     }
 }
 
@@ -217,10 +207,7 @@ impl<'a> Domain<'a> {
     #[must_use]
     #[doc(hidden)]
     pub const fn new(bytes: &'a [u8], suffix: Suffix<'a>) -> Domain<'a> {
-        Domain {
-            bytes,
-            suffix,
-        }
+        Domain { bytes, suffix }
     }
 
     /// The domain name as bytes
@@ -316,10 +303,7 @@ mod test {
                     len: label.len(),
                     typ: None,
                 },
-                None => Info {
-                    len: 0,
-                    typ: None,
-                },
+                None => Info { len: 0, typ: None },
             }
         }
     }

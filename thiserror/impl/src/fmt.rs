@@ -3,9 +3,9 @@ use std::collections::{BTreeSet as Set, HashMap as Map};
 use proc_macro2::TokenTree;
 use quote::{format_ident, quote_spanned};
 use syn::{
+    Ident, Index, LitStr, Member, Result, Token,
     ext::IdentExt,
     parse::{ParseStream, Parser},
-    Ident, Index, LitStr, Member, Result, Token,
 };
 
 use crate::{
@@ -57,10 +57,7 @@ impl Display<'_> {
                 '0'..='9' => {
                     let int = take_int(&mut read);
                     let member = match int.parse::<u32>() {
-                        Ok(index) => Member::Unnamed(Index {
-                            index,
-                            span,
-                        }),
+                        Ok(index) => Member::Unnamed(Index { index, span }),
                         Err(_) => return,
                     };
                     if !member_index.contains_key(&member) {

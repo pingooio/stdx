@@ -48,7 +48,7 @@ use core::mem::size_of;
 mod libc {
     pub use core::{
         ffi::c_void,
-        primitive::{i32 as c_int, i64 as c_long, i8 as c_char, u32 as c_uint, u64 as c_ulong, u8 as c_uchar},
+        primitive::{i8 as c_char, i32 as c_int, i64 as c_long, u8 as c_uchar, u32 as c_uint, u64 as c_ulong},
     };
 }
 
@@ -62,7 +62,7 @@ mod externs {
 
     use crate::{
         libc,
-        ops::{die, ForceAdd as _, ForceInto as _},
+        ops::{ForceAdd as _, ForceInto as _, die},
     };
 
     const HEADER: usize = {
@@ -76,11 +76,7 @@ mod externs {
     const MALLOC_ALIGN: usize = {
         let int_align = mem::align_of::<libc::c_ulong>();
         let ptr_align = mem::align_of::<usize>();
-        if int_align >= ptr_align {
-            int_align
-        } else {
-            ptr_align
-        }
+        if int_align >= ptr_align { int_align } else { ptr_align }
     };
 
     pub unsafe fn malloc(size: libc::c_ulong) -> *mut libc::c_void {
@@ -213,9 +209,7 @@ mod fmt {
 
     impl WriteToPtr {
         pub unsafe fn new(ptr: *mut yaml_char_t) -> Self {
-            WriteToPtr {
-                ptr,
-            }
+            WriteToPtr { ptr }
         }
 
         pub fn write_fmt(&mut self, args: fmt::Arguments) {

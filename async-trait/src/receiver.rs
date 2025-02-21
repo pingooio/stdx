@@ -1,7 +1,7 @@
 use proc_macro2::{Group, TokenStream, TokenTree};
 use syn::{
-    visit_mut::{self, VisitMut},
     Block, ExprPath, Ident, Item, Macro, Pat, PatIdent, Path, Receiver, Signature, Token, TypePath,
+    visit_mut::{self, VisitMut},
 };
 
 pub fn has_self_in_sig(sig: &mut Signature) -> bool {

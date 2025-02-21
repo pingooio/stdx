@@ -7,19 +7,19 @@ use std::{
 
 use serde::{
     de::{
-        value::{BorrowedStrDeserializer, StrDeserializer},
         Deserialize, DeserializeSeed, Deserializer, EnumAccess, Error as _, VariantAccess, Visitor,
+        value::{BorrowedStrDeserializer, StrDeserializer},
     },
     forward_to_deserialize_any,
     ser::{Serialize, SerializeMap, Serializer},
 };
 
 use crate::{
-    value::{
-        de::{MapDeserializer, MapRefDeserializer, SeqDeserializer, SeqRefDeserializer},
-        Value,
-    },
     Error,
+    value::{
+        Value,
+        de::{MapDeserializer, MapRefDeserializer, SeqDeserializer, SeqRefDeserializer},
+    },
 };
 
 /// A representation of YAML's `!Tag` syntax, used for enums.
@@ -97,9 +97,7 @@ impl Tag {
     pub fn new(string: impl Into<String>) -> Self {
         let tag: String = string.into();
         assert!(!tag.is_empty(), "empty YAML tag is not allowed");
-        Tag {
-            string: tag,
-        }
+        Tag { string: tag }
     }
 }
 
@@ -225,10 +223,7 @@ impl<'de> Deserialize<'de> for TaggedValue {
             {
                 let (tag, contents) = data.variant_seed(TagStringVisitor)?;
                 let value = contents.newtype_variant()?;
-                Ok(TaggedValue {
-                    tag,
-                    value,
-                })
+                Ok(TaggedValue { tag, value })
             }
         }
 

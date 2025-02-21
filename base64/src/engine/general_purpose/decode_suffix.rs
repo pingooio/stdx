@@ -1,6 +1,6 @@
 use crate::{
-    engine::{general_purpose::INVALID_VALUE, DecodeMetadata, DecodePaddingMode},
     DecodeError, DecodeSliceError, PAD_BYTE,
+    engine::{DecodeMetadata, DecodePaddingMode, general_purpose::INVALID_VALUE},
 };
 
 /// Decode the last 0-4 bytes, checking for trailing set bits and padding per the provided

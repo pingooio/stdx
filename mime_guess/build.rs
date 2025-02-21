@@ -8,7 +8,7 @@ use std::{
     collections::BTreeMap,
     env,
     fs::File,
-    io::{prelude::*, BufWriter},
+    io::{BufWriter, prelude::*},
     path::Path,
 };
 

@@ -14,9 +14,7 @@ pub struct DaysOfMonth {
 
 impl TimeUnitField for DaysOfMonth {
     fn from_optional_ordinal_set(ordinal_set: Option<OrdinalSet>) -> Self {
-        DaysOfMonth {
-            ordinals: ordinal_set,
-        }
+        DaysOfMonth { ordinals: ordinal_set }
     }
     fn name() -> Cow<'static, str> {
         Cow::from("Days of Month")

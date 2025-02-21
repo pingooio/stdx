@@ -35,9 +35,7 @@ where
     }
 
     pub fn cast<U: CastTo>(self) -> Own<U::Target> {
-        Own {
-            ptr: self.ptr.cast(),
-        }
+        Own { ptr: self.ptr.cast() }
     }
 
     pub unsafe fn boxed(self) -> Box<T> {

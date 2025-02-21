@@ -23,9 +23,7 @@ pub struct Raw<'x> {
 impl<'x> Raw<'x> {
     /// Create a new raw header
     pub fn new(raw: impl Into<Cow<'x, str>>) -> Self {
-        Self {
-            raw: raw.into(),
-        }
+        Self { raw: raw.into() }
     }
 }
 

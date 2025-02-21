@@ -2,15 +2,15 @@ use std::path::PathBuf;
 
 use bytes::Bytes;
 use hyper::{
+    Method, StatusCode, Uri,
     client::conn::http1::SendRequest,
     header::{CONTENT_TYPE, HOST},
-    Method, StatusCode, Uri,
 };
 use hyper_utils::{
     http_body_util::{BodyExt, Full},
     rt::TokioIo,
 };
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
 use tokio::{net::UnixStream, sync::Mutex};
 use tracing::{debug, error};
 

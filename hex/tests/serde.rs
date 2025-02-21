@@ -11,9 +11,7 @@ struct Foo {
 
 #[test]
 fn serialize() {
-    let foo = Foo {
-        bar: vec![1, 10, 100],
-    };
+    let foo = Foo { bar: vec![1, 10, 100] };
 
     let ser = serde_json::to_string(&foo).expect("serialization failed");
     assert_eq!(ser, r#"{"bar":"010a64"}"#);
@@ -21,9 +19,7 @@ fn serialize() {
 
 #[test]
 fn deserialize() {
-    let foo = Foo {
-        bar: vec![1, 10, 100],
-    };
+    let foo = Foo { bar: vec![1, 10, 100] };
 
     let de: Foo = serde_json::from_str(r#"{"bar":"010a64"}"#).expect("deserialization failed");
     assert_eq!(de, foo);
@@ -37,9 +33,7 @@ struct Bar {
 
 #[test]
 fn serialize_upper() {
-    let bar = Bar {
-        foo: vec![1, 10, 100],
-    };
+    let bar = Bar { foo: vec![1, 10, 100] };
 
     let ser = serde_json::to_string(&bar).expect("serialization failed");
     assert_eq!(ser, r#"{"foo":"010A64"}"#);
@@ -47,9 +41,7 @@ fn serialize_upper() {
 
 #[test]
 fn deserialize_upper() {
-    let bar = Bar {
-        foo: vec![1, 10, 100],
-    };
+    let bar = Bar { foo: vec![1, 10, 100] };
 
     let de: Bar = serde_json::from_str(r#"{"foo":"010A64"}"#).expect("deserialization failed");
     assert_eq!(de, bar);

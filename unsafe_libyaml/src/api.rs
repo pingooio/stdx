@@ -1,22 +1,22 @@
 use core::{
-    mem::{size_of, MaybeUninit},
+    mem::{MaybeUninit, size_of},
     ptr::{self, addr_of_mut},
 };
 
 use crate::{
+    PointerExt, YAML_ALIAS_EVENT, YAML_ALIAS_TOKEN, YAML_ANCHOR_TOKEN, YAML_ANY_ENCODING, YAML_DOCUMENT_END_EVENT,
+    YAML_DOCUMENT_START_EVENT, YAML_MAPPING_END_EVENT, YAML_MAPPING_NODE, YAML_MAPPING_START_EVENT, YAML_SCALAR_EVENT,
+    YAML_SCALAR_NODE, YAML_SCALAR_TOKEN, YAML_SEQUENCE_END_EVENT, YAML_SEQUENCE_NODE, YAML_SEQUENCE_START_EVENT,
+    YAML_STREAM_END_EVENT, YAML_STREAM_START_EVENT, YAML_TAG_DIRECTIVE_TOKEN, YAML_TAG_TOKEN,
     externs::{free, malloc, memcpy, memmove, memset, realloc, strdup, strlen},
     libc,
     ops::{ForceAdd as _, ForceMul as _},
-    success::{Success, FAIL, OK},
+    success::{FAIL, OK, Success},
     yaml::{size_t, yaml_char_t},
     yaml_break_t, yaml_document_t, yaml_emitter_state_t, yaml_emitter_t, yaml_encoding_t, yaml_event_t,
     yaml_mapping_style_t, yaml_mark_t, yaml_node_item_t, yaml_node_pair_t, yaml_node_t, yaml_parser_state_t,
     yaml_parser_t, yaml_read_handler_t, yaml_scalar_style_t, yaml_sequence_style_t, yaml_simple_key_t,
-    yaml_tag_directive_t, yaml_token_t, yaml_version_directive_t, yaml_write_handler_t, PointerExt, YAML_ALIAS_EVENT,
-    YAML_ALIAS_TOKEN, YAML_ANCHOR_TOKEN, YAML_ANY_ENCODING, YAML_DOCUMENT_END_EVENT, YAML_DOCUMENT_START_EVENT,
-    YAML_MAPPING_END_EVENT, YAML_MAPPING_NODE, YAML_MAPPING_START_EVENT, YAML_SCALAR_EVENT, YAML_SCALAR_NODE,
-    YAML_SCALAR_TOKEN, YAML_SEQUENCE_END_EVENT, YAML_SEQUENCE_NODE, YAML_SEQUENCE_START_EVENT, YAML_STREAM_END_EVENT,
-    YAML_STREAM_START_EVENT, YAML_TAG_DIRECTIVE_TOKEN, YAML_TAG_TOKEN,
+    yaml_tag_directive_t, yaml_token_t, yaml_version_directive_t, yaml_write_handler_t,
 };
 
 const INPUT_RAW_BUFFER_SIZE: usize = 16384;
@@ -1358,10 +1358,7 @@ pub unsafe fn yaml_document_append_mapping_pair(
     __assert!((*((*document).nodes.start).wrapping_offset((mapping - 1) as isize)).type_ == YAML_MAPPING_NODE);
     __assert!(key > 0 && ((*document).nodes.start).wrapping_offset(key as isize) <= (*document).nodes.top);
     __assert!(value > 0 && ((*document).nodes.start).wrapping_offset(value as isize) <= (*document).nodes.top);
-    let pair = yaml_node_pair_t {
-        key,
-        value,
-    };
+    let pair = yaml_node_pair_t { key, value };
     PUSH!(
         (*((*document).nodes.start).wrapping_offset((mapping - 1) as isize))
             .data

@@ -6,7 +6,7 @@ use std::ffi::OsString;
 pub fn hostname() -> OsString {
     use std::os::unix::ffi::OsStringExt;
 
-    use libc::{c_char, sysconf, _SC_HOST_NAME_MAX};
+    use libc::{_SC_HOST_NAME_MAX, c_char, sysconf};
 
     // Get the maximum size of host names on this system, and account for the
     // trailing NUL byte.

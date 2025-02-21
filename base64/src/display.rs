@@ -36,9 +36,7 @@ impl<'a, 'e, E: Engine> Base64Display<'a, 'e, E> {
 
 impl<'a, 'e, E: Engine> Display for Base64Display<'a, 'e, E> {
     fn fmt(&self, formatter: &mut Formatter) -> Result<(), fmt::Error> {
-        let mut sink = FormatterSink {
-            f: formatter,
-        };
+        let mut sink = FormatterSink { f: formatter };
         self.chunked_encoder.encode(self.bytes, &mut sink)
     }
 }
@@ -61,7 +59,7 @@ impl<'a, 'b: 'a> super::chunked_encoder::Sink for FormatterSink<'a, 'b> {
 #[cfg(test)]
 mod tests {
     use super::{
-        super::chunked_encoder::tests::{chunked_encode_matches_normal_encode_random, SinkTestHelper},
+        super::chunked_encoder::tests::{SinkTestHelper, chunked_encode_matches_normal_encode_random},
         *,
     };
     use crate::engine::general_purpose::STANDARD;

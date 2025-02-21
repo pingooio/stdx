@@ -14,8 +14,8 @@ use std::{
 };
 
 use serde::{
-    de::{Deserialize, DeserializeOwned, IntoDeserializer},
     Serialize,
+    de::{Deserialize, DeserializeOwned, IntoDeserializer},
 };
 
 pub use self::{

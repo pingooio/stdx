@@ -17,7 +17,7 @@ use ipnetwork::IpNetwork;
 pub use memmap2::Mmap;
 #[cfg(feature = "mmap")]
 use memmap2::MmapOptions;
-use serde::{de, Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de};
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum MaxMindDBError {
@@ -123,10 +123,7 @@ impl<'de, T: Deserialize<'de>, S: AsRef<[u8]>> Iterator for Within<'de, T, S> {
                     };
                     let mut decoder = decoder::Decoder::new(&self.reader.buf.as_ref()[self.reader.pointer_base..], rec);
                     return match T::deserialize(&mut decoder) {
-                        Ok(info) => Some(Ok(WithinItem {
-                            ip_net,
-                            info,
-                        })),
+                        Ok(info) => Some(Ok(WithinItem { ip_net, info })),
                         Err(e) => Some(Err(e)),
                     };
                 }
@@ -378,11 +375,7 @@ impl<'de, S: AsRef<[u8]>> Reader<S> {
     }
 
     fn start_node(&self, length: usize) -> usize {
-        if length == 128 {
-            0
-        } else {
-            self.ipv4_start
-        }
+        if length == 128 { 0 } else { self.ipv4_start }
     }
 
     fn find_ipv4_start(&self) -> Result<usize, MaxMindDBError> {
@@ -429,7 +422,7 @@ impl<'de, S: AsRef<[u8]>> Reader<S> {
                 return Err(MaxMindDBError::InvalidDatabaseError(format!(
                     "unknown record size: \
                      {s:?}"
-                )))
+                )));
             }
         };
         Ok(val)

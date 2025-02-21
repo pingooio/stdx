@@ -106,7 +106,7 @@ use std::{
     error::Error,
     ffi::OsStr,
     fmt,
-    iter::{repeat, IntoIterator},
+    iter::{IntoIterator, repeat},
     result,
     str::FromStr,
 };

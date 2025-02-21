@@ -92,17 +92,13 @@ impl AsciiSet {
     pub const fn add(&self, byte: u8) -> Self {
         let mut mask = self.mask;
         mask[byte as usize / BITS_PER_CHUNK] |= 1 << (byte as usize % BITS_PER_CHUNK);
-        AsciiSet {
-            mask,
-        }
+        AsciiSet { mask }
     }
 
     pub const fn remove(&self, byte: u8) -> Self {
         let mut mask = self.mask;
         mask[byte as usize / BITS_PER_CHUNK] &= !(1 << (byte as usize % BITS_PER_CHUNK));
-        AsciiSet {
-            mask,
-        }
+        AsciiSet { mask }
     }
 }
 
@@ -357,9 +353,7 @@ pub fn percent_decode_str(input: &str) -> PercentDecode<'_> {
 /// ```
 #[inline]
 pub fn percent_decode(input: &[u8]) -> PercentDecode<'_> {
-    PercentDecode {
-        bytes: input.iter(),
-    }
+    PercentDecode { bytes: input.iter() }
 }
 
 /// The return type of [`percent_decode`].
@@ -416,9 +410,7 @@ impl<'a> PercentDecode<'a> {
                 let unchanged_bytes_len = initial_bytes.len() - bytes_iter.len() - 3;
                 let mut decoded = initial_bytes[..unchanged_bytes_len].to_owned();
                 decoded.push(decoded_byte);
-                decoded.extend(PercentDecode {
-                    bytes: bytes_iter,
-                });
+                decoded.extend(PercentDecode { bytes: bytes_iter });
                 return Some(decoded);
             }
         }

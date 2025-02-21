@@ -10,16 +10,16 @@ use std::{fmt, sync::Arc};
 // use hyper::client::HttpConnector;
 // use hyper::header::{CONTENT_TYPE, LOCATION};
 use aws_lc_rs::{
-    digest::{digest, SHA256},
+    digest::{SHA256, digest},
     hmac, pkcs8,
     rand::SystemRandom,
-    signature::{EcdsaKeyPair, ECDSA_P256_SHA256_FIXED_SIGNING},
+    signature::{ECDSA_P256_SHA256_FIXED_SIGNING, EcdsaKeyPair},
 };
 use reqwest::{
-    header::{CONTENT_TYPE, LOCATION},
     Method, Response, StatusCode,
+    header::{CONTENT_TYPE, LOCATION},
 };
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{Serialize, de::DeserializeOwned};
 
 mod types;
 pub use types::{
@@ -378,10 +378,7 @@ impl AccountInner {
             key: Key::from_pkcs8_der(credentials.key_pkcs8.as_ref())?,
             client: match (credentials.directory, credentials.urls) {
                 (Some(server_url), _) => Client::new(&server_url, http).await?,
-                (None, Some(urls)) => Client {
-                    http,
-                    urls,
-                },
+                (None, Some(urls)) => Client { http, urls },
                 (None, None) => return Err("no server URLs found".into()),
             },
         })
@@ -435,10 +432,7 @@ impl Client {
 
         // .request(req).await?;
         let urls = res.json().await?;
-        Ok(Client {
-            http,
-            urls,
-        })
+        Ok(Client { http, urls })
     }
 
     async fn post(

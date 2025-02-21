@@ -14,7 +14,7 @@ use std::borrow::Cow;
 use super::Header;
 use crate::encoders::{
     base64::base64_encode_mime,
-    encode::{get_encoding_type, EncodingType},
+    encode::{EncodingType, get_encoding_type},
     quoted_printable::quoted_printable_encode,
 };
 
@@ -27,9 +27,7 @@ pub struct Text<'x> {
 impl<'x> Text<'x> {
     /// Create a new unstructured text header
     pub fn new(text: impl Into<Cow<'x, str>>) -> Self {
-        Self {
-            text: text.into(),
-        }
+        Self { text: text.into() }
     }
 }
 

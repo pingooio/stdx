@@ -27,7 +27,7 @@ mod span;
 mod valid;
 
 use proc_macro::TokenStream;
-use syn::{parse_macro_input, DeriveInput};
+use syn::{DeriveInput, parse_macro_input};
 
 #[proc_macro_derive(Error, attributes(backtrace, error, from, source))]
 pub fn derive_error(input: TokenStream) -> TokenStream {

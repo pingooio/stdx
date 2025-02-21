@@ -73,10 +73,7 @@ impl Ipv4Network {
         if prefix > IPV4_BITS {
             Err(IpNetworkError::InvalidPrefix)
         } else {
-            Ok(Ipv4Network {
-                addr,
-                prefix,
-            })
+            Ok(Ipv4Network { addr, prefix })
         }
     }
 
@@ -100,10 +97,7 @@ impl Ipv4Network {
     /// let network = unsafe { Ipv4Network::new_unchecked(addr, prefix) };
     /// ```
     pub const unsafe fn new_unchecked(addr: Ipv4Addr, prefix: u8) -> Ipv4Network {
-        Ipv4Network {
-            addr,
-            prefix,
-        }
+        Ipv4Network { addr, prefix }
     }
 
     /// Constructs a new `Ipv4Network` from a network address and a network mask.
@@ -111,10 +105,7 @@ impl Ipv4Network {
     /// If the netmask is not valid this will return an `IpNetworkError::InvalidPrefix`.
     pub fn with_netmask(netaddr: Ipv4Addr, netmask: Ipv4Addr) -> Result<Ipv4Network, IpNetworkError> {
         let prefix = ipv4_mask_to_prefix(netmask)?;
-        let net = Self {
-            addr: netaddr,
-            prefix,
-        };
+        let net = Self { addr: netaddr, prefix };
         Ok(net)
     }
 
@@ -124,10 +115,7 @@ impl Ipv4Network {
     pub fn iter(self) -> Ipv4NetworkIterator {
         let start = u32::from(self.network());
         let end = start + (self.size() - 1);
-        Ipv4NetworkIterator {
-            next: Some(start),
-            end,
-        }
+        Ipv4NetworkIterator { next: Some(start), end }
     }
 
     pub fn ip(self) -> Ipv4Addr {
@@ -328,10 +316,7 @@ impl TryFrom<&str> for Ipv4Network {
 
 impl From<Ipv4Addr> for Ipv4Network {
     fn from(a: Ipv4Addr) -> Ipv4Network {
-        Ipv4Network {
-            addr: a,
-            prefix: 32,
-        }
+        Ipv4Network { addr: a, prefix: 32 }
     }
 }
 

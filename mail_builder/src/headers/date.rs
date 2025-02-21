@@ -30,9 +30,7 @@ pub struct Date {
 impl Date {
     /// Create a new Date header from a timestamp.
     pub fn new(date: i64) -> Self {
-        Self {
-            date,
-        }
+        Self { date }
     }
 
     /// Create a new Date header using the current time.

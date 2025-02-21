@@ -1,5 +1,5 @@
-use crate::ser::part::{PartSerializer, Sink};
 use crate::ser::Error;
+use crate::ser::part::{PartSerializer, Sink};
 use form_urlencoded::Serializer as UrlEncodedSerializer;
 use form_urlencoded::Target as UrlEncodedTarget;
 use serde::ser::Serialize;

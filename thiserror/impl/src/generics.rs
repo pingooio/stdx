@@ -1,9 +1,9 @@
-use std::collections::{btree_map::Entry, BTreeMap as Map, BTreeSet as Set};
+use std::collections::{BTreeMap as Map, BTreeSet as Set, btree_map::Entry};
 
 use proc_macro2::TokenStream;
 use quote::ToTokens;
 use syn::{
-    parse_quote, punctuated::Punctuated, GenericArgument, Generics, Ident, PathArguments, Token, Type, WhereClause,
+    GenericArgument, Generics, Ident, PathArguments, Token, Type, WhereClause, parse_quote, punctuated::Punctuated,
 };
 
 pub struct ParamsInScope<'a> {

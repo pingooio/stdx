@@ -20,9 +20,7 @@ pin_project! {
 impl<S> StreamBody<S> {
     /// Create a new `StreamBody`.
     pub fn new(stream: S) -> Self {
-        Self {
-            stream,
-        }
+        Self { stream }
     }
 }
 
@@ -67,9 +65,7 @@ pin_project! {
 impl<B> BodyStream<B> {
     /// Create a new `BodyStream`.
     pub fn new(body: B) -> Self {
-        Self {
-            body,
-        }
+        Self { body }
     }
 }
 
@@ -112,9 +108,7 @@ pin_project! {
 impl<B> BodyDataStream<B> {
     /// Create a new `BodyDataStream`
     pub fn new(body: B) -> Self {
-        Self {
-            body,
-        }
+        Self { body }
     }
 }
 

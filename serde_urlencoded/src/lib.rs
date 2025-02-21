@@ -7,6 +7,6 @@ pub mod de;
 pub mod ser;
 
 #[doc(inline)]
-pub use crate::de::{from_bytes, from_reader, from_str, Deserializer};
+pub use crate::de::{Deserializer, from_bytes, from_reader, from_str};
 #[doc(inline)]
-pub use crate::ser::{to_string, Serializer};
+pub use crate::ser::{Serializer, to_string};

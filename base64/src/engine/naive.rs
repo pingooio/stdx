@@ -1,12 +1,12 @@
 use std::ops::{BitAnd, BitOr, Shl, Shr};
 
 use crate::{
+    DecodeError, DecodeSliceError,
     alphabet::Alphabet,
     engine::{
-        general_purpose::{self, decode_table, encode_table},
         Config, DecodeEstimate, DecodeMetadata, DecodePaddingMode, Engine,
+        general_purpose::{self, decode_table, encode_table},
     },
-    DecodeError, DecodeSliceError,
 };
 
 /// Comparatively simple implementation that can be used as something to compare against in tests

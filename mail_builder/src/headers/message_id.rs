@@ -23,9 +23,7 @@ pub struct MessageId<'x> {
 impl<'x> MessageId<'x> {
     /// Create a new Message ID header
     pub fn new(id: impl Into<Cow<'x, str>>) -> Self {
-        Self {
-            id: vec![id.into()],
-        }
+        Self { id: vec![id.into()] }
     }
 
     /// Create a new multi-value Message ID header

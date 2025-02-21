@@ -1,6 +1,6 @@
 use crate::{
-    model::{ContainerSummary, ListContainersOptions},
     Client, Error,
+    model::{ContainerSummary, ListContainersOptions},
 };
 
 impl Client {

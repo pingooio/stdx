@@ -84,31 +84,22 @@ pub enum Body {
 
 impl Default for Body {
     fn default() -> Self {
-        Body::Text {
-            text: "".into(),
-        }
+        Body::Text { text: "".into() }
     }
 }
 
 impl Body {
     /// Constructor to create a text-only [`Body`] enum
     pub fn text(text: String) -> Self {
-        Body::Text {
-            text,
-        }
+        Body::Text { text }
     }
     /// Constructor to create a html-only [`Body`] enum
     pub fn html(html: String) -> Self {
-        Body::Html {
-            html,
-        }
+        Body::Html { html }
     }
     /// Constructor to create a text and html [`Body`] enum
     pub fn html_and_text(html: String, text: String) -> Self {
-        Body::HtmlAndText {
-            html,
-            text,
-        }
+        Body::HtmlAndText { html, text }
     }
 }
 

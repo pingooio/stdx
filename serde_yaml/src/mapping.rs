@@ -11,7 +11,7 @@ use std::{
 use indexmap::IndexMap;
 use serde::{Deserialize, Deserializer, Serialize};
 
-use crate::{private, Value};
+use crate::{Value, private};
 
 /// A YAML mapping in which the keys and values are both `serde_yaml::Value`.
 #[derive(Clone, Default, Eq, PartialEq)]
@@ -84,12 +84,8 @@ impl Mapping {
     #[inline]
     pub fn entry(&mut self, k: Value) -> Entry {
         match self.map.entry(k) {
-            indexmap::map::Entry::Occupied(occupied) => Entry::Occupied(OccupiedEntry {
-                occupied,
-            }),
-            indexmap::map::Entry::Vacant(vacant) => Entry::Vacant(VacantEntry {
-                vacant,
-            }),
+            indexmap::map::Entry::Occupied(occupied) => Entry::Occupied(OccupiedEntry { occupied }),
+            indexmap::map::Entry::Vacant(vacant) => Entry::Vacant(VacantEntry { vacant }),
         }
     }
 
@@ -194,9 +190,7 @@ impl Mapping {
     /// insertion. Iterator element type is `(&'a Value, &'a Value)`.
     #[inline]
     pub fn iter(&self) -> Iter {
-        Iter {
-            iter: self.map.iter(),
-        }
+        Iter { iter: self.map.iter() }
     }
 
     /// Returns a double-ended iterator visiting all key-value pairs in order of
@@ -210,9 +204,7 @@ impl Mapping {
 
     /// Return an iterator over the keys of the map.
     pub fn keys(&self) -> Keys {
-        Keys {
-            iter: self.map.keys(),
-        }
+        Keys { iter: self.map.keys() }
     }
 
     /// Return an owning iterator over the keys of the map.
@@ -562,9 +554,7 @@ impl<'a> IntoIterator for &'a Mapping {
     type IntoIter = Iter<'a>;
     #[inline]
     fn into_iter(self) -> Self::IntoIter {
-        Iter {
-            iter: self.map.iter(),
-        }
+        Iter { iter: self.map.iter() }
     }
 }
 
@@ -817,9 +807,7 @@ impl<'de> Deserialize<'de> for Mapping {
                 while let Some(key) = data.next_key()? {
                     match mapping.entry(key) {
                         Entry::Occupied(entry) => {
-                            return Err(serde::de::Error::custom(DuplicateKeyError {
-                                entry,
-                            }));
+                            return Err(serde::de::Error::custom(DuplicateKeyError { entry }));
                         }
                         Entry::Vacant(entry) => {
                             let value = data.next_value()?;

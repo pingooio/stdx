@@ -57,12 +57,7 @@ impl<'e, E: Engine, S: StrConsumer> EncoderStringWriter<'e, E, S> {
     /// Create a EncoderStringWriter that will append to the provided `StrConsumer`.
     pub fn from_consumer(str_consumer: S, engine: &'e E) -> Self {
         EncoderStringWriter {
-            encoder: EncoderWriter::new(
-                Utf8SingleCodeUnitWriter {
-                    str_consumer,
-                },
-                engine,
-            ),
+            encoder: EncoderWriter::new(Utf8SingleCodeUnitWriter { str_consumer }, engine),
         }
     }
 

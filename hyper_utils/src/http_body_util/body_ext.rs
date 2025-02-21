@@ -1,4 +1,4 @@
-use crate::http_body_util::{combinators, Frame};
+use crate::http_body_util::{Frame, combinators};
 
 /// An extension trait for [`http_body::Body`] adding various combinators and adapters
 pub trait BodyExt: hyper::body::Body {

@@ -22,9 +22,7 @@ pub struct URL<'x> {
 impl<'x> URL<'x> {
     /// Create a new URL header
     pub fn new(url: impl Into<Cow<'x, str>>) -> Self {
-        Self {
-            url: vec![url.into()],
-        }
+        Self { url: vec![url.into()] }
     }
 
     /// Create a new multi-value URL header

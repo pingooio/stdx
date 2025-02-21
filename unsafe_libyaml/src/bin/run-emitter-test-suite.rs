@@ -30,15 +30,15 @@ use std::{
 };
 
 use unsafe_libyaml::{
+    YAML_ANY_SCALAR_STYLE, YAML_BLOCK_MAPPING_STYLE, YAML_BLOCK_SEQUENCE_STYLE, YAML_DOUBLE_QUOTED_SCALAR_STYLE,
+    YAML_EMITTER_ERROR, YAML_FOLDED_SCALAR_STYLE, YAML_LITERAL_SCALAR_STYLE, YAML_MEMORY_ERROR,
+    YAML_PLAIN_SCALAR_STYLE, YAML_SINGLE_QUOTED_SCALAR_STYLE, YAML_UTF8_ENCODING, YAML_WRITER_ERROR,
     yaml_alias_event_initialize, yaml_document_end_event_initialize, yaml_document_start_event_initialize,
     yaml_emitter_delete, yaml_emitter_emit, yaml_emitter_initialize, yaml_emitter_set_canonical,
     yaml_emitter_set_output, yaml_emitter_set_unicode, yaml_emitter_t, yaml_event_t, yaml_mapping_end_event_initialize,
     yaml_mapping_start_event_initialize, yaml_scalar_event_initialize, yaml_scalar_style_t,
     yaml_sequence_end_event_initialize, yaml_sequence_start_event_initialize, yaml_stream_end_event_initialize,
-    yaml_stream_start_event_initialize, yaml_tag_directive_t, yaml_version_directive_t, YAML_ANY_SCALAR_STYLE,
-    YAML_BLOCK_MAPPING_STYLE, YAML_BLOCK_SEQUENCE_STYLE, YAML_DOUBLE_QUOTED_SCALAR_STYLE, YAML_EMITTER_ERROR,
-    YAML_FOLDED_SCALAR_STYLE, YAML_LITERAL_SCALAR_STYLE, YAML_MEMORY_ERROR, YAML_PLAIN_SCALAR_STYLE,
-    YAML_SINGLE_QUOTED_SCALAR_STYLE, YAML_UTF8_ENCODING, YAML_WRITER_ERROR,
+    yaml_stream_start_event_initialize, yaml_tag_directive_t, yaml_version_directive_t,
 };
 
 use self::cstr::CStr;

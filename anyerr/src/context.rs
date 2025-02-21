@@ -5,7 +5,7 @@ use core::{
 #[cfg(error_generic_member_access)]
 use std::error::Request;
 
-use crate::{error::ContextError, Context, Error, StdError};
+use crate::{Context, Error, StdError, error::ContextError};
 
 mod ext {
     use super::*;

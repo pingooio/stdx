@@ -2,21 +2,19 @@ use std::{fmt, slice, vec};
 
 use serde::{
     de::{
-        self,
+        self, Deserialize, DeserializeSeed, Deserializer, EnumAccess, Error as _, Expected, MapAccess, SeqAccess,
+        Unexpected, VariantAccess, Visitor,
         value::{BorrowedStrDeserializer, StrDeserializer},
-        Deserialize, DeserializeSeed, Deserializer, EnumAccess, Error as _, Expected, MapAccess, SeqAccess, Unexpected,
-        VariantAccess, Visitor,
     },
     forward_to_deserialize_any,
 };
 
 use crate::{
-    number,
+    Error, Mapping, Sequence, Value, number,
     value::{
-        tagged::{self, TagStringVisitor},
         TaggedValue,
+        tagged::{self, TagStringVisitor},
     },
-    Error, Mapping, Sequence, Value,
 };
 
 impl<'de> Deserialize<'de> for Value {
@@ -120,10 +118,7 @@ impl<'de> Deserialize<'de> for Value {
             {
                 let (tag, contents) = data.variant_seed(TagStringVisitor)?;
                 let value = contents.newtype_variant()?;
-                Ok(Value::Tagged(Box::new(TaggedValue {
-                    tag,
-                    value,
-                })))
+                Ok(Value::Tagged(Box::new(TaggedValue { tag, value })))
             }
         }
 
@@ -496,9 +491,7 @@ impl<'a, 'de> EnumAccess<'de> for EnumDeserializer<'a> {
     {
         let str_de = StrDeserializer::<Error>::new(self.tag);
         let variant = seed.deserialize(str_de)?;
-        let visitor = VariantDeserializer {
-            value: self.value,
-        };
+        let visitor = VariantDeserializer { value: self.value };
         Ok((variant, visitor))
     }
 }
@@ -554,9 +547,7 @@ pub(crate) struct SeqDeserializer {
 
 impl SeqDeserializer {
     pub(crate) fn new(vec: Vec<Value>) -> Self {
-        SeqDeserializer {
-            iter: vec.into_iter(),
-        }
+        SeqDeserializer { iter: vec.into_iter() }
     }
 }
 
@@ -981,9 +972,7 @@ impl<'de> EnumAccess<'de> for EnumRefDeserializer<'de> {
     {
         let str_de = BorrowedStrDeserializer::<Error>::new(self.tag);
         let variant = seed.deserialize(str_de)?;
-        let visitor = VariantRefDeserializer {
-            value: self.value,
-        };
+        let visitor = VariantRefDeserializer { value: self.value };
         Ok((variant, visitor))
     }
 }
@@ -1039,9 +1028,7 @@ pub(crate) struct SeqRefDeserializer<'de> {
 
 impl<'de> SeqRefDeserializer<'de> {
     pub(crate) fn new(slice: &'de [Value]) -> Self {
-        SeqRefDeserializer {
-            iter: slice.iter(),
-        }
+        SeqRefDeserializer { iter: slice.iter() }
     }
 }
 

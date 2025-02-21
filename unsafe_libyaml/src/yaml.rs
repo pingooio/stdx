@@ -1,4 +1,4 @@
-pub use core::primitive::{i64 as ptrdiff_t, u64 as size_t, u8 as yaml_char_t};
+pub use core::primitive::{i64 as ptrdiff_t, u8 as yaml_char_t, u64 as size_t};
 use core::{
     ops::Deref,
     ptr::{self, addr_of},

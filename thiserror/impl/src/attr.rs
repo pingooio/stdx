@@ -1,11 +1,11 @@
 use std::collections::BTreeSet as Set;
 
 use proc_macro2::{Delimiter, Group, Span, TokenStream, TokenTree};
-use quote::{format_ident, quote, ToTokens};
+use quote::{ToTokens, format_ident, quote};
 use syn::{
-    braced, bracketed, parenthesized,
-    parse::{discouraged::Speculative, ParseStream},
-    token, Attribute, Error, Ident, Index, LitInt, LitStr, Meta, Result, Token,
+    Attribute, Error, Ident, Index, LitInt, LitStr, Meta, Result, Token, braced, bracketed, parenthesized,
+    parse::{ParseStream, discouraged::Speculative},
+    token,
 };
 
 pub struct Attrs<'a> {

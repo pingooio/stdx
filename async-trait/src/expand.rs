@@ -1,20 +1,20 @@
 use std::{collections::BTreeSet as Set, mem};
 
 use proc_macro2::{Span, TokenStream};
-use quote::{format_ident, quote, quote_spanned, ToTokens};
+use quote::{ToTokens, format_ident, quote, quote_spanned};
 use syn::{
+    Attribute, Block, FnArg, GenericArgument, GenericParam, Generics, Ident, ImplItem, Lifetime, LifetimeParam, Pat,
+    PatIdent, PathArguments, Receiver, ReturnType, Signature, Token, TraitItem, Type, TypePath, WhereClause,
     parse_quote, parse_quote_spanned,
     punctuated::Punctuated,
     visit_mut::{self, VisitMut},
-    Attribute, Block, FnArg, GenericArgument, GenericParam, Generics, Ident, ImplItem, Lifetime, LifetimeParam, Pat,
-    PatIdent, PathArguments, Receiver, ReturnType, Signature, Token, TraitItem, Type, TypePath, WhereClause,
 };
 
 use crate::{
-    bound::{has_bound, InferredBound, Supertraits},
+    bound::{InferredBound, Supertraits, has_bound},
     lifetime::{AddLifetimeToImplTrait, CollectLifetimes},
     parse::Item,
-    receiver::{has_self_in_block, has_self_in_sig, mut_pat, ReplaceSelf},
+    receiver::{ReplaceSelf, has_self_in_block, has_self_in_sig, mut_pat},
     verbatim::VerbatimFn,
 };
 
@@ -42,12 +42,8 @@ enum Context<'a> {
 impl Context<'_> {
     fn lifetimes<'a>(&'a self, used: &'a [Lifetime]) -> impl Iterator<Item = &'a LifetimeParam> {
         let generics = match self {
-            Context::Trait {
-                generics, ..
-            } => generics,
-            Context::Impl {
-                impl_generics, ..
-            } => impl_generics,
+            Context::Trait { generics, .. } => generics,
+            Context::Impl { impl_generics, .. } => impl_generics,
         };
         generics.params.iter().filter_map(move |param| {
             if let GenericParam::Lifetime(param) = param {
@@ -267,12 +263,8 @@ fn transform_sig(context: Context, sig: &mut Signature, has_self: bool, has_defa
         };
 
         let bounds = bounds.iter().filter(|bound| match context {
-            Context::Trait {
-                supertraits, ..
-            } => has_default && !has_bound(supertraits, bound),
-            Context::Impl {
-                ..
-            } => false,
+            Context::Trait { supertraits, .. } => has_default && !has_bound(supertraits, bound),
+            Context::Impl { .. } => false,
         });
 
         where_clause_or_default(&mut sig.generics.where_clause)
@@ -345,9 +337,7 @@ fn transform_block(context: Context, sig: &mut Signature, block: &mut Block) {
         .enumerate()
         .map(|(i, arg)| match arg {
             FnArg::Receiver(Receiver {
-                self_token,
-                mutability,
-                ..
+                self_token, mutability, ..
             }) => {
                 replace_self = true;
                 let ident = Ident::new("__self", self_token.span);
@@ -362,12 +352,7 @@ fn transform_block(context: Context, sig: &mut Signature, block: &mut Block) {
 
                 if let Type::Reference(_) = *arg.ty {
                     quote!()
-                } else if let Pat::Ident(PatIdent {
-                    ident,
-                    mutability,
-                    ..
-                }) = &*arg.pat
-                {
+                } else if let Pat::Ident(PatIdent { ident, mutability, .. }) = &*arg.pat {
                     quote! {
                         #(#attrs)*
                         let #mutability #ident = #ident;
@@ -456,9 +441,7 @@ fn contains_associated_type_impl_trait(context: Context, ret: &mut Type) -> bool
     }
 
     match context {
-        Context::Trait {
-            ..
-        } => false,
+        Context::Trait { .. } => false,
         Context::Impl {
             associated_type_impl_traits,
             ..

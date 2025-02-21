@@ -98,9 +98,7 @@ impl<T: Buf> Buf for BufList<T> {
 
 impl<T> Default for BufList<T> {
     fn default() -> Self {
-        BufList {
-            bufs: VecDeque::new(),
-        }
+        BufList { bufs: VecDeque::new() }
     }
 }
 

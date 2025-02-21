@@ -348,7 +348,7 @@ fn test_lookup_prefix() {
 fn test_within_city() {
     use ipnetwork::IpNetwork;
 
-    use super::{geoip2::City, Within};
+    use super::{Within, geoip2::City};
 
     // let _ = env_logger::try_init();
 

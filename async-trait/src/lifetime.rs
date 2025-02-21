@@ -2,10 +2,9 @@ use std::mem;
 
 use proc_macro2::{Span, TokenStream};
 use syn::{
-    parse_quote_spanned, token,
-    visit_mut::{self, VisitMut},
     Expr, GenericArgument, Lifetime, Receiver, ReturnType, Token, Type, TypeBareFn, TypeImplTrait, TypeParen, TypePtr,
-    TypeReference,
+    TypeReference, parse_quote_spanned, token,
+    visit_mut::{self, VisitMut},
 };
 
 pub struct CollectLifetimes {

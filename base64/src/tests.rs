@@ -1,18 +1,17 @@
 use std::str;
 
 use rand::{
-    distributions,
+    Rng, distributions,
     distributions::{Distribution as _, Uniform},
     seq::SliceRandom,
-    Rng,
 };
 
 use crate::{
     alphabet,
     encode::encoded_len,
     engine::{
-        general_purpose::{GeneralPurpose, GeneralPurposeConfig},
         Config, DecodePaddingMode, Engine,
+        general_purpose::{GeneralPurpose, GeneralPurposeConfig},
     },
 };
 
@@ -30,11 +29,7 @@ fn roundtrip_random_config_long() {
 pub fn assert_encode_sanity(encoded: &str, padded: bool, input_len: usize) {
     let input_rem = input_len % 3;
     let expected_padding_len = if input_rem > 0 {
-        if padded {
-            3 - input_rem
-        } else {
-            0
-        }
+        if padded { 3 - input_rem } else { 0 }
     } else {
         0
     };

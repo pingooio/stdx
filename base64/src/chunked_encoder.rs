@@ -23,9 +23,7 @@ pub struct ChunkedEncoder<'e, E: Engine + ?Sized> {
 
 impl<'e, E: Engine + ?Sized> ChunkedEncoder<'e, E> {
     pub fn new(engine: &'e E) -> ChunkedEncoder<'e, E> {
-        ChunkedEncoder {
-            engine,
-        }
+        ChunkedEncoder { engine }
     }
 
     pub fn encode<S: Sink>(&self, bytes: &[u8], sink: &mut S) -> Result<(), S::Error> {
@@ -58,9 +56,7 @@ pub(crate) struct StringSink<'a> {
 #[cfg(any(feature = "alloc", test))]
 impl<'a> StringSink<'a> {
     pub(crate) fn new(s: &mut String) -> StringSink {
-        StringSink {
-            string: s,
-        }
+        StringSink { string: s }
     }
 }
 
@@ -78,8 +74,8 @@ impl<'a> Sink for StringSink<'a> {
 #[cfg(test)]
 pub mod tests {
     use rand::{
-        distributions::{Distribution, Uniform},
         Rng,
+        distributions::{Distribution, Uniform},
     };
 
     use super::*;

@@ -24,9 +24,7 @@ where
     /// Create a new `Full`.
     pub fn new(data: D) -> Self {
         let data = if data.has_remaining() { Some(data) } else { None };
-        Full {
-            data,
-        }
+        Full { data }
     }
 }
 
@@ -59,9 +57,7 @@ where
 {
     /// Create an empty `Full`.
     fn default() -> Self {
-        Full {
-            data: None,
-        }
+        Full { data: None }
     }
 }
 

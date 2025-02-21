@@ -1,19 +1,20 @@
 use core::{
-    mem::{size_of, MaybeUninit},
+    mem::{MaybeUninit, size_of},
     ptr::{self, addr_of_mut},
 };
 
 use crate::{
+    PointerExt, YAML_ALIAS_EVENT, YAML_COMPOSER_ERROR, YAML_DOCUMENT_END_EVENT, YAML_DOCUMENT_START_EVENT,
+    YAML_MAPPING_END_EVENT, YAML_MAPPING_NODE, YAML_MAPPING_START_EVENT, YAML_MEMORY_ERROR, YAML_SCALAR_EVENT,
+    YAML_SCALAR_NODE, YAML_SEQUENCE_END_EVENT, YAML_SEQUENCE_NODE, YAML_SEQUENCE_START_EVENT, YAML_STREAM_END_EVENT,
+    YAML_STREAM_START_EVENT,
     api::{yaml_free, yaml_malloc, yaml_stack_extend, yaml_strdup},
     externs::{memset, strcmp},
     libc,
-    success::{Success, FAIL, OK},
+    success::{FAIL, OK, Success},
     yaml::yaml_char_t,
     yaml_alias_data_t, yaml_document_delete, yaml_document_t, yaml_event_t, yaml_mark_t, yaml_node_item_t,
-    yaml_node_pair_t, yaml_node_t, yaml_parser_parse, yaml_parser_t, PointerExt, YAML_ALIAS_EVENT, YAML_COMPOSER_ERROR,
-    YAML_DOCUMENT_END_EVENT, YAML_DOCUMENT_START_EVENT, YAML_MAPPING_END_EVENT, YAML_MAPPING_NODE,
-    YAML_MAPPING_START_EVENT, YAML_MEMORY_ERROR, YAML_SCALAR_EVENT, YAML_SCALAR_NODE, YAML_SEQUENCE_END_EVENT,
-    YAML_SEQUENCE_NODE, YAML_SEQUENCE_START_EVENT, YAML_STREAM_END_EVENT, YAML_STREAM_START_EVENT,
+    yaml_node_pair_t, yaml_node_t, yaml_parser_parse, yaml_parser_t,
 };
 
 #[repr(C)]

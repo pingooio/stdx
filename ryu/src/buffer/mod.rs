@@ -29,9 +29,7 @@ impl Buffer {
     #[cfg_attr(feature = "no-panic", no_panic)]
     pub fn new() -> Self {
         let bytes = [MaybeUninit::<u8>::uninit(); 24];
-        Buffer {
-            bytes,
-        }
+        Buffer { bytes }
     }
 
     /// Print a floating point number into this buffer and return a reference to
@@ -139,9 +137,9 @@ impl Sealed for f32 {
     }
 
     #[inline]
-    unsafe fn write_to_ryu_buffer(self, result: *mut u8) -> usize { unsafe {
-        raw::format32(self, result)
-    }}
+    unsafe fn write_to_ryu_buffer(self, result: *mut u8) -> usize {
+        unsafe { raw::format32(self, result) }
+    }
 }
 
 impl Sealed for f64 {
@@ -168,7 +166,7 @@ impl Sealed for f64 {
     }
 
     #[inline]
-    unsafe fn write_to_ryu_buffer(self, result: *mut u8) -> usize { unsafe {
-        raw::format64(self, result)
-    }}
+    unsafe fn write_to_ryu_buffer(self, result: *mut u8) -> usize {
+        unsafe { raw::format64(self, result) }
+    }
 }

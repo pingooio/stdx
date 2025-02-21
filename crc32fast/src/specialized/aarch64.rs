@@ -11,9 +11,7 @@ impl State {
         if cfg!(target_feature = "crc") {
             // SAFETY: The conditions above ensure that all
             //         required instructions are supported by the CPU.
-            Some(Self {
-                state,
-            })
+            Some(Self { state })
         } else {
             None
         }
@@ -24,9 +22,7 @@ impl State {
         if std::arch::is_aarch64_feature_detected!("crc") {
             // SAFETY: The conditions above ensure that all
             //         required instructions are supported by the CPU.
-            Some(Self {
-                state,
-            })
+            Some(Self { state })
         } else {
             None
         }

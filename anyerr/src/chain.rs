@@ -26,9 +26,7 @@ impl<'a> Chain<'a> {
     #[cold]
     pub fn new(head: &'a (dyn StdError + 'static)) -> Self {
         Chain {
-            state: ChainState::Linked {
-                next: Some(head),
-            },
+            state: ChainState::Linked { next: Some(head) },
         }
     }
 }
@@ -38,17 +36,13 @@ impl<'a> Iterator for Chain<'a> {
 
     fn next(&mut self) -> Option<Self::Item> {
         match &mut self.state {
-            Linked {
-                next,
-            } => {
+            Linked { next } => {
                 let error = (*next)?;
                 *next = error.source();
                 Some(error)
             }
             #[cfg(feature = "std")]
-            Buffered {
-                rest,
-            } => rest.next(),
+            Buffered { rest } => rest.next(),
         }
     }
 
@@ -62,9 +56,7 @@ impl<'a> Iterator for Chain<'a> {
 impl DoubleEndedIterator for Chain<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         match &mut self.state {
-            &mut Linked {
-                mut next,
-            } => {
+            &mut Linked { mut next } => {
                 let mut rest = Vec::new();
                 while let Some(cause) = next {
                     next = cause.source();
@@ -72,14 +64,10 @@ impl DoubleEndedIterator for Chain<'_> {
                 }
                 let mut rest = rest.into_iter();
                 let last = rest.next_back();
-                self.state = Buffered {
-                    rest,
-                };
+                self.state = Buffered { rest };
                 last
             }
-            Buffered {
-                rest,
-            } => rest.next_back(),
+            Buffered { rest } => rest.next_back(),
         }
     }
 }
@@ -87,9 +75,7 @@ impl DoubleEndedIterator for Chain<'_> {
 impl ExactSizeIterator for Chain<'_> {
     fn len(&self) -> usize {
         match &self.state {
-            &Linked {
-                mut next,
-            } => {
+            &Linked { mut next } => {
                 let mut len = 0;
                 while let Some(cause) = next {
                     next = cause.source();
@@ -98,9 +84,7 @@ impl ExactSizeIterator for Chain<'_> {
                 len
             }
             #[cfg(feature = "std")]
-            Buffered {
-                rest,
-            } => rest.len(),
+            Buffered { rest } => rest.len(),
         }
     }
 }

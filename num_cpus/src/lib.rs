@@ -368,11 +368,7 @@ fn get_num_cpus() -> usize {
     const CONF_NAME: libc::c_int = libc::_SC_NPROCESSORS_ONLN;
 
     let cpus = unsafe { libc::sysconf(CONF_NAME) };
-    if cpus < 1 {
-        1
-    } else {
-        cpus as usize
-    }
+    if cpus < 1 { 1 } else { cpus as usize }
 }
 
 #[cfg(target_os = "haiku")]
@@ -419,11 +415,7 @@ fn get_num_cpus() -> usize {
 
     let mut info: system_info = unsafe { mem::zeroed() };
     let status = unsafe { get_system_info(&mut info as *mut _) };
-    if status == 0 {
-        info.cpu_count as usize
-    } else {
-        1
-    }
+    if status == 0 { info.cpu_count as usize } else { 1 }
 }
 
 #[cfg(target_os = "hermit")]

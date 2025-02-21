@@ -1,13 +1,13 @@
 use core::ptr::addr_of_mut;
 
 use crate::{
+    PointerExt, YAML_ANY_ENCODING, YAML_READER_ERROR, YAML_UTF8_ENCODING, YAML_UTF16BE_ENCODING, YAML_UTF16LE_ENCODING,
     externs::{memcmp, memmove},
     libc,
     ops::ForceAdd as _,
-    success::{Success, FAIL, OK},
+    success::{FAIL, OK, Success},
     yaml::{size_t, yaml_char_t},
-    yaml_parser_t, PointerExt, YAML_ANY_ENCODING, YAML_READER_ERROR, YAML_UTF16BE_ENCODING, YAML_UTF16LE_ENCODING,
-    YAML_UTF8_ENCODING,
+    yaml_parser_t,
 };
 
 unsafe fn yaml_parser_set_reader_error(

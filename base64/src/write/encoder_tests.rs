@@ -10,8 +10,8 @@ use super::EncoderWriter;
 use crate::{
     alphabet::{STANDARD, URL_SAFE},
     engine::{
-        general_purpose::{GeneralPurpose, NO_PAD, PAD},
         Engine,
+        general_purpose::{GeneralPurpose, NO_PAD, PAD},
     },
     tests::random_engine,
 };
@@ -192,8 +192,8 @@ fn write_2_partials_to_exactly_complete_chunk_encodes_complete_chunk() {
 }
 
 #[test]
-fn write_partial_then_enough_to_complete_chunk_but_not_complete_another_chunk_encodes_complete_chunk_without_consuming_remaining(
-) {
+fn write_partial_then_enough_to_complete_chunk_but_not_complete_another_chunk_encodes_complete_chunk_without_consuming_remaining()
+ {
     let mut c = Cursor::new(Vec::new());
     {
         let mut enc = EncoderWriter::new(&mut c, &NO_PAD_ENGINE);
@@ -223,8 +223,8 @@ fn write_partial_then_enough_to_complete_chunk_and_another_chunk_encodes_complet
 }
 
 #[test]
-fn write_partial_then_enough_to_complete_chunk_and_another_chunk_and_another_partial_chunk_encodes_only_complete_chunks(
-) {
+fn write_partial_then_enough_to_complete_chunk_and_another_chunk_and_another_partial_chunk_encodes_only_complete_chunks()
+ {
     let mut c = Cursor::new(Vec::new());
     {
         let mut enc = EncoderWriter::new(&mut c, &NO_PAD_ENGINE);

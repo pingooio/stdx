@@ -163,11 +163,11 @@
 #[doc(inline)]
 pub use crate::mapping::Mapping;
 #[doc(inline)]
-pub use crate::value::{from_value, to_value, Index, Number, Sequence, Value};
+pub use crate::value::{Index, Number, Sequence, Value, from_value, to_value};
 pub use crate::{
-    de::{from_reader, from_slice, from_str, Deserializer},
+    de::{Deserializer, from_reader, from_slice, from_str},
     error::{Error, Location, Result},
-    ser::{to_string, to_writer, Serializer},
+    ser::{Serializer, to_string, to_writer},
 };
 
 mod de;

@@ -1,8 +1,8 @@
 use reqwest::{
-    header::{self, HeaderMap, HeaderValue},
     Method,
+    header::{self, HeaderMap, HeaderValue},
 };
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de::DeserializeOwned};
 
 pub struct Client {
     pub http_client: reqwest::Client,

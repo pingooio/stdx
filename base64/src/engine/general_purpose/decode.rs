@@ -1,6 +1,6 @@
 use crate::{
-    engine::{general_purpose::INVALID_VALUE, DecodeEstimate, DecodeMetadata, DecodePaddingMode},
     DecodeError, DecodeSliceError, PAD_BYTE,
+    engine::{DecodeEstimate, DecodeMetadata, DecodePaddingMode, general_purpose::INVALID_VALUE},
 };
 
 #[doc(hidden)]

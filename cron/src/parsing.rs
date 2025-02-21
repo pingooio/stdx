@@ -4,13 +4,13 @@ use std::{
 };
 
 use nom::{
+    IResult,
     branch::alt,
     bytes::complete::tag,
     character::complete::{alpha1, digit1, multispace0},
     combinator::{all_consuming, eof, map, map_res, opt},
     multi::separated_list1,
     sequence::{delimited, separated_pair, terminated, tuple},
-    IResult,
 };
 
 use crate::{
@@ -152,22 +152,12 @@ fn root_specifier_list_with_any(i: &str) -> IResult<&str, Vec<RootSpecifier>> {
 
 fn field(i: &str) -> IResult<&str, Field> {
     let (i, specifiers) = root_specifier_list(i)?;
-    Ok((
-        i,
-        Field {
-            specifiers,
-        },
-    ))
+    Ok((i, Field { specifiers }))
 }
 
 fn field_with_any(i: &str) -> IResult<&str, Field> {
     let (i, specifiers) = root_specifier_list_with_any(i)?;
-    Ok((
-        i,
-        Field {
-            specifiers,
-        },
-    ))
+    Ok((i, Field { specifiers }))
 }
 
 fn shorthand_yearly(i: &str) -> IResult<&str, ScheduleFields> {

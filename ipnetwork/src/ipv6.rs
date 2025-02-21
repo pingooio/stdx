@@ -84,10 +84,7 @@ impl Ipv6Network {
         if prefix > IPV6_BITS {
             Err(IpNetworkError::InvalidPrefix)
         } else {
-            Ok(Ipv6Network {
-                addr,
-                prefix,
-            })
+            Ok(Ipv6Network { addr, prefix })
         }
     }
 
@@ -111,10 +108,7 @@ impl Ipv6Network {
     /// let net = unsafe { Ipv6Network::new_unchecked(addr, prefix) };
     /// ```
     pub const unsafe fn new_unchecked(addr: Ipv6Addr, prefix: u8) -> Ipv6Network {
-        Ipv6Network {
-            addr,
-            prefix,
-        }
+        Ipv6Network { addr, prefix }
     }
 
     /// Constructs a new `Ipv6Network` from a network address and a network mask.
@@ -122,10 +116,7 @@ impl Ipv6Network {
     /// If the netmask is not valid this will return an `IpNetworkError::InvalidPrefix`.
     pub fn with_netmask(netaddr: Ipv6Addr, netmask: Ipv6Addr) -> Result<Self, IpNetworkError> {
         let prefix = ipv6_mask_to_prefix(netmask)?;
-        let net = Self {
-            addr: netaddr,
-            prefix,
-        };
+        let net = Self { addr: netaddr, prefix };
         Ok(net)
     }
 
@@ -147,10 +138,7 @@ impl Ipv6Network {
         let mask = max.checked_shr(u32::from(prefix)).unwrap_or(0);
         let end: u128 = dec | mask;
 
-        Ipv6NetworkIterator {
-            next: Some(start),
-            end,
-        }
+        Ipv6NetworkIterator { next: Some(start), end }
     }
 
     pub fn ip(&self) -> Ipv6Addr {
@@ -333,10 +321,7 @@ impl TryFrom<&str> for Ipv6Network {
 
 impl From<Ipv6Addr> for Ipv6Network {
     fn from(a: Ipv6Addr) -> Ipv6Network {
-        Ipv6Network {
-            addr: a,
-            prefix: 128,
-        }
+        Ipv6Network { addr: a, prefix: 128 }
     }
 }
 

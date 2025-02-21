@@ -79,9 +79,7 @@ impl<'a> Emitter<'a> {
             sys::yaml_emitter_set_output(emitter, write_handler, owned.ptr.cast());
             Owned::assume_init(owned)
         };
-        Emitter {
-            pin,
-        }
+        Emitter { pin }
     }
 
     pub fn emit(&mut self, event: Event) -> Result<(), Error> {

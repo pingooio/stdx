@@ -216,9 +216,7 @@ mod capture {
                 Backtrace::create(Backtrace::capture as usize)
             } else {
                 let inner = Inner::Disabled;
-                Backtrace {
-                    inner,
-                }
+                Backtrace { inner }
             }
         }
 
@@ -251,9 +249,7 @@ mod capture {
                 }))
             };
 
-            Backtrace {
-                inner,
-            }
+            Backtrace { inner }
         }
 
         pub(crate) fn status(&self) -> BacktraceStatus {

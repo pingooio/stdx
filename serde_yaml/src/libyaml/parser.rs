@@ -2,7 +2,7 @@ use std::{
     borrow::Cow,
     fmt::{self, Debug},
     mem::MaybeUninit,
-    ptr::{addr_of_mut, NonNull},
+    ptr::{NonNull, addr_of_mut},
     slice,
 };
 
@@ -83,9 +83,7 @@ impl<'input> Parser<'input> {
             addr_of_mut!((*owned.ptr).input).write(input);
             Owned::assume_init(owned)
         };
-        Parser {
-            pin,
-        }
+        Parser { pin }
     }
 
     pub fn next(&mut self) -> Result<(Event<'input>, Mark)> {

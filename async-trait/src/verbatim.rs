@@ -1,8 +1,8 @@
 use proc_macro2::TokenStream;
 use quote::{ToTokens, TokenStreamExt};
 use syn::{
-    parse::{Parse, ParseStream, Result},
     Attribute, Signature, Token, Visibility,
+    parse::{Parse, ParseStream, Result},
 };
 
 pub struct VerbatimFn {

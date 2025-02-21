@@ -240,11 +240,7 @@ impl PartialOrd for HttpDate {
 
 fn toint_1(x: u8) -> Result<u8, Error> {
     let result = x.wrapping_sub(b'0');
-    if result < 10 {
-        Ok(result)
-    } else {
-        Err(Error(()))
-    }
+    if result < 10 { Ok(result) } else { Err(Error(())) }
 }
 
 fn toint_2(s: &[u8]) -> Result<u8, Error> {
@@ -376,13 +372,7 @@ fn parse_asctime(s: &[u8]) -> Result<HttpDate, Error> {
         hour: toint_2(&s[11..13])?,
         day: {
             let x = &s[8..10];
-            {
-                if x[0] == b' ' {
-                    toint_1(x[1])
-                } else {
-                    toint_2(x)
-                }
-            }?
+            { if x[0] == b' ' { toint_1(x[1]) } else { toint_2(x) } }?
         },
         mon: match &s[4..8] {
             b"Jan " => 1,

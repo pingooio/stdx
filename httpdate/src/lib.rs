@@ -70,7 +70,7 @@ mod tests {
         time::{Duration, UNIX_EPOCH},
     };
 
-    use super::{fmt_http_date, parse_http_date, HttpDate};
+    use super::{HttpDate, fmt_http_date, parse_http_date};
 
     #[test]
     fn test_rfc_example() {

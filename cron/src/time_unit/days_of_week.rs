@@ -15,9 +15,7 @@ pub struct DaysOfWeek {
 
 impl TimeUnitField for DaysOfWeek {
     fn from_optional_ordinal_set(ordinal_set: Option<OrdinalSet>) -> Self {
-        DaysOfWeek {
-            ordinals: ordinal_set,
-        }
+        DaysOfWeek { ordinals: ordinal_set }
     }
     fn name() -> Cow<'static, str> {
         Cow::from("Days of Week")

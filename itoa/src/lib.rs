@@ -88,9 +88,7 @@ impl Buffer {
     #[cfg_attr(feature = "no-panic", no_panic)]
     pub fn new() -> Buffer {
         let bytes = [MaybeUninit::<u8>::uninit(); I128_MAX_LEN];
-        Buffer {
-            bytes,
-        }
+        Buffer { bytes }
     }
 
     /// Print an integer into this buffer and return a reference to its string

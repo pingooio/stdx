@@ -3,7 +3,7 @@
 mod error;
 mod types;
 
-use core::str::{from_utf8, FromStr};
+use core::str::{FromStr, from_utf8};
 use std::{collections::BTreeMap, sync::LazyLock};
 
 pub use error::Error;
@@ -95,10 +95,7 @@ impl List {
             current = current.children.entry(key).or_insert_with(Default::default);
         }
 
-        current.leaf = Some(Leaf {
-            is_exception,
-            typ,
-        });
+        current.leaf = Some(Leaf { is_exception, typ });
 
         Ok(())
     }
@@ -109,12 +106,7 @@ macro_rules! anycase_key {
     ($label:ident) => {
         match from_utf8($label) {
             Ok(label) => UniCase::new(Cow::from(label)),
-            Err(_) => {
-                return Info {
-                    len: 0,
-                    typ: None,
-                }
-            }
+            Err(_) => return Info { len: 0, typ: None },
         }
     };
 }
@@ -149,12 +141,7 @@ impl Psl for List {
                 }
                 info
             }
-            None => {
-                return Info {
-                    len: 0,
-                    typ: None,
-                }
-            }
+            None => return Info { len: 0, typ: None },
         };
 
         // the rest of the labels
@@ -416,26 +403,14 @@ mod tests {
     fn find_localhost() {
         let list = List::from_bytes(LIST).unwrap();
         let labels = b"localhost".rsplit(|x| *x == b'.');
-        assert_eq!(
-            list.find(labels),
-            Info {
-                len: 9,
-                typ: None
-            }
-        );
+        assert_eq!(list.find(labels), Info { len: 9, typ: None });
     }
 
     #[test]
     fn find_uk() {
         let list = List::from_bytes(LIST).unwrap();
         let labels = b"uk".rsplit(|x| *x == b'.');
-        assert_eq!(
-            list.find(labels),
-            Info {
-                len: 2,
-                typ: None
-            }
-        );
+        assert_eq!(list.find(labels), Info { len: 2, typ: None });
     }
 
     #[test]

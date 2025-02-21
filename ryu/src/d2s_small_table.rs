@@ -97,46 +97,50 @@ pub static DOUBLE_POW5_TABLE: [u64; 26] = [
 
 // Computes 5^i in the form required by Ryū.
 #[cfg_attr(feature = "no-panic", inline)]
-pub unsafe fn compute_pow5(i: u32) -> (u64, u64) { unsafe {
-    let base = i / DOUBLE_POW5_TABLE.len() as u32;
-    let base2 = base * DOUBLE_POW5_TABLE.len() as u32;
-    let offset = i - base2;
-    debug_assert!(base < DOUBLE_POW5_SPLIT2.len() as u32);
-    let mul = *DOUBLE_POW5_SPLIT2.get_unchecked(base as usize);
-    if offset == 0 {
-        return mul;
+pub unsafe fn compute_pow5(i: u32) -> (u64, u64) {
+    unsafe {
+        let base = i / DOUBLE_POW5_TABLE.len() as u32;
+        let base2 = base * DOUBLE_POW5_TABLE.len() as u32;
+        let offset = i - base2;
+        debug_assert!(base < DOUBLE_POW5_SPLIT2.len() as u32);
+        let mul = *DOUBLE_POW5_SPLIT2.get_unchecked(base as usize);
+        if offset == 0 {
+            return mul;
+        }
+        debug_assert!(offset < DOUBLE_POW5_TABLE.len() as u32);
+        let m = *DOUBLE_POW5_TABLE.get_unchecked(offset as usize);
+        let b0 = m as u128 * mul.0 as u128;
+        let b2 = m as u128 * mul.1 as u128;
+        let delta = pow5bits(i as i32) - pow5bits(base2 as i32);
+        debug_assert!(i / 16 < POW5_OFFSETS.len() as u32);
+        let shifted_sum = (b0 >> delta)
+            + (b2 << (64 - delta))
+            + ((*POW5_OFFSETS.get_unchecked((i / 16) as usize) >> ((i % 16) << 1)) & 3) as u128;
+        (shifted_sum as u64, (shifted_sum >> 64) as u64)
     }
-    debug_assert!(offset < DOUBLE_POW5_TABLE.len() as u32);
-    let m = *DOUBLE_POW5_TABLE.get_unchecked(offset as usize);
-    let b0 = m as u128 * mul.0 as u128;
-    let b2 = m as u128 * mul.1 as u128;
-    let delta = pow5bits(i as i32) - pow5bits(base2 as i32);
-    debug_assert!(i / 16 < POW5_OFFSETS.len() as u32);
-    let shifted_sum = (b0 >> delta)
-        + (b2 << (64 - delta))
-        + ((*POW5_OFFSETS.get_unchecked((i / 16) as usize) >> ((i % 16) << 1)) & 3) as u128;
-    (shifted_sum as u64, (shifted_sum >> 64) as u64)
-}}
+}
 
 // Computes 5^-i in the form required by Ryū.
 #[cfg_attr(feature = "no-panic", inline)]
-pub unsafe fn compute_inv_pow5(i: u32) -> (u64, u64) { unsafe {
-    let base = (i + DOUBLE_POW5_TABLE.len() as u32 - 1) / DOUBLE_POW5_TABLE.len() as u32;
-    let base2 = base * DOUBLE_POW5_TABLE.len() as u32;
-    let offset = base2 - i;
-    debug_assert!(base < DOUBLE_POW5_INV_SPLIT2.len() as u32);
-    let mul = *DOUBLE_POW5_INV_SPLIT2.get_unchecked(base as usize); // 1/5^base2
-    if offset == 0 {
-        return mul;
+pub unsafe fn compute_inv_pow5(i: u32) -> (u64, u64) {
+    unsafe {
+        let base = (i + DOUBLE_POW5_TABLE.len() as u32 - 1) / DOUBLE_POW5_TABLE.len() as u32;
+        let base2 = base * DOUBLE_POW5_TABLE.len() as u32;
+        let offset = base2 - i;
+        debug_assert!(base < DOUBLE_POW5_INV_SPLIT2.len() as u32);
+        let mul = *DOUBLE_POW5_INV_SPLIT2.get_unchecked(base as usize); // 1/5^base2
+        if offset == 0 {
+            return mul;
+        }
+        debug_assert!(offset < DOUBLE_POW5_TABLE.len() as u32);
+        let m = *DOUBLE_POW5_TABLE.get_unchecked(offset as usize); // 5^offset
+        let b0 = m as u128 * (mul.0 - 1) as u128;
+        let b2 = m as u128 * mul.1 as u128; // 1/5^base2 * 5^offset = 1/5^(base2-offset) = 1/5^i
+        let delta = pow5bits(base2 as i32) - pow5bits(i as i32);
+        debug_assert!(base < POW5_INV_OFFSETS.len() as u32);
+        let shifted_sum = ((b0 >> delta) + (b2 << (64 - delta)))
+            + 1
+            + ((*POW5_INV_OFFSETS.get_unchecked((i / 16) as usize) >> ((i % 16) << 1)) & 3) as u128;
+        (shifted_sum as u64, (shifted_sum >> 64) as u64)
     }
-    debug_assert!(offset < DOUBLE_POW5_TABLE.len() as u32);
-    let m = *DOUBLE_POW5_TABLE.get_unchecked(offset as usize); // 5^offset
-    let b0 = m as u128 * (mul.0 - 1) as u128;
-    let b2 = m as u128 * mul.1 as u128; // 1/5^base2 * 5^offset = 1/5^(base2-offset) = 1/5^i
-    let delta = pow5bits(base2 as i32) - pow5bits(i as i32);
-    debug_assert!(base < POW5_INV_OFFSETS.len() as u32);
-    let shifted_sum = ((b0 >> delta) + (b2 << (64 - delta)))
-        + 1
-        + ((*POW5_INV_OFFSETS.get_unchecked((i / 16) as usize) >> ((i % 16) << 1)) & 3) as u128;
-    (shifted_sum as u64, (shifted_sum >> 64) as u64)
-}}
+}

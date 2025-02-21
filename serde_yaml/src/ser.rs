@@ -110,9 +110,7 @@ where
         self.flush_mapping_start()?;
         self.value_start()?;
         let tag = self.take_tag();
-        self.emitter.emit(Event::SequenceStart(Sequence {
-            tag,
-        }))?;
+        self.emitter.emit(Event::SequenceStart(Sequence { tag }))?;
         Ok(())
     }
 
@@ -125,9 +123,7 @@ where
         self.flush_mapping_start()?;
         self.value_start()?;
         let tag = self.take_tag();
-        self.emitter.emit(Event::MappingStart(Mapping {
-            tag,
-        }))?;
+        self.emitter.emit(Event::MappingStart(Mapping { tag }))?;
         Ok(())
     }
 

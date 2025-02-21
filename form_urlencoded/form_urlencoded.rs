@@ -40,9 +40,7 @@ use percent_encoding::{percent_decode, percent_encode_byte};
 /// converted to `[("#first", "%try%")]`.
 #[inline]
 pub fn parse(input: &[u8]) -> Parse<'_> {
-    Parse {
-        input,
-    }
+    Parse { input }
 }
 /// The return type of `parse()`.
 #[derive(Copy, Clone)]
@@ -100,9 +98,7 @@ fn replace_plus(input: &[u8]) -> Cow<'_, [u8]> {
 impl<'a> Parse<'a> {
     /// Return a new iterator that yields pairs of `String` instead of pairs of `Cow<str>`.
     pub fn into_owned(self) -> ParseIntoOwned<'a> {
-        ParseIntoOwned {
-            inner: self,
-        }
+        ParseIntoOwned { inner: self }
     }
 }
 
@@ -124,9 +120,7 @@ impl<'a> Iterator for ParseIntoOwned<'a> {
 ///
 /// Return an iterator of `&str` slices.
 pub fn byte_serialize(input: &[u8]) -> ByteSerialize<'_> {
-    ByteSerialize {
-        bytes: input,
-    }
+    ByteSerialize { bytes: input }
 }
 
 /// Return value of `byte_serialize()`.

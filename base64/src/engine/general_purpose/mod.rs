@@ -2,10 +2,9 @@
 use core::convert::TryInto;
 
 use crate::{
-    alphabet,
+    DecodeSliceError, alphabet,
     alphabet::Alphabet,
     engine::{Config, DecodeMetadata, DecodePaddingMode},
-    DecodeSliceError,
 };
 
 pub(crate) mod decode;

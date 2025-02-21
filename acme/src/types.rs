@@ -1,7 +1,7 @@
 use std::fmt;
 
 use aws_lc_rs::{
-    digest::{digest, Digest, SHA256},
+    digest::{Digest, SHA256, digest},
     signature::{EcdsaKeyPair, KeyPair},
 };
 use reqwest::Response;
@@ -67,8 +67,8 @@ pub struct AccountCredentials {
 mod pkcs8_serde {
     use std::fmt;
 
-    use base64::prelude::{Engine, BASE64_URL_SAFE_NO_PAD};
-    use serde::{de, Deserializer, Serializer};
+    use base64::prelude::{BASE64_URL_SAFE_NO_PAD, Engine};
+    use serde::{Deserializer, Serializer, de};
 
     pub(crate) fn serialize<S>(key_pkcs8: &[u8], serializer: S) -> Result<S::Ok, S::Error>
     where

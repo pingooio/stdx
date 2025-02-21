@@ -1,6 +1,6 @@
 use tracing::debug;
 
-use super::{each_split_within, Fail::*, HasArg, Name, Occur, Opt, Options, ParsingStyle};
+use super::{Fail::*, HasArg, Name, Occur, Opt, Options, ParsingStyle, each_split_within};
 
 #[test]
 fn test_split_within() {

@@ -23,9 +23,7 @@ impl State {
         if cfg!(target_feature = "pclmulqdq") && cfg!(target_feature = "sse2") && cfg!(target_feature = "sse4.1") {
             // SAFETY: The conditions above ensure that all
             //         required instructions are supported by the CPU.
-            Some(Self {
-                state,
-            })
+            Some(Self { state })
         } else {
             None
         }
@@ -39,9 +37,7 @@ impl State {
         {
             // SAFETY: The conditions above ensure that all
             //         required instructions are supported by the CPU.
-            Some(Self {
-                state,
-            })
+            Some(Self { state })
         } else {
             None
         }
@@ -82,10 +78,7 @@ unsafe fn debug(s: &str, a: arch::__m128i) -> arch::__m128i {
             a: arch::__m128i,
             b: [u8; 16],
         }
-        let x = A {
-            a,
-        }
-        .b;
+        let x = A { a }.b;
         print!(" {:20} | ", s);
         for x in x.iter() {
             print!("{:02x} ", x);

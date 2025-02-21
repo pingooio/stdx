@@ -4,8 +4,8 @@
 use std::{
     str,
     sync::{
-        atomic::{AtomicUsize, Ordering},
         Arc,
+        atomic::{AtomicUsize, Ordering},
     },
     thread,
 };
@@ -21,34 +21,36 @@ fn test_exhaustive() {
     for _ in 0..num_cpus::get() {
         let counter = counter.clone();
         let finished = finished.clone();
-        workers.push(thread::spawn(move || loop {
-            let batch = counter.fetch_add(1, Ordering::Relaxed) as u32;
-            if batch > u32::max_value() / BATCH_SIZE {
-                return;
-            }
-
-            let min = batch * BATCH_SIZE;
-            let max = if batch == u32::max_value() / BATCH_SIZE {
-                u32::max_value()
-            } else {
-                min + BATCH_SIZE - 1
-            };
-
-            let mut bytes = [0u8; 24];
-            let mut buffer = ryu::Buffer::new();
-            for u in min..=max {
-                let f = f32::from_bits(u);
-                if !f.is_finite() {
-                    continue;
+        workers.push(thread::spawn(move || {
+            loop {
+                let batch = counter.fetch_add(1, Ordering::Relaxed) as u32;
+                if batch > u32::max_value() / BATCH_SIZE {
+                    return;
                 }
-                let n = unsafe { ryu::raw::format32(f, &mut bytes[0]) };
-                assert_eq!(Ok(Ok(f)), str::from_utf8(&bytes[..n]).map(str::parse));
-                assert_eq!(Ok(f), buffer.format_finite(f).parse());
-            }
 
-            let increment = (max - min + 1) as usize;
-            let update = finished.fetch_add(increment, Ordering::Relaxed);
-            println!("{}", update + increment);
+                let min = batch * BATCH_SIZE;
+                let max = if batch == u32::max_value() / BATCH_SIZE {
+                    u32::max_value()
+                } else {
+                    min + BATCH_SIZE - 1
+                };
+
+                let mut bytes = [0u8; 24];
+                let mut buffer = ryu::Buffer::new();
+                for u in min..=max {
+                    let f = f32::from_bits(u);
+                    if !f.is_finite() {
+                        continue;
+                    }
+                    let n = unsafe { ryu::raw::format32(f, &mut bytes[0]) };
+                    assert_eq!(Ok(Ok(f)), str::from_utf8(&bytes[..n]).map(str::parse));
+                    assert_eq!(Ok(f), buffer.format_finite(f).parse());
+                }
+
+                let increment = (max - min + 1) as usize;
+                let update = finished.fetch_add(increment, Ordering::Relaxed);
+                println!("{}", update + increment);
+            }
         }));
     }
 

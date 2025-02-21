@@ -6,8 +6,8 @@ use std::error;
 
 #[cfg(any(feature = "alloc", test))]
 use crate::{
-    engine::{Config, Engine},
     PAD_BYTE,
+    engine::{Config, Engine},
 };
 
 // /// Encode arbitrary octets as base64 using the [`STANDARD` engine](STANDARD).
@@ -160,8 +160,8 @@ mod tests {
     use std::str;
 
     use rand::{
-        distributions::{Distribution, Uniform},
         Rng,
+        distributions::{Distribution, Uniform},
     };
 
     use super::*;

@@ -6,8 +6,9 @@ use std::{
 };
 
 use serde::{
+    Deserialize, Deserializer, Serialize, Serializer,
     de::{Unexpected, Visitor},
-    forward_to_deserialize_any, Deserialize, Deserializer, Serialize, Serializer,
+    forward_to_deserialize_any,
 };
 
 use crate::{
@@ -540,9 +541,7 @@ impl From<f64> for Number {
             // Destroy NaN sign, signaling, and payload. YAML only has one NaN.
             f = f64::NAN.copysign(1.0);
         }
-        Number {
-            n: N::Float(f),
-        }
+        Number { n: N::Float(f) }
     }
 }
 

@@ -13,9 +13,9 @@
 //! ```
 
 pub use crate::engine::{
+    Engine,
     general_purpose::{
         STANDARD as BASE64_STANDARD, STANDARD_NO_PAD as BASE64_STANDARD_NO_PAD, URL_SAFE as BASE64_URL_SAFE,
         URL_SAFE_NO_PAD as BASE64_URL_SAFE_NO_PAD,
     },
-    Engine,
 };

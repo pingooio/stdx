@@ -3,7 +3,7 @@ use std::{
     ops::Bound::{Included, Unbounded},
 };
 
-use chrono::{offset::TimeZone, DateTime, Datelike, Timelike, Utc};
+use chrono::{DateTime, Datelike, Timelike, Utc, offset::TimeZone};
 
 use crate::{ordinal::*, queries::*, time_unit::*};
 
@@ -21,10 +21,7 @@ pub struct Schedule {
 
 impl Schedule {
     pub(crate) fn new(source: String, fields: ScheduleFields) -> Schedule {
-        Schedule {
-            source,
-            fields,
-        }
+        Schedule { source, fields }
     }
 
     fn next_after<Z>(&self, after: &DateTime<Z>) -> Option<DateTime<Z>>

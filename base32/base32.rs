@@ -24,12 +24,7 @@ const RFC4648_HEX_LOWER: &'static [u8] = b"0123456789abcdefghijklmnopqrstuv";
 const Z: &'static [u8] = b"ybndrfg8ejkmcpqxot1uwisza345h769";
 
 pub fn encode(data: &[u8]) -> String {
-    return encode_private(
-        Alphabet::Rfc4648 {
-            padding: true,
-        },
-        data,
-    );
+    return encode_private(Alphabet::Rfc4648 { padding: true }, data);
 }
 
 pub fn encode_with_alphabet(data: &[u8], alphabet: Alphabet) -> String {
@@ -37,12 +32,7 @@ pub fn encode_with_alphabet(data: &[u8], alphabet: Alphabet) -> String {
 }
 
 pub fn decode(data: &str) -> Result<Vec<u8>, Error> {
-    return decode_with_alphabet(
-        data,
-        Alphabet::Rfc4648 {
-            padding: true,
-        },
-    );
+    return decode_with_alphabet(data, Alphabet::Rfc4648 { padding: true });
 }
 
 pub fn decode_with_alphabet(data: &str, alphabet: Alphabet) -> Result<Vec<u8>, Error> {
@@ -55,18 +45,10 @@ pub fn decode_with_alphabet(data: &str, alphabet: Alphabet) -> Result<Vec<u8>, E
 fn encode_private(alphabet: Alphabet, data: &[u8]) -> String {
     let (alphabet, padding) = match alphabet {
         Alphabet::Crockford => (CROCKFORD, false),
-        Alphabet::Rfc4648 {
-            padding,
-        } => (RFC4648, padding),
-        Alphabet::Rfc4648Lower {
-            padding,
-        } => (RFC4648_LOWER, padding),
-        Alphabet::Rfc4648Hex {
-            padding,
-        } => (RFC4648_HEX, padding),
-        Alphabet::Rfc4648HexLower {
-            padding,
-        } => (RFC4648_HEX_LOWER, padding),
+        Alphabet::Rfc4648 { padding } => (RFC4648, padding),
+        Alphabet::Rfc4648Lower { padding } => (RFC4648_LOWER, padding),
+        Alphabet::Rfc4648Hex { padding } => (RFC4648_HEX, padding),
+        Alphabet::Rfc4648HexLower { padding } => (RFC4648_HEX_LOWER, padding),
         Alphabet::Z => (Z, false),
     };
     let mut ret = Vec::with_capacity((data.len() + 3) / 4 * 5);
@@ -169,36 +151,28 @@ fn decode_private(alphabet: Alphabet, data: &str) -> Option<Vec<u8>> {
     let data = data.as_bytes();
     let alphabet = match alphabet {
         Alphabet::Crockford => CROCKFORD_INV, // supports both upper and lower case
-        Alphabet::Rfc4648 {
-            padding,
-        } => {
+        Alphabet::Rfc4648 { padding } => {
             if padding {
                 RFC4648_INV_PAD
             } else {
                 RFC4648_INV
             }
         }
-        Alphabet::Rfc4648Lower {
-            padding,
-        } => {
+        Alphabet::Rfc4648Lower { padding } => {
             if padding {
                 RFC4648_INV_LOWER_PAD
             } else {
                 RFC4648_INV_LOWER
             }
         }
-        Alphabet::Rfc4648Hex {
-            padding,
-        } => {
+        Alphabet::Rfc4648Hex { padding } => {
             if padding {
                 RFC4648_INV_HEX_PAD
             } else {
                 RFC4648_INV_HEX
             }
         }
-        Alphabet::Rfc4648HexLower {
-            padding,
-        } => {
+        Alphabet::Rfc4648HexLower { padding } => {
             if padding {
                 RFC4648_INV_HEX_LOWER_PAD
             } else {
@@ -241,7 +215,7 @@ fn decode_private(alphabet: Alphabet, data: &str) -> Option<Vec<u8>> {
 #[allow(dead_code, unused_attributes)]
 mod test {
     use super::Alphabet::{Crockford, Rfc4648, Rfc4648Hex, Rfc4648HexLower, Rfc4648Lower, Z};
-    use crate::{decode_with_alphabet, encode_with_alphabet, Error};
+    use crate::{Error, decode_with_alphabet, encode_with_alphabet};
     // use quickcheck::{Arbitrary, Gen};
     // use std::fmt::{Debug, Error, Formatter};
 
@@ -281,50 +255,23 @@ mod test {
     #[test]
     fn masks_rfc4648() {
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83, 0xE7],
-                Rfc4648 {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83, 0xE7], Rfc4648 { padding: false }),
             "7A7H7A7H"
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0x77, 0xC1, 0xF7, 0x7C, 0x1F],
-                Rfc4648 {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0x77, 0xC1, 0xF7, 0x7C, 0x1F], Rfc4648 { padding: false }),
             "O7A7O7A7"
         );
         assert_eq!(
-            decode_with_alphabet(
-                "7A7H7A7H",
-                Rfc4648 {
-                    padding: false
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("7A7H7A7H", Rfc4648 { padding: false }).unwrap(),
             [0xF8, 0x3E, 0x7F, 0x83, 0xE7]
         );
         assert_eq!(
-            decode_with_alphabet(
-                "O7A7O7A7",
-                Rfc4648 {
-                    padding: false
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("O7A7O7A7", Rfc4648 { padding: false }).unwrap(),
             [0x77, 0xC1, 0xF7, 0x7C, 0x1F]
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83],
-                Rfc4648 {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83], Rfc4648 { padding: false }),
             "7A7H7AY"
         );
     }
@@ -332,50 +279,23 @@ mod test {
     #[test]
     fn masks_rfc4648_pad() {
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83, 0xE7],
-                Rfc4648 {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83, 0xE7], Rfc4648 { padding: true }),
             "7A7H7A7H"
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0x77, 0xC1, 0xF7, 0x7C, 0x1F],
-                Rfc4648 {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0x77, 0xC1, 0xF7, 0x7C, 0x1F], Rfc4648 { padding: true }),
             "O7A7O7A7"
         );
         assert_eq!(
-            decode_with_alphabet(
-                "7A7H7A7H",
-                Rfc4648 {
-                    padding: true
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("7A7H7A7H", Rfc4648 { padding: true }).unwrap(),
             [0xF8, 0x3E, 0x7F, 0x83, 0xE7]
         );
         assert_eq!(
-            decode_with_alphabet(
-                "O7A7O7A7",
-                Rfc4648 {
-                    padding: true
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("O7A7O7A7", Rfc4648 { padding: true }).unwrap(),
             [0x77, 0xC1, 0xF7, 0x7C, 0x1F]
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83],
-                Rfc4648 {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83], Rfc4648 { padding: true }),
             "7A7H7AY="
         );
     }
@@ -383,50 +303,23 @@ mod test {
     #[test]
     fn masks_rfc4648_lower() {
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83, 0xE7],
-                Rfc4648Lower {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83, 0xE7], Rfc4648Lower { padding: false }),
             "7a7h7a7h"
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0x77, 0xC1, 0xF7, 0x7C, 0x1F],
-                Rfc4648Lower {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0x77, 0xC1, 0xF7, 0x7C, 0x1F], Rfc4648Lower { padding: false }),
             "o7a7o7a7"
         );
         assert_eq!(
-            decode_with_alphabet(
-                "7a7h7a7h",
-                Rfc4648Lower {
-                    padding: false
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("7a7h7a7h", Rfc4648Lower { padding: false }).unwrap(),
             [0xF8, 0x3E, 0x7F, 0x83, 0xE7]
         );
         assert_eq!(
-            decode_with_alphabet(
-                "o7a7o7a7",
-                Rfc4648Lower {
-                    padding: false
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("o7a7o7a7", Rfc4648Lower { padding: false }).unwrap(),
             [0x77, 0xC1, 0xF7, 0x7C, 0x1F]
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83],
-                Rfc4648Lower {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83], Rfc4648Lower { padding: false }),
             "7a7h7ay"
         );
     }
@@ -434,50 +327,23 @@ mod test {
     #[test]
     fn masks_rfc4648_lower_pad() {
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83, 0xE7],
-                Rfc4648Lower {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83, 0xE7], Rfc4648Lower { padding: true }),
             "7a7h7a7h"
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0x77, 0xC1, 0xF7, 0x7C, 0x1F],
-                Rfc4648Lower {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0x77, 0xC1, 0xF7, 0x7C, 0x1F], Rfc4648Lower { padding: true }),
             "o7a7o7a7"
         );
         assert_eq!(
-            decode_with_alphabet(
-                "7a7h7a7h",
-                Rfc4648Lower {
-                    padding: true
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("7a7h7a7h", Rfc4648Lower { padding: true }).unwrap(),
             [0xF8, 0x3E, 0x7F, 0x83, 0xE7]
         );
         assert_eq!(
-            decode_with_alphabet(
-                "o7a7o7a7",
-                Rfc4648Lower {
-                    padding: true
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("o7a7o7a7", Rfc4648Lower { padding: true }).unwrap(),
             [0x77, 0xC1, 0xF7, 0x7C, 0x1F]
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83],
-                Rfc4648Lower {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83], Rfc4648Lower { padding: true }),
             "7a7h7ay="
         );
     }
@@ -485,50 +351,23 @@ mod test {
     #[test]
     fn masks_rfc4648_hex() {
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83, 0xE7],
-                Rfc4648Hex {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83, 0xE7], Rfc4648Hex { padding: false }),
             "V0V7V0V7"
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0x77, 0xC1, 0xF7, 0x7C, 0x1F],
-                Rfc4648Hex {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0x77, 0xC1, 0xF7, 0x7C, 0x1F], Rfc4648Hex { padding: false }),
             "EV0VEV0V"
         );
         assert_eq!(
-            decode_with_alphabet(
-                "7A7H7A7H",
-                Rfc4648Hex {
-                    padding: false
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("7A7H7A7H", Rfc4648Hex { padding: false }).unwrap(),
             [0x3A, 0x8F, 0x13, 0xA8, 0xF1]
         );
         assert_eq!(
-            decode_with_alphabet(
-                "O7A7O7A7",
-                Rfc4648Hex {
-                    padding: false
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("O7A7O7A7", Rfc4648Hex { padding: false }).unwrap(),
             [0xC1, 0xD4, 0x7C, 0x1D, 0x47]
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83],
-                Rfc4648Hex {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83], Rfc4648Hex { padding: false }),
             "V0V7V0O"
         );
     }
@@ -536,50 +375,23 @@ mod test {
     #[test]
     fn masks_rfc4648_hex_pad() {
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83, 0xE7],
-                Rfc4648Hex {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83, 0xE7], Rfc4648Hex { padding: true }),
             "V0V7V0V7"
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0x77, 0xC1, 0xF7, 0x7C, 0x1F],
-                Rfc4648Hex {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0x77, 0xC1, 0xF7, 0x7C, 0x1F], Rfc4648Hex { padding: true }),
             "EV0VEV0V"
         );
         assert_eq!(
-            decode_with_alphabet(
-                "7A7H7A7H",
-                Rfc4648Hex {
-                    padding: true
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("7A7H7A7H", Rfc4648Hex { padding: true }).unwrap(),
             [0x3A, 0x8F, 0x13, 0xA8, 0xF1]
         );
         assert_eq!(
-            decode_with_alphabet(
-                "O7A7O7A7",
-                Rfc4648Hex {
-                    padding: true
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("O7A7O7A7", Rfc4648Hex { padding: true }).unwrap(),
             [0xC1, 0xD4, 0x7C, 0x1D, 0x47]
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83],
-                Rfc4648Hex {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83], Rfc4648Hex { padding: true }),
             "V0V7V0O="
         );
     }
@@ -587,50 +399,23 @@ mod test {
     #[test]
     fn masks_rfc4648_hex_lower() {
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83, 0xE7],
-                Rfc4648HexLower {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83, 0xE7], Rfc4648HexLower { padding: false }),
             "v0v7v0v7"
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0x77, 0xC1, 0xF7, 0x7C, 0x1F],
-                Rfc4648HexLower {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0x77, 0xC1, 0xF7, 0x7C, 0x1F], Rfc4648HexLower { padding: false }),
             "ev0vev0v"
         );
         assert_eq!(
-            decode_with_alphabet(
-                "7a7h7a7h",
-                Rfc4648HexLower {
-                    padding: false
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("7a7h7a7h", Rfc4648HexLower { padding: false }).unwrap(),
             [0x3A, 0x8F, 0x13, 0xA8, 0xF1]
         );
         assert_eq!(
-            decode_with_alphabet(
-                "o7a7o7a7",
-                Rfc4648HexLower {
-                    padding: false
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("o7a7o7a7", Rfc4648HexLower { padding: false }).unwrap(),
             [0xC1, 0xD4, 0x7C, 0x1D, 0x47]
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83],
-                Rfc4648HexLower {
-                    padding: false
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83], Rfc4648HexLower { padding: false }),
             "v0v7v0o"
         );
     }
@@ -638,50 +423,23 @@ mod test {
     #[test]
     fn masks_rfc4648_hex_lower_pad() {
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83, 0xE7],
-                Rfc4648HexLower {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83, 0xE7], Rfc4648HexLower { padding: true }),
             "v0v7v0v7"
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0x77, 0xC1, 0xF7, 0x7C, 0x1F],
-                Rfc4648HexLower {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0x77, 0xC1, 0xF7, 0x7C, 0x1F], Rfc4648HexLower { padding: true }),
             "ev0vev0v"
         );
         assert_eq!(
-            decode_with_alphabet(
-                "7a7h7a7h",
-                Rfc4648HexLower {
-                    padding: true
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("7a7h7a7h", Rfc4648HexLower { padding: true }).unwrap(),
             [0x3A, 0x8F, 0x13, 0xA8, 0xF1]
         );
         assert_eq!(
-            decode_with_alphabet(
-                "o7a7o7a7",
-                Rfc4648HexLower {
-                    padding: true
-                }
-            )
-            .unwrap(),
+            decode_with_alphabet("o7a7o7a7", Rfc4648HexLower { padding: true }).unwrap(),
             [0xC1, 0xD4, 0x7C, 0x1D, 0x47]
         );
         assert_eq!(
-            encode_with_alphabet(
-                &[0xF8, 0x3E, 0x7F, 0x83],
-                Rfc4648HexLower {
-                    padding: true
-                }
-            ),
+            encode_with_alphabet(&[0xF8, 0x3E, 0x7F, 0x83], Rfc4648HexLower { padding: true }),
             "v0v7v0o="
         );
     }
@@ -698,12 +456,7 @@ mod test {
     fn padding() {
         let num_padding = [0, 6, 4, 3, 1];
         for i in 1..6 {
-            let encoded = encode_with_alphabet(
-                (0..(i as u8)).collect::<Vec<u8>>().as_ref(),
-                Rfc4648 {
-                    padding: true,
-                },
-            );
+            let encoded = encode_with_alphabet((0..(i as u8)).collect::<Vec<u8>>().as_ref(), Rfc4648 { padding: true });
             assert_eq!(encoded.len(), 8);
             for j in 0..(num_padding[i % 5]) {
                 assert_eq!(encoded.as_bytes()[encoded.len() - j - 1], b'=');
@@ -773,28 +526,12 @@ mod test {
 
     #[test]
     fn invalid_chars_rfc4648() {
-        assert_eq!(
-            decode_with_alphabet(
-                ",",
-                Rfc4648 {
-                    padding: true
-                }
-            ),
-            Err(Error::InvalidInput)
-        )
+        assert_eq!(decode_with_alphabet(",", Rfc4648 { padding: true }), Err(Error::InvalidInput))
     }
 
     #[test]
     fn invalid_chars_unpadded_rfc4648() {
-        assert_eq!(
-            decode_with_alphabet(
-                ",",
-                Rfc4648 {
-                    padding: false
-                }
-            ),
-            Err(Error::InvalidInput)
-        )
+        assert_eq!(decode_with_alphabet(",", Rfc4648 { padding: false }), Err(Error::InvalidInput))
     }
 }
 

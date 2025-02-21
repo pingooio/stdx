@@ -7,8 +7,9 @@ use alloc::{string::String, vec};
 #[cfg(any(feature = "alloc", test))]
 use crate::chunked_encoder;
 use crate::{
-    encode::{encode_with_padding, EncodeSliceError},
-    encoded_len, DecodeError, DecodeSliceError,
+    DecodeError, DecodeSliceError,
+    encode::{EncodeSliceError, encode_with_padding},
+    encoded_len,
 };
 
 pub mod general_purpose;

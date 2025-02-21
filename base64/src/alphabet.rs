@@ -71,9 +71,7 @@ impl Alphabet {
             index += 1;
         }
 
-        Self {
-            symbols,
-        }
+        Self { symbols }
     }
 
     /// Create an `Alphabet` from a string of 64 unique printable ASCII bytes.

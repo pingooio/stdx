@@ -18,9 +18,7 @@ impl Aes256Gcm {
 
         let ctx =
             LessSafeKey::new(UnboundKey::new(&aead::AES_256_GCM, key).expect("crypto: error initializing Aes256Gcm"));
-        return Ok(Aes256Gcm {
-            ctx,
-        });
+        return Ok(Aes256Gcm { ctx });
     }
 
     #[inline]
