@@ -12,7 +12,7 @@ description = """
 getopts-like option parsing.
 """
 categories = ["command-line-interface"]
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 unicode-width = "0.1.5"

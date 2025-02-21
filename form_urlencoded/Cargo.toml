@@ -6,8 +6,8 @@ description = "Parser and serializer for the application/x-www-form-urlencoded s
 categories = ["no_std"]
 repository = "https://github.com/bloom42/stdx"
 license = "Apache-2.0"
-edition = "2021"
-rust-version = "1.56"
+edition = "2024"
+rust-version = "1.85"
 
 [lib]
 path = "./form_urlencoded.rs"

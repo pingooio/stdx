@@ -2,7 +2,7 @@
 
 name = "num_cpus"
 version = "1.16.0"
-edition = "2021"
+edition = "2024"
 description = "Get the number of CPUs on a machine."
 authors = ["Sean McArthur <sean@seanmonstar.com>"]
 license = "Apache-2.0"

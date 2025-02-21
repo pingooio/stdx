@@ -42,7 +42,7 @@ impl schemars::JsonSchema for Ipv6Network {
         "Ipv6Network".to_string()
     }
 
-    fn json_schema(_: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
+    fn json_schema(_: &mut schemars::r#gen::SchemaGenerator) -> schemars::schema::Schema {
         schemars::schema::SchemaObject {
             instance_type: Some(schemars::schema::InstanceType::String.into()),
             string: Some(Box::new(schemars::schema::StringValidation {

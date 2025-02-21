@@ -1,8 +1,8 @@
 [package]
 name = "pin-project-lite"
 version = "0.2.14" #publish:version
-edition = "2021"
-rust-version = "1.56"
+edition = "2024"
+rust-version = "1.85"
 license = "Apache-2.0 OR MIT"
 repository = "https://github.com/bloom42/stdx"
 keywords = ["pin", "macros"]

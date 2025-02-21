@@ -5,11 +5,11 @@ authors = ["David Tolnay <dtolnay@gmail.com>"]
 categories = ["rust-patterns", "no-std"]
 description = "Flexible concrete Error type built on std::error::Error"
 documentation = "https://docs.rs/anyhow"
-edition = "2021"
+edition = "2024"
 keywords = ["error", "error-handling"]
 license = "Apache-2.0"
 repository = "https://github.com/bloom42/stdx"
-rust-version = "1.56"
+rust-version = "1.85"
 
 [features]
 default = ["std"]

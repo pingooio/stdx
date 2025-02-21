@@ -58,11 +58,11 @@ impl VisitMut for CollectLifetimes {
         visit_mut::visit_type_reference_mut(self, ty);
     }
 
-    fn visit_generic_argument_mut(&mut self, gen: &mut GenericArgument) {
-        if let GenericArgument::Lifetime(lifetime) = gen {
+    fn visit_generic_argument_mut(&mut self, r#gen: &mut GenericArgument) {
+        if let GenericArgument::Lifetime(lifetime) = r#gen {
             self.visit_lifetime(lifetime);
         }
-        visit_mut::visit_generic_argument_mut(self, gen);
+        visit_mut::visit_generic_argument_mut(self, r#gen);
     }
 }
 

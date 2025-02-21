@@ -9,10 +9,10 @@ readme = "README.md"
 keywords = ["base64", "utf8", "encode", "decode", "no_std"]
 categories = ["encoding"]
 license = "Apache-2.0"
-edition = "2021"
+edition = "2024"
 # dev-dependencies require 1.65, but the main code doesn't
 # This option was added in 1.56, keep it for when we bump MSRV.
-rust-version = "1.56.0"
+rust-version = "1.85.0"
 
 [lib]
 path = "src/base64.rs"

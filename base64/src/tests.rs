@@ -65,7 +65,7 @@ fn roundtrip_random_config(input_len_range: Uniform<usize>, iterations: u32) {
         let engine = random_engine(&mut rng);
 
         for _ in 0..input_len {
-            input_buf.push(rng.gen());
+            input_buf.push(rng.r#gen());
         }
 
         engine.encode_string(&input_buf, &mut encoded_buf);
@@ -77,15 +77,15 @@ fn roundtrip_random_config(input_len_range: Uniform<usize>, iterations: u32) {
 }
 
 pub fn random_config<R: Rng>(rng: &mut R) -> GeneralPurposeConfig {
-    let mode = rng.gen();
+    let mode = rng.r#gen();
     GeneralPurposeConfig::new()
         .with_encode_padding(match mode {
-            DecodePaddingMode::Indifferent => rng.gen(),
+            DecodePaddingMode::Indifferent => rng.r#gen(),
             DecodePaddingMode::RequireCanonical => true,
             DecodePaddingMode::RequireNone => false,
         })
         .with_decode_padding_mode(mode)
-        .with_decode_allow_trailing_bits(rng.gen())
+        .with_decode_allow_trailing_bits(rng.r#gen())
 }
 
 impl distributions::Distribution<DecodePaddingMode> for distributions::Standard {

@@ -1,12 +1,13 @@
-#[cfg(feature = "std")]
-use alloc::vec::{self, Vec};
-
 use self::ChainState::*;
-#[cfg(feature = "std")]
-pub(crate) use crate::Chain;
 use crate::StdError;
 
-#[cfg(not(feature = "std"))]
+#[cfg(any(feature = "std", not(anyhow_no_core_error)))]
+use alloc::vec::{self, Vec};
+
+#[cfg(any(feature = "std", not(anyhow_no_core_error)))]
+pub(crate) use crate::Chain;
+
+#[cfg(all(not(feature = "std"), anyhow_no_core_error))]
 pub(crate) struct Chain<'a> {
     state: ChainState<'a>,
 }
@@ -16,7 +17,7 @@ pub(crate) enum ChainState<'a> {
     Linked {
         next: Option<&'a (dyn StdError + 'static)>,
     },
-    #[cfg(feature = "std")]
+    #[cfg(any(feature = "std", not(anyhow_no_core_error)))]
     Buffered {
         rest: vec::IntoIter<&'a (dyn StdError + 'static)>,
     },
@@ -26,9 +27,7 @@ impl<'a> Chain<'a> {
     #[cold]
     pub fn new(head: &'a (dyn StdError + 'static)) -> Self {
         Chain {
-            state: ChainState::Linked {
-                next: Some(head),
-            },
+            state: ChainState::Linked { next: Some(head) },
         }
     }
 }
@@ -38,17 +37,13 @@ impl<'a> Iterator for Chain<'a> {
 
     fn next(&mut self) -> Option<Self::Item> {
         match &mut self.state {
-            Linked {
-                next,
-            } => {
+            Linked { next } => {
                 let error = (*next)?;
                 *next = error.source();
                 Some(error)
             }
-            #[cfg(feature = "std")]
-            Buffered {
-                rest,
-            } => rest.next(),
+            #[cfg(any(feature = "std", not(anyhow_no_core_error)))]
+            Buffered { rest } => rest.next(),
         }
     }
 
@@ -58,13 +53,11 @@ impl<'a> Iterator for Chain<'a> {
     }
 }
 
-#[cfg(feature = "std")]
+#[cfg(any(feature = "std", not(anyhow_no_core_error)))]
 impl DoubleEndedIterator for Chain<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         match &mut self.state {
-            Linked {
-                mut next,
-            } => {
+            Linked { mut next } => {
                 let mut rest = Vec::new();
                 while let Some(cause) = next {
                     next = cause.source();
@@ -72,14 +65,10 @@ impl DoubleEndedIterator for Chain<'_> {
                 }
                 let mut rest = rest.into_iter();
                 let last = rest.next_back();
-                self.state = Buffered {
-                    rest,
-                };
+                self.state = Buffered { rest };
                 last
             }
-            Buffered {
-                rest,
-            } => rest.next_back(),
+            Buffered { rest } => rest.next_back(),
         }
     }
 }
@@ -87,9 +76,7 @@ impl DoubleEndedIterator for Chain<'_> {
 impl ExactSizeIterator for Chain<'_> {
     fn len(&self) -> usize {
         match &self.state {
-            Linked {
-                mut next,
-            } => {
+            Linked { mut next } => {
                 let mut len = 0;
                 while let Some(cause) = next {
                     next = cause.source();
@@ -97,15 +84,13 @@ impl ExactSizeIterator for Chain<'_> {
                 }
                 len
             }
-            #[cfg(feature = "std")]
-            Buffered {
-                rest,
-            } => rest.len(),
+            #[cfg(any(feature = "std", not(anyhow_no_core_error)))]
+            Buffered { rest } => rest.len(),
         }
     }
 }
 
-#[cfg(feature = "std")]
+#[cfg(any(feature = "std", not(anyhow_no_core_error)))]
 impl Default for Chain<'_> {
     fn default() -> Self {
         Chain {

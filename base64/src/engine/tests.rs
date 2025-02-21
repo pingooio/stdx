@@ -245,7 +245,7 @@
 //         let input_len = input_len_range.sample(&mut rng);
 
 //         for _ in 0..input_len {
-//             orig_data.push(rng.gen());
+//             orig_data.push(rng.r#gen());
 //         }
 
 //         let engine = E::random(&mut rng);
@@ -614,7 +614,7 @@
 
 //         // replace one encoded byte with an invalid byte
 //         let invalid_byte: u8 = loop {
-//             let byte: u8 = rng.gen();
+//             let byte: u8 = rng.r#gen();
 
 //             if alphabet.symbols.contains(&byte) || byte == PAD_BYTE {
 //                 continue;
@@ -1064,7 +1064,7 @@
 //         let input_len = input_len_range.sample(&mut rng);
 
 //         for _ in 0..input_len {
-//             orig_data.push(rng.gen());
+//             orig_data.push(rng.r#gen());
 //         }
 
 //         let engine = E::random(&mut rng);
@@ -1284,7 +1284,7 @@
 // ) -> usize {
 //     let len = length_distribution.sample(rng);
 //     for _ in 0..len {
-//         vec.push(rng.gen());
+//         vec.push(rng.r#gen());
 //     }
 
 //     len
@@ -1292,7 +1292,7 @@
 
 // fn fill_rand_len<R: rand::Rng>(vec: &mut Vec<u8>, rng: &mut R, len: usize) {
 //     for _ in 0..len {
-//         vec.push(rng.gen());
+//         vec.push(rng.r#gen());
 //     }
 // }
 
@@ -1432,15 +1432,15 @@
 //     }
 
 //     fn random_alphabet<R: rand::Rng>(rng: &mut R, alphabet: &Alphabet) -> Self::Engine {
-//         let mode = rng.gen();
+//         let mode = rng.r#gen();
 
 //         let config = naive::NaiveConfig {
 //             encode_padding: match mode {
-//                 DecodePaddingMode::Indifferent => rng.gen(),
+//                 DecodePaddingMode::Indifferent => rng.r#gen(),
 //                 DecodePaddingMode::RequireCanonical => true,
 //                 DecodePaddingMode::RequireNone => false,
 //             },
-//             decode_allow_trailing_bits: rng.gen(),
+//             decode_allow_trailing_bits: rng.r#gen(),
 //             decode_padding_mode: mode,
 //         };
 

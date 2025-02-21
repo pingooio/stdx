@@ -7,7 +7,7 @@ repository = "https://github.com/bloom42/stdx"
 keywords = ["uuid", "no_std"]
 categories = ["uuid"]
 license = "Apache-2.0"
-edition = "2021"
+edition = "2024"
 
 [lib]
 name = "uuid"

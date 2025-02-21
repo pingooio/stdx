@@ -53,7 +53,7 @@ impl schemars::JsonSchema for IpNetwork {
         "IpNetwork".to_string()
     }
 
-    fn json_schema(gen: &mut schemars::gen::SchemaGenerator) -> schemars::schema::Schema {
+    fn json_schema(r#gen: &mut schemars::r#gen::SchemaGenerator) -> schemars::schema::Schema {
         schemars::schema::SchemaObject {
             metadata: Some(
                 schemars::schema::Metadata {

@@ -265,7 +265,7 @@ fn every_possible_split_of_input() {
         normal_encoded.clear();
 
         for _ in 0..size {
-            orig_data.push(rng.gen());
+            orig_data.push(rng.r#gen());
         }
 
         let engine = random_engine(&mut rng);
@@ -307,7 +307,7 @@ fn retrying_writes_that_error_with_interrupted_works() {
 
         let orig_len: usize = rng.gen_range(100..20_000);
         for _ in 0..orig_len {
-            orig_data.push(rng.gen());
+            orig_data.push(rng.r#gen());
         }
 
         // encode the normal way
@@ -371,7 +371,7 @@ fn writes_that_only_write_part_of_input_and_sometimes_interrupt_produce_correct_
 
         let orig_len: usize = rng.gen_range(100..20_000);
         for _ in 0..orig_len {
-            orig_data.push(rng.gen());
+            orig_data.push(rng.r#gen());
         }
 
         // encode the normal way
@@ -449,7 +449,7 @@ fn do_encode_random_config_matches_normal_encode(max_input_len: usize) {
 
         let orig_len: usize = rng.gen_range(100..20_000);
         for _ in 0..orig_len {
-            orig_data.push(rng.gen());
+            orig_data.push(rng.r#gen());
         }
 
         // encode the normal way

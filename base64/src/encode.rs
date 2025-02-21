@@ -253,7 +253,7 @@ mod tests {
             let input_len = input_len_range.sample(&mut rng);
 
             for _ in 0..input_len {
-                orig_data.push(rng.gen());
+                orig_data.push(rng.r#gen());
             }
 
             let prefix_len = prefix_len_range.sample(&mut rng);
@@ -308,12 +308,12 @@ mod tests {
             let input_len = input_len_range.sample(&mut rng);
 
             for _ in 0..input_len {
-                orig_data.push(rng.gen());
+                orig_data.push(rng.r#gen());
             }
 
             // plenty of existing garbage in the encoded buffer
             for _ in 0..10 * input_len {
-                encoded_data.push(rng.gen());
+                encoded_data.push(rng.r#gen());
             }
 
             encoded_data_original_state.extend_from_slice(&encoded_data);
@@ -355,7 +355,7 @@ mod tests {
             let input_len = input_len_range.sample(&mut rng);
 
             for _ in 0..input_len {
-                input.push(rng.gen());
+                input.push(rng.r#gen());
             }
 
             let config = random_config(&mut rng);
@@ -364,7 +364,7 @@ mod tests {
             // fill up the output buffer with garbage
             let encoded_size = encoded_len(input_len, config.encode_padding()).unwrap();
             for _ in 0..encoded_size {
-                output.push(rng.gen());
+                output.push(rng.r#gen());
             }
 
             let orig_output_buf = output.clone();
@@ -397,7 +397,7 @@ mod tests {
             let input_len = input_len_range.sample(&mut rng);
 
             for _ in 0..input_len {
-                input.push(rng.gen());
+                input.push(rng.r#gen());
             }
 
             let engine = random_engine(&mut rng);
@@ -405,7 +405,7 @@ mod tests {
             // fill up the output buffer with garbage
             let encoded_size = encoded_len(input_len, engine.config().encode_padding()).unwrap();
             for _ in 0..encoded_size + 1000 {
-                output.push(rng.gen());
+                output.push(rng.r#gen());
             }
 
             let orig_output_buf = output.clone();
@@ -434,7 +434,7 @@ mod tests {
 
             // fill output with random
             for _ in 0..100 {
-                output.push(rng.gen());
+                output.push(rng.r#gen());
             }
 
             let orig_output_buf = output.clone();
@@ -458,7 +458,7 @@ mod tests {
         let mut rng = rand::thread_rng();
 
         for _ in 0..input_len {
-            bytes.push(rng.gen());
+            bytes.push(rng.r#gen());
         }
 
         let encoded = engine.encode(&bytes);

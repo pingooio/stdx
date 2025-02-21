@@ -188,7 +188,7 @@ mod tests {
             let input_len = input_len_range.sample(&mut rng);
 
             for _ in 0..input_len {
-                orig_data.push(rng.gen());
+                orig_data.push(rng.r#gen());
             }
 
             let engine = random_engine(&mut rng);
@@ -199,7 +199,7 @@ mod tests {
 
             // fill the buf with a prefix
             for _ in 0..prefix_len {
-                prefix.push(rng.gen());
+                prefix.push(rng.r#gen());
             }
 
             decoded_with_prefix.resize(prefix_len, 0);
@@ -296,7 +296,7 @@ mod tests {
             let input_len = input_len_range.sample(&mut rng);
 
             for _ in 0..input_len {
-                orig_data.push(rng.gen());
+                orig_data.push(rng.r#gen());
             }
 
             let engine = random_engine(&mut rng);
@@ -305,7 +305,7 @@ mod tests {
 
             // fill the buffer with random garbage, long enough to have some room before and after
             for _ in 0..5000 {
-                decode_buf.push(rng.gen());
+                decode_buf.push(rng.r#gen());
             }
 
             // keep a copy for later comparison

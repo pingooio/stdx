@@ -11,7 +11,7 @@ documentation = "http://oschwald.github.io/maxminddb-rust/maxminddb/struct.Reade
 repository = "https://github.com/bloom42/stdx"
 license = "ISC"
 include = ["/Cargo.toml", "/benches/*.rs", "/src/**/*.rs", "/README.md", "/LICENSE"]
-edition = "2021"
+edition = "2024"
 
 
 [lib]

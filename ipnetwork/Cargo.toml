@@ -8,7 +8,7 @@ repository = "https://github.com/bloom42/stdx"
 keywords = ["network", "ip", "address", "cidr"]
 readme = "README.md"
 categories = ["network-programming", "parser-implementations"]
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 serde = { workspace = true }

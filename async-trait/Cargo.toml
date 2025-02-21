@@ -5,12 +5,12 @@ authors = ["David Tolnay <dtolnay@gmail.com>"]
 categories = ["asynchronous", "no-std"]
 description = "Type erasure for async trait methods"
 documentation = "https://docs.rs/async-trait"
-edition = "2021"
+edition = "2024"
 exclude = ["build.rs"]
 keywords = ["async"]
 license = "Apache-2.0"
 repository = "https://github.com/bloom42/stdx"
-rust-version = "1.56"
+rust-version = "1.85"
 
 [lib]
 proc-macro = true

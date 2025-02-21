@@ -9,8 +9,8 @@ license = "MIT"
 keywords = ["http", "rocket", "static", "web", "server"]
 categories = ["web-programming", "filesystem"]
 authors = ["pyros2097 <pyros2097@gmail.com>"]
-edition = "2021"
-rust-version = "1.70.0"
+edition = "2024"
+rust-version = "1.85"
 
 [dependencies]
 walkdir = { workspace = true }

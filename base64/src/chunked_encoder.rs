@@ -134,7 +134,7 @@ pub mod tests {
 
             let buf_len = input_len_range.sample(&mut rng);
             for _ in 0..buf_len {
-                input_buf.push(rng.gen());
+                input_buf.push(rng.r#gen());
             }
 
             let engine = random_engine(&mut rng);
