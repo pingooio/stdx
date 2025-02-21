@@ -55,7 +55,7 @@ use crate::{
 /// ```
 #[must_use]
 #[cfg_attr(feature = "no-panic", no_panic)]
-pub unsafe fn format64(f: f64, result: *mut u8) -> usize {
+pub unsafe fn format64(f: f64, result: *mut u8) -> usize { unsafe {
     let bits = f.to_bits();
     let sign = ((bits >> (DOUBLE_MANTISSA_BITS + DOUBLE_EXPONENT_BITS)) & 1) != 0;
     let ieee_mantissa = bits & ((1u64 << DOUBLE_MANTISSA_BITS) - 1);
@@ -117,7 +117,7 @@ pub unsafe fn format64(f: f64, result: *mut u8) -> usize {
         *result.offset(index + length + 1) = b'e';
         index as usize + length as usize + 2 + write_exponent3(kk - 1, result.offset(index + length + 2))
     }
-}
+}}
 
 /// Print f32 to the given buffer and return number of bytes written.
 ///
@@ -158,7 +158,7 @@ pub unsafe fn format64(f: f64, result: *mut u8) -> usize {
 /// ```
 #[must_use]
 #[cfg_attr(feature = "no-panic", no_panic)]
-pub unsafe fn format32(f: f32, result: *mut u8) -> usize {
+pub unsafe fn format32(f: f32, result: *mut u8) -> usize { unsafe {
     let bits = f.to_bits();
     let sign = ((bits >> (FLOAT_MANTISSA_BITS + FLOAT_EXPONENT_BITS)) & 1) != 0;
     let ieee_mantissa = bits & ((1u32 << FLOAT_MANTISSA_BITS) - 1);
@@ -220,4 +220,4 @@ pub unsafe fn format32(f: f32, result: *mut u8) -> usize {
         *result.offset(index + length + 1) = b'e';
         index as usize + length as usize + 2 + write_exponent2(kk - 1, result.offset(index + length + 2))
     }
-}
+}}

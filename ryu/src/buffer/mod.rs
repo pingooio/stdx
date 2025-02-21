@@ -139,9 +139,9 @@ impl Sealed for f32 {
     }
 
     #[inline]
-    unsafe fn write_to_ryu_buffer(self, result: *mut u8) -> usize {
+    unsafe fn write_to_ryu_buffer(self, result: *mut u8) -> usize { unsafe {
         raw::format32(self, result)
-    }
+    }}
 }
 
 impl Sealed for f64 {
@@ -168,7 +168,7 @@ impl Sealed for f64 {
     }
 
     #[inline]
-    unsafe fn write_to_ryu_buffer(self, result: *mut u8) -> usize {
+    unsafe fn write_to_ryu_buffer(self, result: *mut u8) -> usize { unsafe {
         raw::format64(self, result)
-    }
+    }}
 }
