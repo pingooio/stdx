@@ -1,6 +1,6 @@
 use std::fmt;
 
-use ring::{
+use aws_lc_rs::{
     digest::{Digest, SHA256, digest},
     signature::{EcdsaKeyPair, KeyPair},
 };
@@ -24,10 +24,10 @@ pub enum Error {
     Base64(#[from] base64::DecodeError),
     /// Failed from cryptographic operations
     #[error("cryptographic operation failed: {0}")]
-    Crypto(ring::error::Unspecified),
+    Crypto(aws_lc_rs::error::Unspecified),
     /// Failed to instantiate a private key
     #[error("invalid key bytes: {0}")]
-    CryptoKey(ring::error::KeyRejected),
+    CryptoKey(aws_lc_rs::error::KeyRejected),
     /// HTTP request failure
     #[error("HTTP request failure: {0}")]
     Http(#[from] reqwest::Error),
