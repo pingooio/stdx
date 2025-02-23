@@ -8,8 +8,8 @@ authors = ["Sylvain Kerkour"]
 path = "./src/crypto.rs"
 
 [dependencies]
-sha2 = "0.10"
-sha3 = "0.10"
+sha2 = { git = "https://github.com/RustCrypto/hashes", rev = "ae568d4fb26873479c4e564202632912579a2bb2" }
+sha3 = { git = "https://github.com/RustCrypto/hashes", rev = "ae568d4fb26873479c4e564202632912579a2bb2", features = ["asm"] }
 
 [dev-dependencies]
 hex = { path = "../hex" }

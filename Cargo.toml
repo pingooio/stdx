@@ -101,4 +101,6 @@ serde_derive  = { git = "https://github.com/serde-rs/serde", rev = "04ff3e8f950e
 serde_json  = { git = "https://github.com/serde-rs/json", rev = "87f78da0f57a5bc6c875e56357bc9761558a3ef9" }
 
 
+digest = { git = "https://github.com/RustCrypto/traits", rev = "6bbf1a4a67a52c5863e3101b232e7f3f33bb47a5" }
 ring  = { git = "https://github.com/briansmith/ring", rev = "6665689aa80217670a1b2b9394f0af7833e3da5e" }
+# aws-lc-rs = { git = "https://github.com/aws/aws-lc-rs", rev = "76bcc062a97e6565f2fbb881d9e50b61a7736ee2" }
