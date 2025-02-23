@@ -5,7 +5,7 @@ use std::path::Path;
 use std::time::SystemTime;
 use std::{fs, io};
 
-use crypto::hash::sha3;
+use crypto::sha3;
 
 #[cfg_attr(all(debug_assertions, not(feature = "debug-embed")), allow(unused))]
 pub struct FileEntry {

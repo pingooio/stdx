@@ -8,7 +8,8 @@ authors = ["Sylvain Kerkour"]
 path = "./src/crypto.rs"
 
 [dependencies]
-aws-lc-rs = { workspace = true }
+sha2 = "0.10"
+sha3 = "0.10"
 
 [dev-dependencies]
 hex = { path = "../hex" }

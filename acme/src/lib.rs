@@ -9,7 +9,7 @@ use std::{fmt, sync::Arc};
 // #[cfg(feature = "hyper-rustls")]
 // use hyper::client::HttpConnector;
 // use hyper::header::{CONTENT_TYPE, LOCATION};
-use aws_lc_rs::{
+use ring::{
     digest::{SHA256, digest},
     hmac, pkcs8,
     rand::SystemRandom,
@@ -503,7 +503,7 @@ impl Key {
         let rng = SystemRandom::new();
         let pkcs8 = EcdsaKeyPair::generate_pkcs8(&ECDSA_P256_SHA256_FIXED_SIGNING, &rng).map_err(Error::Crypto)?;
         let key =
-            EcdsaKeyPair::from_pkcs8(&ECDSA_P256_SHA256_FIXED_SIGNING, pkcs8.as_ref()).map_err(Error::CryptoKey)?;
+            EcdsaKeyPair::from_pkcs8(&ECDSA_P256_SHA256_FIXED_SIGNING, pkcs8.as_ref(), &rng).map_err(Error::CryptoKey)?;
         let thumb = base64::encode_with_alphabet(Jwk::thumb_sha256(&key)?.as_ref(), base64::Alphabet::UrlNoPadding);
 
         Ok((
@@ -519,7 +519,7 @@ impl Key {
 
     fn from_pkcs8_der(pkcs8_der: &[u8]) -> Result<Self, Error> {
         let rng = SystemRandom::new();
-        let key = EcdsaKeyPair::from_pkcs8(&ECDSA_P256_SHA256_FIXED_SIGNING, pkcs8_der).map_err(Error::CryptoKey)?;
+        let key = EcdsaKeyPair::from_pkcs8(&ECDSA_P256_SHA256_FIXED_SIGNING, pkcs8_der, &rng).map_err(Error::CryptoKey)?;
         let thumb = base64::encode_with_alphabet(Jwk::thumb_sha256(&key)?.as_ref(), base64::Alphabet::UrlNoPadding);
 
         Ok(Self {
@@ -532,7 +532,7 @@ impl Key {
 }
 
 impl Signer for Key {
-    type Signature = aws_lc_rs::signature::Signature;
+    type Signature = ring::signature::Signature;
 
     fn header<'n, 'u: 'n, 's: 'u>(&'s self, nonce: Option<&'n str>, url: &'u str) -> Header<'n> {
         debug_assert!(nonce.is_some());

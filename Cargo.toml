@@ -47,7 +47,6 @@ members = [
 ]
 
 [workspace.dependencies]
-aws-lc-rs = { git = "https://github.com/aws/aws-lc-rs", rev = "76bcc062a97e6565f2fbb881d9e50b61a7736ee2" }
 bytes = "1"
 chrono = { version = "0.4", default-features = false, features = ["clock", "oldtime", "serde", "std", ] }
 futures-util = "0.3"
@@ -59,6 +58,7 @@ mime = "0.3"
 nom = "7"
 rand = "0.8"
 reqwest = { version = "0.12", default-features = false, features = ["charset", "gzip", "http2", "multipart", "json", "rustls-tls", "zstd"] }
+ring = { git = "https://github.com/briansmith/ring", rev = "6665689aa80217670a1b2b9394f0af7833e3da5e" }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tokio = { version = "1", features = ["full"] }
@@ -96,8 +96,9 @@ thiserror-impl  = { path = "./thiserror/impl" }
 uuid = { path = "./uuid" }
 
 
-aws-lc-rs = { git = "https://github.com/aws/aws-lc-rs", rev = "76bcc062a97e6565f2fbb881d9e50b61a7736ee2" }
-ring  = { git = "https://github.com/briansmith/ring", rev = "dcc7784d3b9df66fbf250af3f48e513e0ad8357b" }
 serde  = { git = "https://github.com/serde-rs/serde", rev = "04ff3e8f950eb9862759781d85ec29d906917b70" }
 serde_derive  = { git = "https://github.com/serde-rs/serde", rev = "04ff3e8f950eb9862759781d85ec29d906917b70" }
 serde_json  = { git = "https://github.com/serde-rs/json", rev = "87f78da0f57a5bc6c875e56357bc9761558a3ef9" }
+
+
+ring  = { git = "https://github.com/briansmith/ring", rev = "6665689aa80217670a1b2b9394f0af7833e3da5e" }
